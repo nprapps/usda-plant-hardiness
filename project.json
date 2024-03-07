@@ -1,0 +1,31 @@
+{
+  "s3": {
+    "stage": {
+      "bucket": "stage-apps.npr.org",
+      "path": "usda-plant-hardiness"
+    },
+    "live": {
+      "bucket": "apps.npr.org",
+      "path": "usda-plant-hardiness"
+    }
+  },
+  "styles": {
+    "src/css/seed.less": "build/style.css"
+  },
+  "scripts": {
+    "src/js/main.js": "build/app.js"
+  },
+  "title": "",
+  "description": "",
+  "url": "",
+  "image": "assets/logo.png",
+  "analytics": {
+    "topicIDs": [],
+    "primaryTopic": "",
+    "secondaryTopics": []
+  },
+  "sheets": [],
+  "docs": {},
+  "embedded": true,
+  "production": false
+}
