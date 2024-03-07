@@ -8,11 +8,11 @@
     "url": "https://github.com/nprapps/usda-plant-hardiness.git"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.81.0",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.14.2",
-    "@nprapps/betty": "^1.0.9",
+    "@nprapps/betty": "^1.0.11",
     "async": "^2.0.0-rc.1",
-    "aws-sdk": "^2.2.45",
     "babelify": "^10.0.0",
     "browser-pack-flat": "^3.0.5",
     "browserify": "^16.2.3",
@@ -21,6 +21,7 @@
     "csv": "^5.1.1",
     "dot": "^1.1.2",
     "exorcist": "^1.0.1",
+    "fast-xml-parser": "^4.3.5",
     "googleapis": "^84.0.0",
     "grunt": "^1.0.4",
     "grunt-contrib-connect": "^2.0.0",
