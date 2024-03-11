@@ -95,7 +95,7 @@ module.exports = function (grunt) {
           break;
 
         case "stage":
-          bucketConfig = require("../stage-elections24.json");
+          bucketConfig = config.s3.stage;
           break;
       }
 

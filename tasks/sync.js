@@ -130,8 +130,6 @@ module.exports = function (grunt) {
     if (target == "live" && !project.production) {
       var checklist = grunt.file.read("tasks/checklist.txt");
       grunt.fail.fatal(checklist);
-    } else if (target == "stage") {
-      var config = require("../stage-elections24.json");
     } else {
       config = project.s3[target];
     }
