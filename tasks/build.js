@@ -55,6 +55,16 @@ module.exports = function(grunt) {
     return filtered;
   };
 
+  grunt.template.style = function(hash) {
+    var styles = [];
+    for (var k in hash) {
+      if (hash[k]) {
+        styles.push([k, hash[k]].join(": "));
+      }
+    }
+    return styles.join("; ");
+  }
+
   grunt.template.include = function(where, data) {
     grunt.verbose.writeln(" - Including file: " +  where);
     var file = grunt.file.read(path.resolve("src/", where));

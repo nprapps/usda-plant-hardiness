@@ -1,0 +1,28 @@
+<section class="text slide <%= slide.classes %>" id="<%= slide.id %>">
+  <% if (slide.image) { %>
+  <img
+    src="./assets/synced/images/resized/<%= slide.image %>"
+    class="backdrop"
+    alt=""
+    style="<%= t.style({
+      "object-fit": slide.contain ? "contain" : false,
+      "object-position": slide.anchor
+    }) %>"
+  >
+  <% } %>
+  <div class="text">
+    <div class="divider"></div>
+    <div class="content">
+      <% if (slide.locator) { %>
+        <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
+      <% } %>
+
+      <%= t.renderMarkdown(slide.text) %>
+    </div>
+    <% if (slide.caption) { %>
+    <div class="caption">
+      <%= t.renderMarkdown(slide.caption) %>
+    </div>
+    <% } %>
+  </div>
+</section>

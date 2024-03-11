@@ -1,0 +1,203 @@
+@textShadow: 0 0 8px darken(#333, 0.2);
+
+.titlecard,
+header.splash {
+  // height: 200vh;
+  height: unset;
+  overflow: hidden;
+  background-attachment: fixed;
+  background-size: cover;
+
+  @media @mobile {
+    background-attachment: scroll;
+  }
+
+  .background {
+    z-index: -1;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    left: 0;
+  }
+
+  div.darken {
+    position: relative;
+    // z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    overflow: auto;
+    // background-color: rgba(0,0,0,0.5);
+    background-image: linear-gradient(
+      to top,
+      fade(#111, 95%) calc(~"100% - 100vh"),
+      transparent
+      // to top,
+      // fade(black, 40%) calc(~"100% - 100px"),
+      // transparent
+    );
+    padding-top: 200px;
+    padding-bottom: 90vh;
+    min-height: 100vh;
+    // margin-bottom: -20vh;
+  }
+
+  // + .slide .text {
+  //   margin-top: 50vh;
+  // }
+
+  .bylines {
+    // .sans();
+    font-size: 80%;
+    color: #eee;
+  }
+
+  .chatter {
+    // .sans();
+    width: 650px;
+    max-width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 17px;
+    line-height: 1.6;
+    padding: 20px;
+    text-shadow: @textShadow;
+    margin: 40px auto 0 auto;
+
+    @media @mobile {
+      margin-top: 0;
+    }
+  }
+
+  .logo {
+    height: 32px;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 30px;
+    color: white;
+    line-height: 1.3;
+    text-align: center;
+    margin: 0;
+    padding: 30px 0 5px 0;
+
+    @media screen and @mobile-above {
+      font-size: 60px;
+    }
+  }
+
+  p {
+    @media @mobile {
+      font-size: 14px;
+    }
+  }
+
+  h1,
+  p {
+    // @fade: fade(darken(@sky-blue, 30%), 30%);
+    // background: @fade;
+    // box-shadow: 0 0 32px 32px @fade;
+    // padding: 0 20px;
+    // border-radius: 40px;
+  }
+
+  hr {
+    max-width: 400px;
+    margin: 40px auto;
+    height: 4px;
+    border: none;
+    // background: url("./assets/synced/illos/scribble.svg");
+    background-color: @accent-light;
+  }
+}
+
+.slide.video.titlecard,
+.slide.image.titlecard {
+  .scroll-bug {
+    padding: 1rem 0;
+    background: none;
+    margin: 0 auto;
+  }
+}
+
+.a11y-controls {
+  padding: 0 0 11px 0;
+  line-height: 1;
+  text-align: right;
+
+  @media @mobile-above {
+    padding-bottom: 10px;
+    padding-top: 5px; 
+  }
+
+  input[type="checkbox"] {
+    .sr-only;
+
+    & + label {
+      // .sans();
+      // cursor: pointer;
+      font-size: 14px;
+      font-style: italic;
+      // padding: 8px;
+    }
+
+    &:focus + label,
+    label:focus {
+      outline: 1px solid #666;
+    }
+
+    & + label::after {
+      font-style: normal;
+      display: inline-block;
+      content: "✘";
+      margin-left: 8px;
+      width: 1.2em;
+      height: 1.2em;
+      border-radius: 2px;
+      line-height: 1.2em;
+      color: #666;
+      background: #333;
+      cursor: pointer;
+      border: 1px solid #333;
+    }
+
+    &:checked + label::after {
+      // Because green looks a little weird here
+      background: #666;
+      content: "✔";
+      color: #333;
+      border-color: transparent;
+    }
+  }
+}
+
+.fixed {
+  position: fixed;
+  bottom: 30px;
+  right: 0;
+  z-index: 100;
+  padding: 5px 0;
+  background: rgba(0, 0, 0, 0.5);
+
+  input[type="checkbox"] {
+    // &:checked + label::after {
+    //   background: @bay-blue-medium;
+    //   color: @off-white;
+    // }
+
+    @media @mobile {
+      & + label {
+        font-size: 10px;
+      }
+    }
+  }
+}
+
+.hidden {
+  visibility: hidden;
+}
