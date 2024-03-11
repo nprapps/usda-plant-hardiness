@@ -90,25 +90,16 @@ classDef unsureprocess fill: #ff00ffaa, color: #fff, stroke-dasharray: 5 5
 graph TB
 W[custom rasters]:::data --> WW[some raster tiling process]:::unsureprocess -. custom Raster tiles:::data .-> Y[(raster hosting?)]:::unsure 
 
-B[custom vectors]:::data --> ogr2ogr:::process --> postgisDB
-B[custom vectors] --> E
+B[custom vectors]:::data --> C
 Z3[other data?]:::data -.-> G
-E["`**maputnik** 
-	vector tile styling`"]:::toLearn -. "??" .-> D
+
+A[OSM, NE, etc.]:::data --> C(some tiling process):::process --> QQQ[MVT tiles in .MBTiles format] --> F
 
 
-A[OSM, NE, etc.]:::data -->C(make process):::process
-A --> E
-
-subgraph "`**OpenMapTiles**`"
-C --> postgisDB[(postgisDB)] -->|.MBtiles | D[?? bake it all ??]:::unsure
-
-end
-
-E -. "style.json"  .-> G
+maputnik[Maputnik]:::process --> styleJson["style.json"]  --> G
 
 
-D -. MVT tiles? .-> F[("`**PMTiles** 
+F[("`**PMTiles** 
 		vector tile hosting`")]:::unsure
 F --> G["`**maplibre-gl-js** for client-side`"]
 
@@ -140,6 +131,16 @@ classDef unsureprocess fill: #ff00ffaa, color: #fff, stroke-dasharray: 5 5, stro
 - https://www.youtube.com/watch?v=3xpTBJAL8nc&list=PLGHe6Moaz52Mcq4BC9vczIIizNzwIYocv&index=4&ab_channel=MapTiler (ogr2ogr)
 ### Maplibre 
 - https://github.com/stlpublicradio/dailygraphics-templates/tree/master/interactive_polygon_map
+
+### ProtoMaps (alt to openmaptiles?)
+- https://www.youtube.com/watch?v=_R5pM8lVldU&ab_channel=NACIS
+
+### Chris Amico guide
+- https://www.muckrock.com/news/archives/2024/feb/13/release-notes-how-to-make-self-hosted-maps-that-work-everywhere-cost-next-to-nothing-and-might-even-work-in-airplane-mode/
+- 
+
+
+
 ### Other helpful links
 https://discussions.apple.com/docs/DOC-250006086
 
