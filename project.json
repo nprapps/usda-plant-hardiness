@@ -2,7 +2,7 @@
   "s3": {
     "stage": {
       "bucket": "stage-apps.npr.org",
-      "path": "usda-plant-hardiness"
+      "path": "enlivened-latitude"
     },
     "live": {
       "bucket": "apps.npr.org",
@@ -25,7 +25,9 @@
     "secondaryTopics": []
   },
   "sheets": [],
-  "docs": {},
-  "embedded": true,
+  "docs": {
+    "story": "13HF-GgF43YTkPFX-R0f0AiR0ks0Xfvt2_1zRX9q4ah0"
+  },
+  "embedded": false,
   "production": false
 }
