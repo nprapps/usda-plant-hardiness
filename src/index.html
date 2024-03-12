@@ -1,4 +1,11 @@
 <!doctype html>
+
+<%
+var doc = grunt.data.archieml.story;
+var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
+grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social);
+%>
+
 <html lang="en-US">
   <head>
     <%= t.include("partials/_head.html", grunt.data.json) %>
@@ -6,8 +13,33 @@
   </head>
   <body>
 
+    <main class="sequence">
+
+      <%
+        doc.sequence.forEach(function(slide, id) {
+          if (slide.type == "skip") return;
+          if (slide.type == "titlecard") {
+            print(t.include(`_${slide.type || "image"}.html`, { "slide": slide, "id": id }));
+          } else {
+            print(t.include(`_${slide.type || "image"}.html`, { "slide": slide, "id": id }));
+          }
+        });
+      %>
+
+    </main>
+
+    <%= t.include("partials/_footer.html", { "doc": doc }) %>
+
     <script>
-        window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
+      // image unloading for lazy-load
+      var lazy = Array.prototype.slice.call(document.querySelectorAll(".sequence .slide:nth-child(n + 3) [src]"));
+      lazy.forEach(function(img) {
+        img.setAttribute("data-src", img.getAttribute("src"));
+        img.removeAttribute("src", "");
+      });
+
+      // attach analytics to window
+      window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
     </script>
     <script src="app.js" async></script>
     <%= t.include("partials/_analytics.html") %>

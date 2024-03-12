@@ -1,0 +1,52 @@
+<%
+  if (slide.diptych) {
+    var diptych = slide.diptych.split(/,\s*/).filter(i => i);
+  }
+%>
+
+<section class="image slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="image">
+  <% if (slide.image) { %>
+  <img
+    class="backdrop"
+    data-src="./assets/synced/images/<%= slide.image %>"
+    alt=""
+    style="<%= t.style({
+      "object-position": slide.anchor,
+      "object-fit": slide.constrain
+    }) %>"
+  >
+  <% } %>
+
+  <% if (slide.illo) { %>
+  <img
+    class="backdrop"
+    data-src="./assets/synced/illos/<%= slide.illo %>"
+    alt=""
+    style="<%= t.style({
+      "object-position": slide.anchor,
+      "object-fit": slide.constrain
+    }) %>"
+  >
+  <% } %>
+
+
+  <% if (slide.diptych) { %>
+    <div class="diptych-wrapper backdrop">
+      <div class="diptych">
+        <% diptych.forEach(function(img) { %>
+          <div class="image-container">
+            <img src="./assets/synced/images/resized/<%= img %>" alt="">
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+    
+  <% if (slide.inset) { %>
+  <img class="inset" src="./assets/synced/images/resized/<%= slide.inset%>" alt="">
+  <% } %>
+  <% if (slide.credit) { %>
+  <span class="watermark" alt=""><%=slide.credit%></span>
+  <% } %>
+  <%= t.include("partials/_text.html", { slide }) %>
+</section>

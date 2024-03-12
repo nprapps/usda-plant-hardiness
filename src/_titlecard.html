@@ -1,0 +1,79 @@
+<%
+  var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
+%>
+
+<section class="<% if (slide.video) { %>video<% } %> <% if (slide.image) { %>image<% } %> splash titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="<% if (slide.video) { %>video<% } else { %>image<% } %>">
+  <% if (slide.video) { %>
+  <video
+    id="video-<%= slide.id %>"
+    poster="./assets/synced/video/<%=slide.video%>.jpg"
+    class="backdrop"
+    muted
+    loop
+    playsinline
+    autoplay
+    style="<%= t.style({
+      "object-position": slide.anchor,
+      "object-fit": slide.constrain
+    }) %>"></video>
+  <% } %>
+
+  <% if (slide.image) { %>
+    <img
+      class="backdrop"
+      data-src="./assets/synced/images/<%= slide.image %>"
+      alt=""
+      style="<%= t.style({
+        "object-position": slide.anchor,
+        "object-fit": slide.constrain
+      }) %>"
+    >
+  <% } %>
+
+  <% if (slide.credit) { %>
+  <div class="watermark" alt="">
+    <%=slide.credit%>
+  </div>
+  <% } %>
+
+  <div class="darken">
+    <div class="chatter">
+      <img class="logo" src="./assets/logo-outline.svg" alt="NPR" />
+      <h1><%= slide.headline %></h1>
+      <%= t.renderMarkdown(slide.text) %>
+    
+      <hr>
+
+      <% if (slide.bylines) { %>
+      <div class="bylines">
+        <%= t.renderMarkdown(slide.bylines) %>
+      </div>
+      <% } %>
+    </div>
+
+    <div class="scroll-bug" aria-hidden="true">
+      scroll
+      <svg class="drop" viewBox="0 0 50 50" height="0">
+        <path d="M 0,0 L 25,25 50,0"></path>
+      </svg>
+    </div>
+
+    <% if (slide.video) { %>
+    <div class="a11y-controls">
+      <input type="checkbox" checked="checked" id="autoplay-video">
+      <label for="autoplay-video">Autoplay video?</label>
+    </div>
+    <% } %>
+  </div>
+</section>
+<% if (slide.video) { %>
+<script type="text/javascript">
+  // Load video based on current screen width
+  // It won't get reloaded if resized, YOLO
+  if (window.innerWidth < 501) {
+      document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/mobile-<%= slide.video %>");
+    } else {
+      document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/<%= slide.video %>");
+    }
+</script>
+  <% } %>

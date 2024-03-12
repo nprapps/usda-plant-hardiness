@@ -28,6 +28,7 @@ Common tasks that you may want to run include:
 
 * ``sheets`` - updates local data from Google Sheets
 * ``docs`` - updates local data from Google Docs
+* ``sync`` - syncs files in ``src/assets/synced/`` (usually media files) to S3
 * ``google-auth`` - authenticates your account against Google for private files
 * ``static`` - rebuilds files but doesn't start the dev server
 * ``cron`` - runs builds and deploys on a timer (see ``tasks/cron.js`` for details)
@@ -35,6 +36,85 @@ Common tasks that you may want to run include:
 
   * ``publish:live`` uploads to production
   * ``publish:simulated`` does a dry run of uploaded files and their compressed sizes
+
+You can also chain commands and pass flags for the deploy target:
+* ``grunt sync docs sheets static publish`` - publish to stage
+* ``grunt sync:live docs static publish:live`` - publish to production
+
+Useful conventions in the content doc
+-------------------------------------
+
+Most slides will be a single image and a single block of text, formatted like:
+
+.. code::
+
+ id: card-id
+ image: filename.jpg
+ constrain: contain
+ align: right
+
+ text::
+ Text goes here
+ ::text
+
+ caption::
+ Optional caption here
+ ::caption
+
+**To use the same image for a sequence of text blocks,** don't make multiple entries for the image. Instead rework the usual text section as a ``textBlocks`` element to loop thorugh.
+
+.. code::
+
+ id: card-id
+ image: filename.jpg
+ constrain: contain
+ align: right
+ textBlocks:
+ [.textSections]
+
+ text::
+ First block of text goes here
+ ::text
+
+ text::
+ Next block of text goes here.
+ ::text
+
+ text::
+ Repeat as needed (though consider if you need this many)
+ ::text
+
+ []
+
+**Anchoring an image's focal point**
+
+When an image is set to ``contain``, it will by default keep the focus on the center of the image as the top or sides are cropped out of view. To shift that focall point, specify an ``anchor`` in the doc. For example:
+
+.. code::
+
+ image: 10_19_SPAIN-13.jpg
+ constrain: contain
+ anchor: 50% 20%
+
+The first parameter is left/right, the second is top/bottom. (See `MDN documentation about object-fit <https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit>`_ for more.)
+
+**Letterboxing images**
+
+To letterbox an image on desktop and on mobile, add this param:
+
+.. code::
+
+  constrain: contain
+
+
+To remove letterboxing, remove that param if it's there.
+
+**Show two images side-by-side**
+
+.. code::
+
+  type: image
+  diptych: Nepal-5.jpg, Nepal-6.jpg
 
 Troubleshooting
 ---------------
