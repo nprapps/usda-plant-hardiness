@@ -1,6 +1,6 @@
 var $ = require("./lib/qsa")
 var track = require("./lib/tracking");
-// require("./video");
+require("./video");
 require("./analytics");
 
 var slides = $(".sequence .slide").reverse();
@@ -25,7 +25,6 @@ if (isOne) {
 var active = null;
 
 var activateSlide = function(slide) {  
-  console.log(slide, active);
   // skip if already in the slide
   if (active == slide) return;
   
@@ -34,13 +33,6 @@ var activateSlide = function(slide) {
     active.classList.remove("active");
     active.classList.add("exiting");
     setTimeout(() => exiting.classList.remove("exiting"), 1000);
-    // //also remove magic map depending on slide type
-    // if(exiting.classList.contains("map-block") && !slide.classList.contains("map-block")) {
-    //   magicMap.classList.remove("active");
-    //   magicMap.classList.add("exiting");      
-    //   setTimeout(() => magicMap.classList.remove("exiting"), 1000);
-    // }
-
   } 
 
   // force video playback
@@ -48,6 +40,7 @@ var activateSlide = function(slide) {
     v.currentTime = 1;
     v.play();
   });
+
   // lazy-load neighboring slides
   var neighbors = [-1, 0, 1, 2];
   var all = $(".sequence .slide");
@@ -68,16 +61,10 @@ var activateSlide = function(slide) {
 
   slide.classList.add("active");
   slide.classList.remove("exiting");
-  //also activate magic map depending on slide type
-  // if(slide.classList.contains("map-block")) {
-  //   magicMap.classList.add("active");
-  //   magicMap.dataset.name = slide.id;
-  //   magicMap.classList.remove("exiting");
-  // }
-
+  
   active = slide;
 
-  // Assuming first (intro) slide is not video
+  // Uncomment if the first slide is a video
   // if (slide.dataset.type === "video") {
   //   autoplayWrapper.classList.remove("hidden");
   // } else {
@@ -85,28 +72,26 @@ var activateSlide = function(slide) {
   // }
 }
 
-var timer = null; 
 var onScroll = function() {
   for (var i = 0; i < slides.length; i++) {
-  var slide = slides[i];    
-  var postTitle = i <= 1 ? null : slides[i + 1];
-  var isAfterTitleCard = (postTitle && postTitle.classList.contains("titlecard")) ? true : false;
-  var bounds = slide.getBoundingClientRect();
+    var slide = slides[i];
+    var postTitle = i <= 1 ? null : slides[i + 1];
+    var isAfterTitleCard = (postTitle && postTitle.classList.contains("titlecard")) ? true : false;
+    var bounds = slide.getBoundingClientRect();
 
-  // tweaking slide toggle tolerances if this is the first card after a titlecard
-  if (
-    (isAfterTitleCard && (bounds.top < window.innerHeight && bounds.bottom > 0)) ||
-    (!isAfterTitleCard && (bounds.top < window.innerHeight * .9 && bounds.bottom > 0))
-    ) {
-      clearTimeout(timer);
-    }
+    // tweaking slide toggle tolerances if this is the first card after a titlecard
+    if (
+      (isAfterTitleCard && (bounds.top < window.innerHeight && bounds.bottom > 0)) ||
+      (!isAfterTitleCard && (bounds.top < window.innerHeight * .9 && bounds.bottom > 0))
+      ) {
 
-    var complete = ((slides.length - i) / slides.length * 100) | 0;
-    if (complete > completion) {
-      completion = complete;
-      track("completion", completion + "%");
+        var complete = ((slides.length - i) / slides.length * 100) | 0;
+        if (complete > completion) {
+          completion = complete;
+          track("completion", completion + "%");
+        }
+        return activateSlide(slide);
     }
-    return activateSlide(slide);
   }
 }
 
