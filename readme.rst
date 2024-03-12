@@ -41,6 +41,11 @@ You can also chain commands and pass flags for the deploy target:
 * ``grunt sync docs sheets static publish`` - publish to stage
 * ``grunt sync:live docs static publish:live`` - publish to production
 
+Data sources
+------------
+
+Jupyter Notebook for processing PRISM minimum temperature data: https://github.com/nprapps/PRISM-min-temp
+
 Useful conventions in the content doc
 -------------------------------------
 
