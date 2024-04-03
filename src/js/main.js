@@ -1,5 +1,10 @@
 var $ = require("./lib/qsa")
+var debounce = require("./lib/debounce"); //ruth had in sea level rise...not sure if we need
 var track = require("./lib/tracking");
+
+var mapView = require("./mapView");
+var {getTemps,getData,formatTemperatures} = require("./util");
+
 require("./video");
 require("./analytics");
 
