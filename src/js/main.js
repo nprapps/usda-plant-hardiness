@@ -2,8 +2,11 @@ var $ = require("./lib/qsa")
 var debounce = require("./lib/debounce"); //ruth had in sea level rise...not sure if we need
 var track = require("./lib/tracking");
 
+var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
+var pmtiles = require("pmtiles/dist");
+
 var mapView = require("./mapView");
-var {getTemps,getData,formatTemperatures} = require("./util");
+var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
 
 require("./video");
 require("./analytics");
@@ -27,12 +30,102 @@ if (isOne) {
   document.body.classList.add("nprone");
 }
 
+// Initialize map here
+var onWindowLoaded = async function() {
+  renderMap();
+}
+
+var renderMap = async function() {
+  var container = "base-map";
+  var element = document.querySelector(`#${container}`);
+  console.log(element)
+  var width = element.offsetWidth;
+
+  // add the PMTiles plugin to the maplibregl global.
+  const protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol('pmtiles', (request) => {
+      return new Promise((resolve, reject) => {
+          const callback = (err, data) => {
+              if (err) {
+                  reject(err);
+              } else {
+                  resolve({data});
+              }
+          };
+          protocol.tile(request, callback);
+      });
+  });
+
+  const PMTILES_URL = 'https://apps.npr.org/dailygraphics/graphics/00-map-test-20240318/synced/usda_zones.pmtiles';
+
+  const p = new pmtiles.PMTiles(PMTILES_URL);
+  console.log(p)
+  // this is so we share one instance across the JS code and the map renderer
+  protocol.add(p);
+
+  p.getHeader().then(h => { 
+
+    const map = new maplibregl.Map({
+      container: container,
+      style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=xw1Hu0AgtCFvkcG0fosv',
+      center: [-77.04, 38.907],
+      zoom: 11.15
+  });
+
+    map.on('load', () => {
+      map.addSource('usda_zones', {
+        type: 'vector',
+        url: `pmtiles://${PMTILES_URL}`,
+        attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
+      })
+
+    map.addLayer({
+      'id': 'zones',
+      'source': 'usda_zones',
+      'source-layer': '2023_zones',
+      'type': 'fill',
+      'paint': {
+        "fill-color": [
+        "case",
+        ["==", ["get", "2023_zone"], null],
+        "#aaffff",
+        ["step", ["get", "2023_zone"], "#d6d6fd", -55, "#c4c4f0", -50, "#ababd7", -45, "#f0b0e9", -40, "#e691e8", -35, "#d57dd8", -30 , "#a969fa", -25, "#5274e8", -20, "#69a0fb", -15, "#43c9de", -10, "#26bb51", -5, "#6cc860", 0, "#a7d772", 5, "#cddc7a", 10, "#f0db8d", 15, "#efcc64", 20, "#e0b75b", 25, "#fcb77f", 30, "#f39d46", 35, "#ef7932", 40, "#f1572e", 45, "#f18669", 50, "#dd5a53", 55, "#be142d", 60, "#9d3023", 65, "#7b1b09"]
+        ],
+        "fill-opacity": .7
+      }      
+    },
+    // This line is the id of the layer this layer should be immediately below
+    "Water")
+    })
+
+    map.on('mousemove', async function(e) {      
+      var temperatures = await getTemps(e.lngLat);      
+
+      document.getElementById('info').innerHTML =
+        // e.point is the x, y coordinates of the mousemove event relative
+        // to the top-left corner of the map
+        `${
+          // e.lngLat is the longitude, latitude geographical position of the event
+          JSON.stringify(e.lngLat.wrap())}<br>
+          Temps: ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
+            <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
+            <b>zone</b>: ${temperatures.zone} | 
+            <b>countBelow</b>: ${temperatures.countBelow} | 
+            <b>countAbove</b>: ${temperatures.countAbove} | 
+          `;
+    });
+  })
+}
+
+
 var active = null;
 
 var activateSlide = function(slide) {  
   // skip if already in the slide
   if (active == slide) return;
   
+  console.log(slide)
+
   if (active) {
     var exiting = active;
     active.classList.remove("active");
@@ -101,8 +194,10 @@ var onScroll = function() {
 }
 
 document.body.classList.add("boot-complete");
-window.addEventListener("scroll", onScroll);
+window.addEventListener("scroll", debounce(onScroll, 50)); //ruth
 onScroll();
+window.addEventListener("load", onWindowLoaded);
+
 
 // link tracking
 var trackLink = function() {

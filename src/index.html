@@ -14,6 +14,15 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
   <body>
 
     <main class="sequence">
+      <div
+        id="base-map"
+        aria-hidden=true
+        class="backdrop"
+        alt=""
+        style="z-index:-1"
+      >
+    </div>
+    <div id="info"></div>
 
       <%
         doc.sequence.forEach(function(slide, id) {

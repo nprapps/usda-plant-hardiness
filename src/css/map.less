@@ -1,0 +1,35 @@
+
+
+// Base map styles
+#base-map {
+  z-index: 100 !important;
+  clear: right;
+  position: fixed;
+  overflow: hidden;
+  object-fit: cover;
+  width: 100vw;
+  height: calc(100 * var(--vh));
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  animation: none;
+  // opacity: 0;
+  opacity: 1;
+
+  &.active {
+    animation: fade-in 0.2s linear;
+    opacity: 1;
+  }
+
+  &.exiting {
+    animation: fade-out 0.2s linear;
+    opacity: 0;
+  }
+}
+
+#info {
+  z-index: 101;
+      position: absolute;
+    background-color: white;
+    color: black;
+}

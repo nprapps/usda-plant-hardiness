@@ -51,8 +51,8 @@ var getTemps = async function(lngLat) {
 
   // only get data if the data is a new file
   if (fileName != tempData.fileName) {
-    var url = `https://apps.npr.org/dailygraphics/graphics/00-map-test-20240318/json/${fileName}.json`
-
+    var url = `./assets/synced/json/minTmin/${fileName}.json`
+    console.log(url)
     // // get data    
     var promise = await Promise.all([getData(url)]);
     tempData = {
