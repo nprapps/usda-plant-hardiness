@@ -1,0 +1,15 @@
+<section class="map slide <%= slide.classes %>" id="<%= slide.id %>"  
+  data-type="map"
+  data-mapLayer="<%= slide.mapLayer %>"
+  <% if (slide.center) { %>
+  data-center="<%= slide.center%>"
+  <% } %>
+  <% if (slide.center) { %>
+  data-zoom="<%= slide.zoom%>"
+  <% } %>
+  >  
+  <% if (slide.inset) { %>
+  <img class="inset" src="./assets/synced/<%= slide.inset%>" alt="">
+  <% } %>
+  <%= t.include("partials/_text.html", { slide }) %>
+</section>

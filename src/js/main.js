@@ -17,6 +17,8 @@ var autoplayWrapper = $.one(".a11y-controls");
 var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 var completion = 0;
+var map;
+var activeMap = "2012_zone";
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
   $("video").forEach(v => v.addEventListener(e, console.log));
@@ -59,17 +61,18 @@ var renderMap = async function() {
   const PMTILES_URL = 'https://apps.npr.org/dailygraphics/graphics/00-map-test-20240318/synced/usda_zones.pmtiles';
 
   const p = new pmtiles.PMTiles(PMTILES_URL);
-  console.log(p)
+
   // this is so we share one instance across the JS code and the map renderer
   protocol.add(p);
 
   p.getHeader().then(h => { 
 
-    const map = new maplibregl.Map({
+    map = new maplibregl.Map({
       container: container,
       style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=xw1Hu0AgtCFvkcG0fosv',
-      center: [-77.04, 38.907],
-      zoom: 11.15
+      // center: [-77.04, 38.907],
+      center: [-98.04, 39.507],
+      zoom: 3.9
   });
 
     map.on('load', () => {
@@ -80,7 +83,24 @@ var renderMap = async function() {
       })
 
     map.addLayer({
-      'id': 'zones',
+      'id': '2012_zones',
+      'source': 'usda_zones',
+      'source-layer': '2012_zones',
+      'type': 'fill',
+      'paint': {
+        "fill-color": [
+        "case",
+        ["==", ["get", "2012_zone"], null],
+        "#aaffff",
+        ["step", ["get", "2012_zone"], "#d6d6fd", -55, "#c4c4f0", -50, "#ababd7", -45, "#f0b0e9", -40, "#e691e8", -35, "#d57dd8", -30 , "#a969fa", -25, "#5274e8", -20, "#69a0fb", -15, "#43c9de", -10, "#26bb51", -5, "#6cc860", 0, "#a7d772", 5, "#cddc7a", 10, "#f0db8d", 15, "#efcc64", 20, "#e0b75b", 25, "#fcb77f", 30, "#f39d46", 35, "#ef7932", 40, "#f1572e", 45, "#f18669", 50, "#dd5a53", 55, "#be142d", 60, "#9d3023", 65, "#7b1b09"]
+        ],
+        "fill-opacity": 0.7
+      }      
+    },
+    // This line is the id of the layer this layer should be immediately below
+    "Water")
+    map.addLayer({
+      'id': '2023_zones',
       'source': 'usda_zones',
       'source-layer': '2023_zones',
       'type': 'fill',
@@ -91,11 +111,11 @@ var renderMap = async function() {
         "#aaffff",
         ["step", ["get", "2023_zone"], "#d6d6fd", -55, "#c4c4f0", -50, "#ababd7", -45, "#f0b0e9", -40, "#e691e8", -35, "#d57dd8", -30 , "#a969fa", -25, "#5274e8", -20, "#69a0fb", -15, "#43c9de", -10, "#26bb51", -5, "#6cc860", 0, "#a7d772", 5, "#cddc7a", 10, "#f0db8d", 15, "#efcc64", 20, "#e0b75b", 25, "#fcb77f", 30, "#f39d46", 35, "#ef7932", 40, "#f1572e", 45, "#f18669", 50, "#dd5a53", 55, "#be142d", 60, "#9d3023", 65, "#7b1b09"]
         ],
-        "fill-opacity": .7
+        "fill-opacity": 0
       }      
     },
     // This line is the id of the layer this layer should be immediately below
-    "Water")
+    "Water") 
     })
 
     map.on('mousemove', async function(e) {      
@@ -117,6 +137,15 @@ var renderMap = async function() {
   })
 }
 
+var handler;
+
+// var handlers = {
+//   map: new mapView(map),
+//   image: new imageView(),
+//   video: new imageView(),
+//   text: new textView(),
+//   multiple: new imageView(),
+// };
 
 var active = null;
 
@@ -124,7 +153,34 @@ var activateSlide = function(slide) {
   // skip if already in the slide
   if (active == slide) return;
   
-  console.log(slide)
+  // console.log(slide)
+  // console.log(slide.dataset)
+  // console.log(JSON.parse(slide.dataset.center))
+  // console.log(map)
+
+  try {  
+    // console.log(map.getStyle().layers)
+    var layers = map.getStyle().layers.filter(a=> a.source == "usda_zones" && a.id != slide.dataset.maplayer)
+    layers.forEach(d=> {
+      map.setPaintProperty(d.id,'fill-opacity',0)
+    })
+    map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.7);
+
+    if (layer) {
+      // const newSourceLayer = slide.dataset.maplayer;
+      // console.log(newSourceLayer)
+      // console.log(layer.sourceLayer)
+      // layer.sourceLayer = newSourceLayer;
+      // console.log(layer.sourceLayer)
+    }
+
+    
+    // map.fire('dataloading', {dataType: 'source'});
+  } catch(err) {
+    console.log(err)
+  }
+  
+
 
   if (active) {
     var exiting = active;
