@@ -8,9 +8,6 @@ module.exports = class ImageView extends View {
   }
 
   preload(slide, active) {
-
-    console.log('hello')
-
     var images = $("[data-src]", slide);
     images.forEach(function (img) {
       img.src = img.dataset.src;

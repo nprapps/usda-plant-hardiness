@@ -43,7 +43,6 @@ var onWindowLoaded = async function() {
 var renderMap = async function() {
   var container = "base-map";
   var element = document.querySelector(`#${container}`);
-  console.log(element)
   var width = element.offsetWidth;
 
   // add the PMTiles plugin to the maplibregl global.
@@ -70,7 +69,7 @@ var renderMap = async function() {
   // this is so we share one instance across the JS code and the map renderer
   protocol.add(p);
 
-  p.getHeader().then(h => { 
+  p.getHeader().then(h => {
 
     map = new maplibregl.Map({
       container: container,
@@ -155,6 +154,8 @@ var handlers = {
 var active = null;
 
 var activateSlide = function(slide, slideNumber) {  
+  handlers.map.map = map;
+
   // skip if already in the slide
   if (active == slide) return;
 
@@ -166,46 +167,17 @@ var activateSlide = function(slide, slideNumber) {
   var currType = slide.dataset.type || "image";
   handler = handlers[currType];
   handler.enter(slide);
-  console.log(currType)
-  console.log(handler)
 
   active = slide;
-  
-  // Dan improve this here...
-  // try {  
-    // console.log(map.getStyle().layers)
-    // var layers = map.getStyle().layers.filter(a=> a.source == "usda_zones" && a.id != slide.dataset.maplayer)
-    // layers.forEach(d=> {
-    //   map.setPaintProperty(d.id,'fill-opacity',0)
-    // })
-    // map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.7);
-
-    // if (layer) {
-      // const newSourceLayer = slide.dataset.maplayer;
-      // console.log(newSourceLayer)
-      // console.log(layer.sourceLayer)
-      // layer.sourceLayer = newSourceLayer;
-      // console.log(layer.sourceLayer)
-    // }
-
-    
-    // map.fire('dataloading', {dataType: 'source'});
-  // } catch(err) {
-    // console.log(err)
-  // }
-
-  // if (active) {
-  //   var exiting = active;
-  //   active.classList.remove("active");
-  //   active.classList.add("exiting");
-  //   setTimeout(() => exiting.classList.remove("exiting"), 1000);
-  // } 
 
   // force video playback
   if (!isOne) $("video[autoplay]", slide).forEach(v => {
     v.currentTime = 1;
     v.play();
   });
+
+  
+
 
   // lazy-load neighboring slides
   var neighbors = [-1, 0, 1, 2];
