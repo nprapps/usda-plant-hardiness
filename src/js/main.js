@@ -84,7 +84,17 @@ var renderMap = async function() {
     map.dragRotate.disable();
     // disable map rotation using touch rotation gesture
     map.touchZoomRotate.disableRotation();
-    
+
+    // Add geolocate control to the map.
+    map.addControl(
+      new maplibregl.GeolocateControl({
+          positionOptions: {
+              enableHighAccuracy: true
+          },
+          trackUserLocation: true
+      })
+    )
+
     // let bbox = [[-127.958450,24.367739], [-65.545807,49.979709]];
     // map.fitBounds(bbox, {
     //   padding: {top: 10, bottom:10, left: 10, right: 10}
