@@ -77,7 +77,18 @@ var renderMap = async function() {
       // center: [-77.04, 38.907],
       center: [-98.04, 39.507],
       zoom: 3.9
-  });
+    });
+    
+    map.scrollZoom.disable();
+    // disable map rotation using right click + drag
+    map.dragRotate.disable();
+    // disable map rotation using touch rotation gesture
+    map.touchZoomRotate.disableRotation();
+    
+    // let bbox = [[-127.958450,24.367739], [-65.545807,49.979709]];
+    // map.fitBounds(bbox, {
+    //   padding: {top: 10, bottom:10, left: 10, right: 10}
+    // });
 
     map.on('load', () => {
       map.addSource('usda_zones', {
@@ -175,9 +186,6 @@ var activateSlide = function(slide, slideNumber) {
     v.currentTime = 1;
     v.play();
   });
-
-  
-
 
   // lazy-load neighboring slides
   var neighbors = [-1, 0, 1, 2];

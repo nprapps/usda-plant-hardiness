@@ -21,19 +21,37 @@ module.exports = class MapView extends View {
 
     mapElement.classList.add("active");
     mapElement.classList.remove("exiting");
+    
+    if (map) {
+      // pan and zoom
 
-    try {
-      var layers = map.getStyle().layers.filter(a=> a.source == "usda_zones" && a.id != slide.dataset.maplayer)
-      layers.forEach(d=> {
-        map.setPaintProperty(d.id,'fill-opacity',0)
-      })
-      map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.7);
-    } catch(err) {
-      // console.log(err)
+      var {oldLng, oldLat} = map.getCenter();      
+      var oldCenter = [oldLng,oldLat];      
+      var newCenter = JSON.parse(slide.dataset.center);          
+      
+      var oldZoom = map.getZoom();
+      var newZoom = slide.dataset.zoom;
+
+      if (oldZoom != newZoom || oldCenter != newCenter) {
+        map.flyTo({
+          center: newCenter,
+          zoom: newZoom,
+          essential: true 
+        })
+      }
+
+      // filter pmtiles data layer to what the slide says
+      try {
+        var layers = map.getStyle().layers.filter(a=> a.source == "usda_zones" && a.id != slide.dataset.maplayer)
+        layers.forEach(d=> {
+          map.setPaintProperty(d.id,'fill-opacity',0)
+        })
+        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.7);
+      } catch(err) {
+        // console.log(err)
+      }
+
     }
-    // Remove old layers? 
-    // Add new layers
-
     window.addEventListener("scroll", this.onMapScroll);
   }
 
