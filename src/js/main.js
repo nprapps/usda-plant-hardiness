@@ -6,6 +6,9 @@ var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 var pmtiles = require("pmtiles/dist");
 
 var mapView = require("./mapView");
+var imageView = require("./imageView");
+var textView = require("./textView");
+
 var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
 
 require("./video");
@@ -58,7 +61,9 @@ var renderMap = async function() {
       });
   });
 
-  const PMTILES_URL = 'https://apps.npr.org/dailygraphics/graphics/00-map-test-20240318/synced/usda_zones.pmtiles';
+  // const PMTILES_URL = 'https://apps.npr.org/dailygraphics/graphics/00-map-test-20240318/synced/usda_zones.pmtiles';
+  const PMTILES_URL = 'http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/usda_zones.pmtiles'
+
 
   const p = new pmtiles.PMTiles(PMTILES_URL);
 
@@ -139,55 +144,62 @@ var renderMap = async function() {
 
 var handler;
 
-// var handlers = {
-//   map: new mapView(map),
-//   image: new imageView(),
-//   video: new imageView(),
-//   text: new textView(),
-//   multiple: new imageView(),
-// };
+var handlers = {
+  map: new mapView(map),
+  image: new imageView(),
+  video: new imageView(),
+  text: new textView(),
+  multiple: new imageView(),
+};
 
 var active = null;
 
-var activateSlide = function(slide) {  
+var activateSlide = function(slide, slideNumber) {  
   // skip if already in the slide
   if (active == slide) return;
+
+  // If we changed block type, let the previous director leave
+  if (handler) {
+    handler.exit(active);
+  }
+
+  var currType = slide.dataset.type || "image";
+  handler = handlers[currType];
+  handler.enter(slide);
+  console.log(currType)
+  console.log(handler)
+
+  active = slide;
   
-  // console.log(slide)
-  // console.log(slide.dataset)
-  // console.log(JSON.parse(slide.dataset.center))
-  // console.log(map)
-
-  try {  
+  // Dan improve this here...
+  // try {  
     // console.log(map.getStyle().layers)
-    var layers = map.getStyle().layers.filter(a=> a.source == "usda_zones" && a.id != slide.dataset.maplayer)
-    layers.forEach(d=> {
-      map.setPaintProperty(d.id,'fill-opacity',0)
-    })
-    map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.7);
+    // var layers = map.getStyle().layers.filter(a=> a.source == "usda_zones" && a.id != slide.dataset.maplayer)
+    // layers.forEach(d=> {
+    //   map.setPaintProperty(d.id,'fill-opacity',0)
+    // })
+    // map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.7);
 
-    if (layer) {
+    // if (layer) {
       // const newSourceLayer = slide.dataset.maplayer;
       // console.log(newSourceLayer)
       // console.log(layer.sourceLayer)
       // layer.sourceLayer = newSourceLayer;
       // console.log(layer.sourceLayer)
-    }
+    // }
 
     
     // map.fire('dataloading', {dataType: 'source'});
-  } catch(err) {
-    console.log(err)
-  }
-  
+  // } catch(err) {
+    // console.log(err)
+  // }
 
-
-  if (active) {
-    var exiting = active;
-    active.classList.remove("active");
-    active.classList.add("exiting");
-    setTimeout(() => exiting.classList.remove("exiting"), 1000);
-  } 
+  // if (active) {
+  //   var exiting = active;
+  //   active.classList.remove("active");
+  //   active.classList.add("exiting");
+  //   setTimeout(() => exiting.classList.remove("exiting"), 1000);
+  // } 
 
   // force video playback
   if (!isOne) $("video[autoplay]", slide).forEach(v => {
@@ -202,21 +214,23 @@ var activateSlide = function(slide) {
   neighbors.forEach(function(offset) {
     var neighbor = all[index + offset];
     if (!neighbor) return;
-    var images = $("[data-src]", neighbor);
-    images.forEach(function(img) {
-      img.src = img.dataset.src;
-      img.removeAttribute("data-src");
-      if (img.dataset.poster) {
-        img.poster = img.dataset.poster;
-        img.removeAttribute("data-poster");
-      }
-    })
+    var nextType = neighbor.dataset.type || "image";
+    var neighborHandler = handlers[nextType];
+    neighborHandler.preload(
+      neighbor,
+      handler != neighborHandler && offset == 1
+    );
+    // var images = $("[data-src]", neighbor);
+    // images.forEach(function(img) {
+    //   img.src = img.dataset.src;
+    //   img.removeAttribute("data-src");
+    //   if (img.dataset.poster) {
+    //     img.poster = img.dataset.poster;
+    //     img.removeAttribute("data-poster");
+    //   }
+    // })
   });
-
-  slide.classList.add("active");
-  slide.classList.remove("exiting");
   
-  active = slide;
 
   // Uncomment if the first slide is a video
   // if (slide.dataset.type === "video") {
@@ -244,7 +258,9 @@ var onScroll = function() {
           completion = complete;
           track("completion", completion + "%");
         }
-        return activateSlide(slide);
+        var slideNumber = slides.length - 1 - i;
+        console.log(`slide ${slideNumber}, id: ${slide.id}`);
+        return activateSlide(slide, slideNumber);
     }
   }
 }

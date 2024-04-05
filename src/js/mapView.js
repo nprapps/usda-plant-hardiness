@@ -7,7 +7,7 @@ module.exports = class MapView extends View {
   constructor(map) {
     super();
     this.map = map;
-    this.onMapScroll = debounce(onMapScroll, 50);
+    // this.onMapScroll = debounce(onMapScroll, 50);
   }
 
 
