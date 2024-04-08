@@ -10,7 +10,8 @@
     }
   },
   "styles": {
-    "src/css/seed.less": "build/style.css"
+    "src/css/seed.less": "build/style.css",
+    "src/css/maplibre-gl.css":"build/maplibre-gl.css"
   },
   "scripts": {
     "src/js/main.js": "build/app.js"
