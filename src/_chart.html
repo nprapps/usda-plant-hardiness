@@ -1,0 +1,8 @@
+<section class="chart slide align-<%= slide.align || "right" %> <%= slide.classes %>" id="<%= slide.id %>"  
+  data-type="chart"  
+  >  
+  <% if (slide.inset) { %>
+  <img class="inset" src="./assets/synced/<%= slide.inset%>" alt="">
+  <% } %>
+  <%= t.include("partials/_text.html", { slide }) %>
+</section>

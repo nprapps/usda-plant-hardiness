@@ -8,6 +8,7 @@ var pmtiles = require("pmtiles/dist");
 var mapView = require("./mapView");
 var imageView = require("./imageView");
 var textView = require("./textView");
+var chartView = require("./chartView");
 
 var {getUserLocation} = require("./mapFunctions");
 var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
@@ -198,6 +199,7 @@ var handler;
 
 var handlers = {
   map: new mapView(map),
+  chart: new chartView(),
   image: new imageView(),
   video: new imageView(),
   text: new textView(),
