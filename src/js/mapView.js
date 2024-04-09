@@ -4,7 +4,7 @@ var debounce = require("./lib/debounce"); //from Ruth
 var { isMobile } = require("./lib/breakpoints");
 
 var mapElement = $.one("#base-map");
-var mapAssets = {};
+// var mapAssets = {};
 // var classes;
 
 
@@ -12,7 +12,7 @@ module.exports = class MapView extends View {
   constructor(map) {
     super();
     this.map = map;
-    this.onMapScroll = debounce(onMapScroll, 50);
+    // this.onMapScroll = debounce(onMapScroll, 50);
   }
 
   enter(slide) {
@@ -53,12 +53,12 @@ module.exports = class MapView extends View {
       }
 
     }
-    window.addEventListener("scroll", this.onMapScroll);
+    // window.addEventListener("scroll", this.onMapScroll);
   }
 
   exit(slide) {
 
-    window.removeEventListener("scroll", this.onMapScroll);
+    // window.removeEventListener("scroll", this.onMapScroll);
 
     super.exit(slide);
     mapElement.classList.add("exiting");
@@ -71,8 +71,8 @@ module.exports = class MapView extends View {
   // }
 };
 
-var onMapScroll = function () {
+// var onMapScroll = function () {
   // console.log("onMapScroll")
   
 
-};
+// };
