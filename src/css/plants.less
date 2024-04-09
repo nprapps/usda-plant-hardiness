@@ -1,0 +1,94 @@
+@potSize: 100px;
+
+
+@keyframes walking {
+	0% {
+		left: 0;
+	}
+
+	49% {
+		 -webkit-transform: scaleX(1);
+  		transform: scaleX(1);
+	}
+	50% {
+		left: calc(100% - @potSize);
+		top: -92px;		
+		-webkit-transform: scaleX(-1);
+  		transform: scaleX(-1);
+	}
+
+	99% {
+		 -webkit-transform: scaleX(-1);
+  		transform: scaleX(-1);
+	}
+	100% {		
+		 -webkit-transform: scaleX(1);
+  		transform: scaleX(1);
+	}
+}
+
+@keyframes walkingScreen {
+	0% {
+		opacity: 0;
+	}
+
+	1% {
+		opacity: 1;
+	}
+
+	5% {
+		left: calc(100% - 92px);
+		rotate: 0deg;
+	}
+	5.1% {
+		rotate: -90deg;
+		top: calc(100% - 92px);
+	}
+
+	10% {
+		rotate: -90deg;
+		left: calc(100% - 92px);
+		top:-8px;
+	}
+
+	10.1% {
+		rotate: -180deg;
+		left: calc(100% - 92px);
+	}
+
+	20% {
+		top:-8px;
+		left:-200px;
+		rotate: -180deg;
+	}
+
+}
+
+section.map {
+	overflow: visible;
+
+	.text {
+		position: relative;
+	}
+	
+}
+
+.pot {
+	position: absolute;
+	left: 0;
+	top: -92px;
+	width: @potSize;
+	height: @potSize;
+
+	// animation: walking 10s linear infinite;
+}
+
+.sequence .pot2 {
+	position: absolute;
+	bottom: -8px;	
+	left: -200px;
+	width: @potSize;
+	height: @potSize;
+	z-index: 10000;
+	animation: walkingScreen 120s linear infinite;
+}

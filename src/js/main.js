@@ -9,6 +9,7 @@ var mapView = require("./mapView");
 var imageView = require("./imageView");
 var textView = require("./textView");
 
+var {getUserLocation} = require("./mapFunctions");
 var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
 
 require("./video");
@@ -22,6 +23,10 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 var completion = 0;
 var map;
 var activeMap = "2012_zone";
+var selectedLocation = {
+  coords:null,
+  placeName: null
+};
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
   $("video").forEach(v => v.addEventListener(e, console.log));
@@ -76,7 +81,7 @@ var renderMap = async function() {
       style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=xw1Hu0AgtCFvkcG0fosv',
       // center: [-77.04, 38.907],
       center: [-98.04, 39.507],
-      zoom: 3.9
+      zoom: 3.8
     });
     
     map.scrollZoom.disable();
@@ -86,14 +91,15 @@ var renderMap = async function() {
     map.touchZoomRotate.disableRotation();
 
     // Add geolocate control to the map.
-    map.addControl(
-      new maplibregl.GeolocateControl({
-          positionOptions: {
-              enableHighAccuracy: true
-          },
-          trackUserLocation: true
-      })
-    )
+    // map.addControl(
+    //   new maplibregl.GeolocateControl({
+    //       positionOptions: {
+    //           enableHighAccuracy: true
+    //       },
+    //       // trackUserLocation: true,
+    //       showUserLocation:false
+    //   })
+    // )
 
     // let bbox = [[-127.958450,24.367739], [-65.545807,49.979709]];
     // map.fitBounds(bbox, {
@@ -141,6 +147,32 @@ var renderMap = async function() {
     },
     // This line is the id of the layer this layer should be immediately below
     "Water") 
+    })
+
+
+    // what to do when you click LocateClick  
+    var locatorButton = $.one(".locateMe");
+    var surpriseMeButton = $.one(".surpriseMe");
+
+    locatorButton.addEventListener('click', () => {
+      // get lat long      
+      getUserLocation().then(userLocation => {
+        // Do something with userLocation
+        console.log(userLocation);
+        selectedLocation.coords = userLocation;
+        
+        map.flyTo({
+          center: [userLocation.longitude,userLocation.latitude],
+          zoom: 12,
+          speed:0.7,
+          essential: true 
+        })
+      });
+      console.log('hello')
+    });
+
+    surpriseMeButton.addEventListener('click',() => {
+      // fly to. 
     })
 
     map.on('mousemove', async function(e) {      
@@ -268,3 +300,12 @@ var trackLink = function() {
   track(action, label);
 };
 $("[data-track]").forEach(el => el.addEventListener("click", trackLink));
+
+
+
+
+async function getLocation() {
+  const userLocation = await getUserLocation();
+  // Do something with userLocation
+  console.log(userLocation);
+}

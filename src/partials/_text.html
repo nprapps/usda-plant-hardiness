@@ -2,13 +2,13 @@
   
     slide.textSections.forEach(function(d) { %>
     <div class="text" id="<%= d.id %>">
-    <div class="content">
-      <% if (slide.locator) { %>
-        <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
-      <% } %>
+      <div class="content">
+        <% if (slide.locator) { %>
+          <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
+        <% } %>
 
-      <%= t.renderMarkdown(d.text) %>
-    </div>
+        <%= t.renderMarkdown(d.text) %>
+      </div>
 
     <% if (d.audio) { %>
       <%= t.include(`partials/_audio.html`, { "slide": d }) %>
@@ -26,6 +26,12 @@
  </div>
   <% }) } else if (slide.text) { %>
   <div class="text">
+    <% if (slide.hasPot) { %>
+    <div class="pot">
+      <img alt="walking pot" src="./assets/walker.gif">            
+    </div>
+    <% } %>
+
     <div class="content">
       <% if (slide.locator) { %>
         <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
@@ -47,7 +53,11 @@
     <% if (slide.legend) { %>
       <%= t.include(`legends/_${slide.legend}.html`, { slide }) %>
     <% } %>
-    </div>
+
+    <%if (slide.locate) { %>
+      <%= t.include(`partials/_geoButtons.html`) %>
+    <% } %>
+  </div>
     <% if (slide.includeLegend) print(t.include(`ai2html/_${slide.includeLegend}.html`, { slide })) %>
 
   <% } else if (!slide.text && slide.type != "titlecard") { %>
