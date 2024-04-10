@@ -79,8 +79,7 @@ var renderMap = async function() {
 
     map = new maplibregl.Map({
       container: container,
-      style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=xw1Hu0AgtCFvkcG0fosv',
-      // center: [-77.04, 38.907],
+      style: './assets/style.json',
       center: [-98.04, 39.507],
       zoom: 3.8
     });
