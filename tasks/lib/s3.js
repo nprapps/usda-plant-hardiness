@@ -47,21 +47,20 @@ var download = async function (Bucket, Key) {
 };
 
 // get a single page of results from S3
-var getRemote = async function (Bucket, Prefix, Marker = null) {
-  var results = await s3.send(
-    new ListObjectsV2Command({ Bucket, Prefix, Marker })
-  );
-  var items = (results.Contents || [])
-    .map(function (obj) {
-      return {
-        file: obj.Key.replace(/.*\/synced\//, ""),
-        size: obj.Size,
-        key: obj.Key,
-        mtime: obj.LastModified,
-      };
-    })
-    .filter((i) => i.size);
-  var next = results.IsTruncated ? items[items.length - 1].key : null;
+var getRemote = async function (Bucket, Prefix, next = undefined) {
+  var input = { Bucket, Prefix };
+  if (next) input.ContinuationToken = next;
+  var command = new ListObjectsV2Command(input);
+  var results = await s3.send(command);
+  var items = (results.Contents || []).map(function (obj) {
+    return {
+      file: obj.Key.replace(/.*\/synced\//, ""),
+      size: obj.Size,
+      key: obj.Key,
+      mtime: obj.LastModified,
+    };
+  }).filter((i) => i.size);
+  var next = results.IsTruncated ? results.NextContinuationToken : null;
   return { items, next };
 };
 
