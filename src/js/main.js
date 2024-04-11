@@ -169,6 +169,7 @@ var renderMap = async function() {
           "fill-opacity": 0
         }      
       },"Water")                             
+
       // map.addLayer({
       //   'id': 'water-pattern',
       //   'source': "maptiler_planet",
@@ -176,13 +177,14 @@ var renderMap = async function() {
       //   'type': 'fill',
       //   "paint": {
       //     "fill-color": "rgba(255, 255, 0, 1)",
+      //     "fill-opacity":0.05,
       //     "fill-pattern": [
       //       "case",
       //       ["==", ["get", "class"], "ocean"],
-      //       "zones:z1a3",
+      //       "zones:wave",
       //       ["==", ["get", "class"], "lake"],
-      //       "zones:z1a3",
-      //       "zones:z1a3"
+      //       "zones:wave",
+      //       "zones:wave"
       //     ]
       //   }      
       // },"River")
