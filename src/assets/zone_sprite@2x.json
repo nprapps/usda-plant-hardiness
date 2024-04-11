@@ -1,4 +1,11 @@
 {
+  "wave": {
+    "height": 288,
+    "pixelRatio": 4,
+    "width": 388,
+    "x": 2560,
+    "y": 1024
+  },
   "z10a": {
     "height": 512,
     "pixelRatio": 4,
