@@ -10,7 +10,7 @@ var imageView = require("./imageView");
 var textView = require("./textView");
 var chartView = require("./chartView");
 
-var {getUserLocation} = require("./mapFunctions");
+var {getUserLocation,compileLegendStyle,compileZoneLabelStyle} = require("./mapHelpers");
 var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
 
 require("./video");
@@ -112,43 +112,83 @@ var renderMap = async function() {
         url: `pmtiles://${PMTILES_URL}`,
         attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
       })
+      map.addLayer({
+        'id': '2012_zones',
+        'source': 'usda_zones',
+        'source-layer': '2012_zones',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "2012_zone"], null],
+          "#aaffff",compileLegendStyle("2012_zone")          
+          ],
+          "fill-opacity": 1
+        }      
+      },
+      // This line is the id of the layer this layer should be immediately below
+      "Water")
 
-    map.addLayer({
-      'id': '2012_zones',
-      'source': 'usda_zones',
-      'source-layer': '2012_zones',
-      'type': 'fill',
-      'paint': {
-        "fill-color": [
-        "case",
-        ["==", ["get", "2012_zone"], null],
-        "#aaffff",
-        ["step", ["get", "2012_zone"], "#d6d6fd", -55, "#c4c4f0", -50, "#ababd7", -45, "#f0b0e9", -40, "#e691e8", -35, "#d57dd8", -30 , "#a969fa", -25, "#5274e8", -20, "#69a0fb", -15, "#43c9de", -10, "#26bb51", -5, "#6cc860", 0, "#a7d772", 5, "#cddc7a", 10, "#f0db8d", 15, "#efcc64", 20, "#e0b75b", 25, "#fcb77f", 30, "#f39d46", 35, "#ef7932", 40, "#f1572e", 45, "#f18669", 50, "#dd5a53", 55, "#be142d", 60, "#9d3023", 65, "#7b1b09"]
-        ],
-        "fill-opacity": 0.7
-      }      
-    },
-    // This line is the id of the layer this layer should be immediately below
-    "Water")
-    map.addLayer({
-      'id': '2023_zones',
-      'source': 'usda_zones',
-      'source-layer': '2023_zones',
-      'type': 'fill',
-      'paint': {
-        "fill-color": [
-        "case",
-        ["==", ["get", "2023_zone"], null],
-        "#aaffff",
-        ["step", ["get", "2023_zone"], "#d6d6fd", -55, "#c4c4f0", -50, "#ababd7", -45, "#f0b0e9", -40, "#e691e8", -35, "#d57dd8", -30 , "#a969fa", -25, "#5274e8", -20, "#69a0fb", -15, "#43c9de", -10, "#26bb51", -5, "#6cc860", 0, "#a7d772", 5, "#cddc7a", 10, "#f0db8d", 15, "#efcc64", 20, "#e0b75b", 25, "#fcb77f", 30, "#f39d46", 35, "#ef7932", 40, "#f1572e", 45, "#f18669", 50, "#dd5a53", 55, "#be142d", 60, "#9d3023", 65, "#7b1b09"]
-        ],
-        "fill-opacity": 0
-      }      
-    },
-    // This line is the id of the layer this layer should be immediately below
-    "Water") 
+      map.addLayer({
+        'id': '2012_zones_labels',
+        'source': 'usda_zones',
+        'source-layer': '2012_zones',
+        'type': 'fill',
+        "minzoom": 7,
+        'paint': {
+          "fill-color": "rgba(255, 255, 0, 1)",
+          "fill-pattern": compileZoneLabelStyle("2012_zone"),
+          "fill-opacity": 0.4
+        }      
+      },"Water") 
+
+      map.addLayer({
+        'id': '2023_zones',
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "2023_zone"], null],
+          "#aaffff",compileLegendStyle("2023_zone")
+          ],
+          "fill-opacity": 0
+        }      
+      },"Water")       
+
+      map.addLayer({
+        'id': '2023_zones_labels',
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        "minzoom": 7,
+        'paint': {
+          "fill-color": "rgba(255, 255, 0, 1)",
+          "fill-pattern": compileZoneLabelStyle("2023_zone"),
+          "fill-opacity": 0
+        }      
+      },"Water")                             
+      // map.addLayer({
+      //   'id': 'water-pattern',
+      //   'source': "maptiler_planet",
+      //   'source-layer': 'water',
+      //   'type': 'fill',
+      //   "paint": {
+      //     "fill-color": "rgba(255, 255, 0, 1)",
+      //     "fill-pattern": [
+      //       "case",
+      //       ["==", ["get", "class"], "ocean"],
+      //       "zones:z1a3",
+      //       ["==", ["get", "class"], "lake"],
+      //       "zones:z1a3",
+      //       "zones:z1a3"
+      //     ]
+      //   }      
+      // },"River")
+
+      console.log(map.getStyle().layers)
     })
-
 
     // what to do when you click LocateClick  
     var locatorButton = $.one(".locateMe");
@@ -168,29 +208,28 @@ var renderMap = async function() {
           essential: true 
         })
       });
-      console.log('hello')
     });
 
     surpriseMeButton.addEventListener('click',() => {
       // fly to. 
     })
 
-    map.on('mousemove', async function(e) {      
-      var temperatures = await getTemps(e.lngLat);      
+    // map.on('mousemove', async function(e) {
+    //   var temperatures = await getTemps(e.lngLat);      
 
-      document.getElementById('info').innerHTML =
-        // e.point is the x, y coordinates of the mousemove event relative
-        // to the top-left corner of the map
-        `${
-          // e.lngLat is the longitude, latitude geographical position of the event
-          JSON.stringify(e.lngLat.wrap())}<br>
-          Temps: ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
-            <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
-            <b>zone</b>: ${temperatures.zone} | 
-            <b>countBelow</b>: ${temperatures.countBelow} | 
-            <b>countAbove</b>: ${temperatures.countAbove} | 
-          `;
-    });
+    //   document.getElementById('info').innerHTML =
+    //     // e.point is the x, y coordinates of the mousemove event relative
+    //     // to the top-left corner of the map
+    //     `${
+    //       // e.lngLat is the longitude, latitude geographical position of the event
+    //       JSON.stringify(e.lngLat.wrap())}<br>
+    //       Temps: ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
+    //         <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
+    //         <b>zone</b>: ${temperatures.zone} | 
+    //         <b>countBelow</b>: ${temperatures.countBelow} | 
+    //         <b>countAbove</b>: ${temperatures.countAbove} | 
+    //       `;
+    // });
   })
 }
 

@@ -19,11 +19,15 @@ module.exports = class MapView extends View {
     super.enter(slide);
     var map = this.map;
 
+
+
     mapElement.classList.add("active");
     mapElement.classList.remove("exiting");
     
     if (map) {
       // pan and zoom
+
+      console.log(map.getStyle().layers)
 
       var {oldLng, oldLat} = map.getCenter();      
       var oldCenter = [oldLng,oldLat];      
@@ -47,7 +51,8 @@ module.exports = class MapView extends View {
         layers.forEach(d=> {
           map.setPaintProperty(d.id,'fill-opacity',0)
         })
-        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.7);
+        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',1);
+        map.setPaintProperty(`${slide.dataset.maplayer}_labels`, 'fill-opacity',0.4);
       } catch(err) {
         // console.log(err)
       }
