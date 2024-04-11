@@ -872,7 +872,7 @@
       "id": "Other border",
       "type": "line",
       "source": "npr_osm",
-      "source-layer": "boundary",
+      "source-layer": "boundaries",
       "minzoom": 3,
       "maxzoom": 22,
       "layout": {
@@ -905,14 +905,9 @@
         "all",
         [
           "in",
-          "admin_level",
+          "pmap:min_admin_level",
           3,
           4
-        ],
-        [
-          "==",
-          "maritime",
-          0
         ]
       ]
     },
@@ -973,7 +968,7 @@
       "id": "Country border",
       "type": "line",
       "source": "npr_osm",
-      "source-layer": "boundary",
+      "source-layer": "boundaries",
       "minzoom": 0,
       "layout": {
         "line-cap": "round",
@@ -1015,18 +1010,8 @@
         "all",
         [
           "==",
-          "admin_level",
-          2
-        ],
-        [
-          "==",
-          "disputed",
-          0
-        ],
-        [
-          "==",
-          "maritime",
-          0
+          "pmap:kind",
+          "country"
         ]
       ]
     },
@@ -1178,7 +1163,7 @@
       "maxzoom": 12,
       "layout": {
         "text-font": [
-          "NPR Serif Bold"
+          "NPR Serif"
         ],
         "text-size": [
           "interpolate",
@@ -1222,7 +1207,7 @@
             22
           ]
         ],
-        "text-field": "{name:en}",
+        "text-field": "{name}",
         "visibility": "visible",
         "text-padding": {
           "stops": [
