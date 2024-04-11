@@ -3,8 +3,8 @@
   "id": "basic-v2",
   "name": "Basic",
   "sources": {
-    "maptiler_planet": {
-      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=xw1Hu0AgtCFvkcG0fosv",
+    "npr_osm": {
+      "url": "pmtiles://http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/osm-basemap-z10.pmtiles",
       "type": "vector"
     },
     "maptiler_attribution": {
@@ -35,181 +35,9 @@
       }
     },
     {
-      "id": "Residential",
-      "type": "fill",
-      "source": "maptiler_planet",
-      "source-layer": "landuse",
-      "maxzoom": 14,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "fill-color": {
-          "stops": [
-            [
-              2,
-              "hsl(60,23%,81%)"
-            ],
-            [
-              14,
-              "hsl(60,21%,85%)"
-            ]
-          ]
-        }
-      },
-      "filter": [
-        "in",
-        "class",
-        "neighbourhood",
-        "residential",
-        "suburb"
-      ]
-    },
-    {
-      "id": "Glacier",
-      "type": "fill",
-      "source": "maptiler_planet",
-      "source-layer": "globallandcover",
-      "maxzoom": 8,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "fill-color": "hsla(0, 0%, 100%, 0.7)"
-      },
-      "filter": [
-        "==",
-        "class",
-        "snow"
-      ]
-    },
-    {
-      "id": "Forest",
-      "type": "fill",
-      "source": "maptiler_planet",
-      "source-layer": "globallandcover",
-      "maxzoom": 8,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "fill-color": {
-          "stops": [
-            [
-              1,
-              "hsla(91,40%,70%,0.25)"
-            ],
-            [
-              7,
-              "hsla(91,40%,70%,0.6)"
-            ]
-          ]
-        }
-      },
-      "filter": [
-        "in",
-        "class",
-        "forest",
-        "tree"
-      ]
-    },
-    {
-      "id": "Sand",
-      "type": "fill",
-      "source": "maptiler_planet",
-      "source-layer": "landcover",
-      "minzoom": 8,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "fill-color": "hsla(54,81%,53%,0.3)",
-        "fill-opacity": {
-          "stops": [
-            [
-              7,
-              0.7
-            ],
-            [
-              12,
-              1
-            ]
-          ]
-        },
-        "fill-antialias": false
-      },
-      "filter": [
-        "==",
-        "class",
-        "sand"
-      ]
-    },
-    {
-      "id": "Grass",
-      "type": "fill",
-      "source": "maptiler_planet",
-      "source-layer": "landcover",
-      "minzoom": 8,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "fill-color": "hsla(89,40%,78%,0.8)",
-        "fill-opacity": {
-          "stops": [
-            [
-              7,
-              0.7
-            ],
-            [
-              12,
-              1
-            ]
-          ]
-        },
-        "fill-antialias": false
-      },
-      "filter": [
-        "==",
-        "class",
-        "grass"
-      ]
-    },
-    {
-      "id": "Wood",
-      "type": "fill",
-      "source": "maptiler_planet",
-      "source-layer": "landcover",
-      "minzoom": 8,
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "fill-color": "hsla(91,40%,70%,0.8)",
-        "fill-opacity": {
-          "stops": [
-            [
-              7,
-              0.7
-            ],
-            [
-              12,
-              1
-            ]
-          ]
-        },
-        "fill-antialias": false
-      },
-      "filter": [
-        "==",
-        "class",
-        "wood"
-      ]
-    },
-    {
       "id": "Water",
       "type": "fill",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "water",
       "layout": {
         "visibility": "visible"
@@ -236,7 +64,7 @@
     {
       "id": "River",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "waterway",
       "layout": {
         "visibility": "visible"
@@ -275,7 +103,7 @@
     {
       "id": "River intermittent",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "waterway",
       "layout": {
         "visibility": "visible"
@@ -309,7 +137,7 @@
     {
       "id": "Transit tunnel",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "transportation",
       "minzoom": 4,
       "layout": {
@@ -358,7 +186,7 @@
     {
       "id": "Bridge",
       "type": "fill",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "transportation",
       "layout": {
         "visibility": "visible"
@@ -384,7 +212,7 @@
     {
       "id": "Pier",
       "type": "fill",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "transportation",
       "layout": {
         "visibility": "visible"
@@ -404,8 +232,8 @@
     {
       "id": "Road network",
       "type": "line",
-      "source": "maptiler_planet",
-      "source-layer": "transportation",
+      "source": "npr_osm",
+      "source-layer": "roads",
       "minzoom": 5,
       "layout": {
         "line-cap": "round",
@@ -555,7 +383,7 @@
     {
       "id": "Path",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "transportation",
       "minzoom": 15,
       "layout": {
@@ -604,7 +432,7 @@
     {
       "id": "Building",
       "type": "fill",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "building",
       "layout": {
         "visibility": "none"
@@ -629,7 +457,7 @@
     {
       "id": "Railway",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "transportation",
       "minzoom": 9,
       "layout": {
@@ -723,7 +551,7 @@
     {
       "id": "Transit",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "transportation",
       "layout": {
         "visibility": "visible"
@@ -765,7 +593,7 @@
     {
       "id": "Aeroway",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "aeroway",
       "minzoom": 10,
       "layout": {
@@ -842,7 +670,7 @@
     {
       "id": "Airport labels",
       "type": "symbol",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "aerodrome_label",
       "minzoom": 10,
       "layout": {
@@ -898,7 +726,7 @@
     {
       "id": "Station labels",
       "type": "symbol",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "poi",
       "minzoom": 12,
       "layout": {
@@ -962,7 +790,7 @@
     {
       "id": "Road labels",
       "type": "symbol",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "transportation_name",
       "minzoom": 14,
       "layout": {
@@ -1043,7 +871,7 @@
     {
       "id": "Other border",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "boundary",
       "minzoom": 3,
       "maxzoom": 22,
@@ -1091,7 +919,7 @@
     {
       "id": "Disputed border",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "boundary",
       "minzoom": 0,
       "layout": {
@@ -1144,7 +972,7 @@
     {
       "id": "Country border",
       "type": "line",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "boundary",
       "minzoom": 0,
       "layout": {
@@ -1205,7 +1033,7 @@
     {
       "id": "Place labels",
       "type": "symbol",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "place",
       "minzoom": 0,
       "maxzoom": 16,
@@ -1300,8 +1128,8 @@
     {
       "id": "City labels",
       "type": "symbol",
-      "source": "maptiler_planet",
-      "source-layer": "place",
+      "source": "npr_osm",
+      "source-layer": "places",
       "maxzoom": 16,
       "layout": {
         "text-font": [
@@ -1337,15 +1165,15 @@
       },
       "filter": [
         "==",
-        "class",
-        "city"
+        "pmap:kind",
+        "locality"
       ]
     },
     {
       "id": "Country labels",
       "type": "symbol",
-      "source": "maptiler_planet",
-      "source-layer": "place",
+      "source": "npr_osm",
+      "source-layer": "places",
       "minzoom": 1,
       "maxzoom": 12,
       "layout": {
@@ -1418,14 +1246,14 @@
       },
       "filter": [
         "==",
-        "class",
+        "pmap:kind_detail",
         "country"
       ]
     },
     {
       "id": "Continent labels",
       "type": "symbol",
-      "source": "maptiler_planet",
+      "source": "npr_osm",
       "source-layer": "place",
       "maxzoom": 1,
       "layout": {

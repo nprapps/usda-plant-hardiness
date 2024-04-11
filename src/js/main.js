@@ -84,11 +84,11 @@ var renderMap = async function() {
       zoom: 3.8
     });
     
-    map.scrollZoom.disable();
+    // map.scrollZoom.disable();
     // disable map rotation using right click + drag
-    map.dragRotate.disable();
+    // map.dragRotate.disable();
     // disable map rotation using touch rotation gesture
-    map.touchZoomRotate.disableRotation();
+    // map.touchZoomRotate.disableRotation();
 
     // Add geolocate control to the map.
     // map.addControl(
