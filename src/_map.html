@@ -1,10 +1,13 @@
 <section class="map slide align-<%= slide.align || "right" %> <%= slide.classes %>" id="<%= slide.id %>"  
   data-type="map"
   data-mapLayer="<%= slide.mapLayer %>"
+  <% if (slide.addPointer) { %> 
+  data-addPointer='true'
+  <% } %>
   <% if (slide.center) { %>
   data-center="<%= slide.center%>"
   <% } %>
-  <% if (slide.center) { %>
+  <% if (slide.zoom) { %>
   data-zoom="<%= slide.zoom%>"
   <% } %>
   >  

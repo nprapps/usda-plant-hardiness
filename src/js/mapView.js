@@ -1,7 +1,9 @@
 var $ = require("./lib/qsa");
 var View = require("./view"); //from Ruth
 var debounce = require("./lib/debounce"); //from Ruth
-var { isMobile } = require("./lib/breakpoints");
+// var { isMobile } = require("./lib/breakpoints");
+
+var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
 var mapElement = $.one("#base-map");
 // var mapAssets = {};
@@ -26,8 +28,6 @@ module.exports = class MapView extends View {
     
     if (map) {
       // pan and zoom
-
-      console.log(map.getStyle().layers)
 
       var {oldLng, oldLat} = map.getCenter();      
       var oldCenter = [oldLng,oldLat];      
@@ -54,8 +54,20 @@ module.exports = class MapView extends View {
         map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',1);
         map.setPaintProperty(`${slide.dataset.maplayer}_labels`, 'fill-opacity',0.4);
       } catch(err) {
-        // console.log(err)
+        console.log(err)
       }
+
+      // Get data under a lat/lon
+      if (slide.dataset.addpointer) {
+        console.log('has add pointer')
+        console.log(newCenter)
+        console.log(map.project(newCenter))
+        var point = map.project(newCenter);
+        // // get marker and use to get data
+        const features = map.queryRenderedFeatures(point);
+        console.log(features)
+      } 
+      
 
     }
     // window.addEventListener("scroll", this.onMapScroll);

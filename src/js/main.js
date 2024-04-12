@@ -10,11 +10,21 @@ var imageView = require("./imageView");
 var textView = require("./textView");
 var chartView = require("./chartView");
 
-var {getUserLocation,compileLegendStyle,compileZoneLabelStyle} = require("./mapHelpers");
+var {
+      getUserLocation,
+      compileLegendStyle,
+      compileZoneLabelStyle
+    } = require("./mapHelpers");
+
 var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
 
 require("./video");
 require("./analytics");
+
+var {
+  surpriseClick,
+  locateMeClick
+} = require("./geoClick");
 
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
@@ -23,9 +33,13 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 var completion = 0;
 var map;
+
+// global variable for active map layer
 var activeMap = "2012_zone";
+
+// global place variable
 var selectedLocation = {
-  coords:null,
+  coords:[],
   placeName: null
 };
 
@@ -196,27 +210,40 @@ var renderMap = async function() {
     var locatorButton = $.one(".locateMe");
     var surpriseMeButton = $.one(".surpriseMe");
 
-    locatorButton.addEventListener('click', () => {
-      // get lat long      
-      getUserLocation().then(userLocation => {
-        // Do something with userLocation
-        console.log(userLocation);
-        selectedLocation.coords = userLocation;
-        
-        map.flyTo({
-          center: [userLocation.longitude,userLocation.latitude],
-          zoom: 12,
-          speed:0.7,
-          essential: true 
-        })
-      });
-    });
+    locatorButton.addEventListener('click',(evt) => {      
+      locateMeClick(evt,selectedLocation)
+    })    
 
-    surpriseMeButton.addEventListener('click',() => {
-      // fly to. 
+    surpriseMeButton.addEventListener('click',(evt) => {      
+      surpriseClick(evt,selectedLocation)
     })
 
     map.on('mousemove', async function(e) {
+      // get features under point
+        const features = map.queryRenderedFeatures(e.point);
+        console.log(e)
+        // // Limit the number of properties we're displaying for
+        // // legibility and performance
+        // const displayProperties = [
+        //     'type',
+        //     'properties',
+        //     'id',
+        //     'layer',
+        //     'source',
+        //     'sourceLayer',
+        //     'state'
+        // ];
+
+        // const displayFeatures = features.map((feat) => {
+        //     const displayFeat = {};
+        //     displayProperties.forEach((prop) => {
+        //         displayFeat[prop] = feat[prop];
+        //     });
+        //     return displayFeat;
+        // });
+
+      console.log(e)
+
       var temperatures = await getTemps(e.lngLat);      
 
       document.getElementById('info').innerHTML =
@@ -342,12 +369,3 @@ var trackLink = function() {
   track(action, label);
 };
 $("[data-track]").forEach(el => el.addEventListener("click", trackLink));
-
-
-
-
-async function getLocation() {
-  const userLocation = await getUserLocation();
-  // Do something with userLocation
-  console.log(userLocation);
-}
