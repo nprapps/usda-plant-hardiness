@@ -216,22 +216,22 @@ var renderMap = async function() {
       // fly to. 
     })
 
-    // map.on('mousemove', async function(e) {
-    //   var temperatures = await getTemps(e.lngLat);      
+    map.on('mousemove', async function(e) {
+      var temperatures = await getTemps(e.lngLat);      
 
-    //   document.getElementById('info').innerHTML =
-    //     // e.point is the x, y coordinates of the mousemove event relative
-    //     // to the top-left corner of the map
-    //     `${
-    //       // e.lngLat is the longitude, latitude geographical position of the event
-    //       JSON.stringify(e.lngLat.wrap())}<br>
-    //       Temps: ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
-    //         <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
-    //         <b>zone</b>: ${temperatures.zone} | 
-    //         <b>countBelow</b>: ${temperatures.countBelow} | 
-    //         <b>countAbove</b>: ${temperatures.countAbove} | 
-    //       `;
-    // });
+      document.getElementById('info').innerHTML =
+        // e.point is the x, y coordinates of the mousemove event relative
+        // to the top-left corner of the map
+        `${
+          // e.lngLat is the longitude, latitude geographical position of the event
+          JSON.stringify(e.lngLat.wrap())}<br>
+          Temps: ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
+            <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
+            <b>zone</b>: ${temperatures.zone} | 
+            <b>countBelow</b>: ${temperatures.countBelow} | 
+            <b>countAbove</b>: ${temperatures.countAbove} | 
+          `;
+    });
   })
 }
 

@@ -48,9 +48,20 @@ var getTemps = async function(lngLat) {
   // //get file
   var fileRowNum = adjustedRowNum - (fileY*c)
   var fileColNum = adjustedColNum - (fileX*c)
+  // console.log(fileRowNum)
+  var maxFileY = 15;
+  var maxFileX = 35;
+  // var fileRowMax = 
+
+  var inBounds = true;
+  if (fileY < 0 || fileY > maxFileY || fileX < 0 || fileX > maxFileX) {
+    inBounds = false;
+    console.log(inBounds)
+  } 
+
 
   // only get data if the data is a new file
-  if (fileName != tempData.fileName) {
+  if (fileName != tempData.fileName && inBounds) {
     var url = `./assets/synced/json/minTmin/${fileName}.json`
     console.log(url)
     // // get data    

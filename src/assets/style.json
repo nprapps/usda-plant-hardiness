@@ -1163,7 +1163,7 @@
       "maxzoom": 12,
       "layout": {
         "text-font": [
-          "NPR Serif"
+          "NPR Serif Bold"
         ],
         "text-size": [
           "interpolate",
@@ -1208,7 +1208,7 @@
           ]
         ],
         "text-field": "{name}",
-        "visibility": "visible",
+        "visibility": "none",
         "text-padding": {
           "stops": [
             [
