@@ -1,6 +1,7 @@
 var $ = require("./lib/qsa")
 var debounce = require("./lib/debounce"); //ruth had in sea level rise...not sure if we need
 var track = require("./lib/tracking");
+// var { isMobile } = require("./lib/breakpoints");
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 var pmtiles = require("pmtiles/dist");
@@ -92,6 +93,8 @@ var renderMap = async function() {
   protocol.add(p);
 
   p.getHeader().then(h => {
+
+    // optionally, get timezone if mobile, to pick which 3rd of country to show
 
     map = new maplibregl.Map({
       container: container,
@@ -246,7 +249,6 @@ var renderMap = async function() {
     map.on('mousemove', async function(e) {
       // get features under point
         const features = map.queryRenderedFeatures(e.point);
-        console.log(e)
         // // Limit the number of properties we're displaying for
         // // legibility and performance
         // const displayProperties = [

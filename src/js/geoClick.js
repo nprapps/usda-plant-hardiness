@@ -91,7 +91,7 @@ var geoClick = function(selectedLocation,target,map) {
   nextSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
-  nextSlide.dataset.zoom = 10.5;
+  nextSlide.dataset.zoom = 8.5;
 
   // move pointer
   map.getSource('point').setData(makePoint(selectedLocation.coords));
@@ -150,15 +150,62 @@ async function updateDom(selectedLocation,map) {
     <b>countAbove</b>: ${temperatures.countAbove}
   `;
   // update DOM
+  // get all spans inside 
+  var spans = $(".content p span.mod")
+  console.log(spans)
+  console.log(zoneInfo)
+
+  spans.forEach(d => {
+    // update 2012 zone
+    if (d.classList.value.includes("oldZone")) {
+      d.innerHTML = zoneInfo.d2012;
+      d.className = "";
+
+      d.classList.add(`mod`)
+      d.classList.add(`t${zoneInfo.d2012}`)
+      d.classList.add(`zoneText`)
+      d.classList.add('oldZone')
+      
+    }
+
+    // update 2023 zone
+    if (d.classList.value.includes("newZone")) {
+
+      d.innerHTML = zoneInfo.d2023;
+      d.className = "";
+      d.classList.add(`mod`)    
+      d.classList.add(`t${zoneInfo.d2023}`)
+      d.classList.add("zoneText")
+      d.classList.add('newZone')
+    }
+
+    // change temp ranges
+    if (d.classList.value.includes("tempRange")) {
+      if (d.classList.value.includes("t2012")) {
+        var min = zoneInfo.t2012;
+      } else {
+        var min = zoneInfo.t2023;
+      }
+      if (min == 65) {
+        d.innerHTML = "above 65"  
+      } else if (min == -60) {
+        d.innerHTML = 'Lower than -55'
+      } else {
+        d.innerHTML = `between ${min} and ${min+5}`
+      }
+      
+    }
+  })
   //TKTKTKTK
 }
 
 function getZone(zonesData) {
-  console.log(zonesData)
   var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];
   var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];
 
   var obj = {
+    "t2012":temp2012,
+    "t2023":temp2023,
     "d2012":temp2zone(temp2012),
     "d2023":temp2zone(temp2023),
     "zDiff":((temp2023 - temp2012)/5)
