@@ -118,13 +118,30 @@ function compileZoneLabelStyle(layer) {
           ]
 }
 
+function makePoint(coords) {
+  return {
+    'type': 'FeatureCollection',
+    'features': [
+      {
+        'type': 'Feature',
+        'geometry': {
+          'type': 'Point',
+          'coordinates': coords
+        }
+      }
+    ]
+  };
+}
+
+
 
 
 module.exports = {
   getUserLocation,
   compileLegendStyle,
   getLegendConfig,
-  compileZoneLabelStyle
+  compileZoneLabelStyle,
+  makePoint
 }
 
 

@@ -13,7 +13,8 @@ var chartView = require("./chartView");
 var {
       getUserLocation,
       compileLegendStyle,
-      compileZoneLabelStyle
+      compileZoneLabelStyle,
+      makePoint
     } = require("./mapHelpers");
 
 var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
@@ -23,7 +24,8 @@ require("./analytics");
 
 var {
   surpriseClick,
-  locateMeClick
+  locateMeClick,
+  rotateClick
 } = require("./geoClick");
 
 var slides = $(".sequence .slide").reverse();
@@ -121,6 +123,11 @@ var renderMap = async function() {
     // });
 
     map.on('load', () => {
+      map.addSource('point', {
+          'type': 'geojson',
+          'data': makePoint([0,0])
+      });
+
       map.addSource('usda_zones', {
         type: 'vector',
         url: `pmtiles://${PMTILES_URL}`,
@@ -182,7 +189,19 @@ var renderMap = async function() {
           "fill-pattern": compileZoneLabelStyle("2023_zone"),
           "fill-opacity": 0
         }      
-      },"Water")                             
+      },"Water")    
+
+      map.addLayer({
+        'id': 'point',
+        'type': 'circle',
+        'source': 'point',
+        'paint': {
+            'circle-radius': 8,
+            'circle-color': 'transparent',
+            'circle-stroke-color':'#fff',
+            'circle-stroke-width':2
+        }
+      });                         
 
       // map.addLayer({
       //   'id': 'water-pattern',
@@ -209,6 +228,12 @@ var renderMap = async function() {
     // what to do when you click LocateClick  
     var locatorButton = $.one(".locateMe");
     var surpriseMeButton = $.one(".surpriseMe");
+
+
+
+    $.one(".rotateLocation").addEventListener('click',(evt) => {      
+      rotateClick(evt,selectedLocation,map)
+    })    
 
     locatorButton.addEventListener('click',(evt) => {      
       locateMeClick(evt,selectedLocation,map)

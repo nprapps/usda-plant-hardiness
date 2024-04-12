@@ -1,6 +1,10 @@
 var $ = require("./lib/qsa")
 
-var {getUserLocation} = require("./mapHelpers");
+var {
+  getUserLocation,
+  makePoint 
+} = require("./mapHelpers");
+
 var {
   getTemps,
   formatTemperatures,
@@ -29,6 +33,36 @@ export function locateMeClick(evt,selectedLocation,map) {
 
 }
 
+export async function rotateClick(evt,selectedLocation,map) {
+  // get random place
+  var randomLngLat = [
+    -98.04 + (Math.random() - 0.9) * 10,
+    39 + (Math.random() - 0.4) * 10
+  ]
+
+  // Get place name from coords?
+
+  // update master data
+  selectedLocation.coords = randomLngLat;
+  
+  var rotatorFlying = true;
+  map.flyTo({
+    center: randomLngLat,
+    speed:0.7,
+    essential: true 
+  })
+
+  // move pointer
+  map.getSource('point').setData(makePoint(selectedLocation.coords));
+
+  map.on('moveend', function(e){
+    if (rotatorFlying) {
+      updateDom(selectedLocation,map)    
+      rotatorFlying = false  
+    }    
+  }); 
+}
+
 export function surpriseClick(evt,selectedLocation,map) {
 
   // get the parent container of this
@@ -36,8 +70,8 @@ export function surpriseClick(evt,selectedLocation,map) {
 
   // get random place
   var randomLngLat = [
-    -80.5 + (Math.random() - 0.5) * 10,
-    40 + (Math.random() - 0.5) * 10
+    -98.04 + (Math.random() - 0.9) * 10,
+    39 + (Math.random() - 0.4) * 10
   ]
 
   // Get place name from coords?
@@ -58,6 +92,9 @@ var geoClick = function(selectedLocation,target,map) {
 
   // Change the zoom level
   nextSlide.dataset.zoom = 10.5;
+
+  // move pointer
+  map.getSource('point').setData(makePoint(selectedLocation.coords));
 
   // deactivate the buttons?
   // var qBtns = target.querySelectorAll("button");
@@ -101,7 +138,7 @@ async function updateDom(selectedLocation,map) {
   });  
 
   // get all items that need to be updated
-  $.one("#info").innerHTML = `
+  $.one(".info-inner").innerHTML = `
   <b>Lng,Lat:</b> ${selectedLocation.coords}<br>
   <b>x,y:</b> ${point.x},${point.y}<br>
   <b>2012 zone:</b> ${zoneInfo.d2012}<br>
@@ -117,6 +154,7 @@ async function updateDom(selectedLocation,map) {
 }
 
 function getZone(zonesData) {
+  console.log(zonesData)
   var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];
   var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];
 
