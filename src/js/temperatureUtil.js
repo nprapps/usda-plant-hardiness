@@ -73,18 +73,16 @@ var getTemps = async function(lngLat) {
   }
 
   var data = tempData.data[fileRowNum][fileColNum];
+
   var avg = average(data);
   var avgfloor = Math.floor(avg/5)*5;
-  var zoneID = (avgfloor/5)+12;
-  var zone = Math.floor((zoneID/2)+1);
-  var halfZone = zoneID % 2 == 0 ? "a" : "b";
-  var countBelow = data.filter(e => e < zone);
-  var countAbove = data.filter(e => e > zone+5);
+  var countBelow = data.filter(e => e < avgfloor);
+  var countAbove = data.filter(e => e > avgfloor+5);
 
   var thisCellData = {
         "data":data,
         "avg": avg,
-        "zone": `${zone}${halfZone}`,
+        "zone": temp2zone(avgfloor),
         "countBelow": countBelow.length,
         "countAbove": countAbove.length
       }
@@ -92,10 +90,15 @@ var getTemps = async function(lngLat) {
   return thisCellData
 }    
 
-
+function temp2zone(temperature) {
+  var num = (temperature / 5) + 12;
+  var letter = num % 2 == 0 ? "a" : "b"
+  return `${Math.floor(num/2)+1}${letter}`;
+}
 
 module.exports = {
   getTemps,
   getData,
-  formatTemperatures
+  formatTemperatures,
+  temp2zone
 }

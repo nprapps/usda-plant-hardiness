@@ -211,11 +211,11 @@ var renderMap = async function() {
     var surpriseMeButton = $.one(".surpriseMe");
 
     locatorButton.addEventListener('click',(evt) => {      
-      locateMeClick(evt,selectedLocation)
+      locateMeClick(evt,selectedLocation,map)
     })    
 
     surpriseMeButton.addEventListener('click',(evt) => {      
-      surpriseClick(evt,selectedLocation)
+      surpriseClick(evt,selectedLocation,map)
     })
 
     map.on('mousemove', async function(e) {

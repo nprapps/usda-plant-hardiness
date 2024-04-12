@@ -21,7 +21,8 @@ module.exports = class MapView extends View {
     super.enter(slide);
     var map = this.map;
 
-
+    console.log(slide)
+    console.log(slide.dataset.maplayer)
 
     mapElement.classList.add("active");
     mapElement.classList.remove("exiting");
@@ -30,11 +31,23 @@ module.exports = class MapView extends View {
       // pan and zoom
 
       var {oldLng, oldLat} = map.getCenter();      
-      var oldCenter = [oldLng,oldLat];      
-      var newCenter = JSON.parse(slide.dataset.center);          
+      var oldCenter = [oldLng,oldLat];   
+
+      if (slide.dataset.center) {
+        var newCenter = JSON.parse(slide.dataset.center);            
+      } else {
+        var newCenter = oldCenter;
+      }
+      
       
       var oldZoom = map.getZoom();
-      var newZoom = slide.dataset.zoom;
+
+      if (slide.dataset.zoom) {
+        var newZoom = slide.dataset.zoom;  
+      } else {
+        var newZoom = oldZoom;
+      }
+      
 
       if (oldZoom != newZoom || oldCenter != newCenter) {
         map.flyTo({
@@ -56,19 +69,6 @@ module.exports = class MapView extends View {
       } catch(err) {
         console.log(err)
       }
-
-      // Get data under a lat/lon
-      if (slide.dataset.addpointer) {
-        console.log('has add pointer')
-        console.log(newCenter)
-        console.log(map.project(newCenter))
-        var point = map.project(newCenter);
-        // // get marker and use to get data
-        const features = map.queryRenderedFeatures(point);
-        console.log(features)
-      } 
-      
-
     }
     // window.addEventListener("scroll", this.onMapScroll);
   }
