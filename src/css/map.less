@@ -1,5 +1,4 @@
 // colors
-
 @t1a: #D6D6FD;
 @t1b: #c4c4f0;
 @t2a: #DCBAF4;
@@ -54,6 +53,23 @@
 .t13a {background-color: @t13a;}
 .t13b {background-color: @t13b;}
 
+// Diverging temp colors
+// @tDiff-3: #0041D7;
+// @tDiff-2: #5580E4;
+// @tDiff-1: #AABFF1;
+// @tDiff0:  #FFFFFF;
+// @tDiff1:  #ECBCAA;
+// @tDiff2:  #D97A55;
+// @tDiff3:  #C73800;
+
+// .tDiff-3 {background-color: @tDiff-3};
+// .tDiff-2 {background-color: @tDiff-2};
+// .tDiff-1 {background-color: @tDiff-1};
+// .tDiff0 {background-color: @tDiff0};
+// .tDiff1 {background-color: @tDiff1};
+// .tDiff2 {background-color: @tDiff2};
+// .tDiff3 {background-color: @tDiff3};
+
 .mod.zoneText {
   padding-left:10px;
   padding-right: 10px;
@@ -61,7 +77,6 @@
 
 // Base map styles
 #base-map {
-  // z-index: 100 !important;
   z-index: 0;
   clear: right;
   position: fixed;
@@ -85,18 +100,51 @@
     animation: fade-out 0.2s linear;
     opacity: 0;
   }
+
+  &.explore-mode {
+    z-index: 100 !important;
+  }
 }
 
 #info {
-  // z-index: 101;
+  z-index: -2;
   position: fixed;
   background-color: white;
   color: black;
   margin:10px;
   padding:10px;
-  left: 0;
+  right: 0;
   top: 0;
-  display: none;
+  width: 300px;
+  
+
+  &.explore-mode {
+    z-index: 101;
+  }
+}
+
+#explore-button {
+  z-index: 102;
+  position: fixed;
+  background: white;
+  color: #333;
+  padding: 5px;
+  top: 0;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  div {
+    display: none;
+    &.active {
+      display: inline-block;
+    }
+  }
 }
 
 #geo-container {

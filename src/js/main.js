@@ -15,6 +15,7 @@ var {
       getUserLocation,
       compileLegendStyle,
       compileZoneLabelStyle,
+      compileTempDiffStyle,
       makePoint
     } = require("./mapHelpers");
 
@@ -83,9 +84,9 @@ var renderMap = async function() {
       });
   });
 
-  // const PMTILES_URL = 'https://apps.npr.org/dailygraphics/graphics/00-map-test-20240318/synced/usda_zones.pmtiles';
+  
   const PMTILES_URL = 'http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/usda_zones.pmtiles'
-
+  const tempDiffURL =  'http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/temp_diff.pmtiles'  
 
   const p = new pmtiles.PMTiles(PMTILES_URL);
 
@@ -136,6 +137,33 @@ var renderMap = async function() {
         url: `pmtiles://${PMTILES_URL}`,
         attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
       })
+
+      map.addSource('temp_diff', {
+        type: 'vector',
+        url: `pmtiles://${tempDiffURL}`
+      })
+
+
+      map.addLayer({
+        'id': 'temp_diff_layer',
+        'source': 'temp_diff',
+        'source-layer': 'temp_diffgeojsonl',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          'interpolate',
+          ['linear'],
+          ['get', 'temp_diff'],
+          -10, '#3F4E6F', // Low population density (transparent)
+          0, '#fff', // Medium population density (semi-transparent red)
+          10, '#C73800' // High population density (semi-transparent blue)
+        ],
+          "fill-opacity": 0
+        }      
+      },
+      // This line is the id of the layer this layer should be immediately below
+      "Water")
+
       map.addLayer({
         'id': '2012_zones',
         'source': 'usda_zones',
@@ -232,7 +260,12 @@ var renderMap = async function() {
     var locatorButton = $.one(".locateMe");
     var surpriseMeButton = $.one(".surpriseMe");
 
+    $.one("#explore-button").addEventListener('click',() => {
+      // console.log()
+      $.one("#base-map").classList.toggle('explore-mode');
+      $.one("#info").classList.toggle('explore-mode');
 
+    })    
 
     $.one(".rotateLocation").addEventListener('click',(evt) => {      
       rotateClick(evt,selectedLocation,map)
@@ -248,30 +281,9 @@ var renderMap = async function() {
 
     map.on('mousemove', async function(e) {
       // get features under point
-        const features = map.queryRenderedFeatures(e.point);
-        // // Limit the number of properties we're displaying for
-        // // legibility and performance
-        // const displayProperties = [
-        //     'type',
-        //     'properties',
-        //     'id',
-        //     'layer',
-        //     'source',
-        //     'sourceLayer',
-        //     'state'
-        // ];
+      const features = map.queryRenderedFeatures(e.point);
 
-        // const displayFeatures = features.map((feat) => {
-        //     const displayFeat = {};
-        //     displayProperties.forEach((prop) => {
-        //         displayFeat[prop] = feat[prop];
-        //     });
-        //     return displayFeat;
-        // });
-
-      console.log(e)
-
-      var temperatures = await getTemps(e.lngLat);      
+      var temperatures = await getTemps(e.lngLat);
 
       document.getElementById('info').innerHTML =
         // e.point is the x, y coordinates of the mousemove event relative

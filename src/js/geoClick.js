@@ -36,7 +36,7 @@ export function locateMeClick(evt,selectedLocation,map) {
 export async function rotateClick(evt,selectedLocation,map) {
   // get random place
   var randomLngLat = [
-    -98.04 + (Math.random() - 0.9) * 10,
+    -85.04 + (Math.random() - 0.5) * 10,
     39 + (Math.random() - 0.4) * 10
   ]
 
@@ -70,7 +70,7 @@ export function surpriseClick(evt,selectedLocation,map) {
 
   // get random place
   var randomLngLat = [
-    -98.04 + (Math.random() - 0.9) * 10,
+    -85.04 + (Math.random() - 0.4) * 10,
     39 + (Math.random() - 0.4) * 10
   ]
 

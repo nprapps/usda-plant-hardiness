@@ -29,6 +29,21 @@ var legendColors = [
   "#581205"
 ]
 
+var tempDiffColors = [
+  "#3F4E6F",
+"#7F899F",
+"#BFC4CF",
+"#FFFFFF",
+"#F8E6DF",
+"#F1CDBF",
+"#EAB49F",
+"#E39B7F",
+"#DC825F",
+"#D5693F",
+"#CE501F",
+"#C73800"
+]
+
 var legendConfigSeed = [{"zoneName":"1a"},{"zoneName":"1b"},{"zoneName":"1a"},{"zoneName":"2b"},{"zoneName":"2a"},{"zoneName":"3b"},{"zoneName":"3a"},{"zoneName":"4b"},{"zoneName":"4a"},{"zoneName":"5b"},{"zoneName":"5a"},{"zoneName":"6b"},{"zoneName":"6a"},{"zoneName":"7b"},{"zoneName":"7a"},{"zoneName":"8b"},{"zoneName":"8a"},{"zoneName":"9b"},{"zoneName":"9a"},{"zoneName":"10b"},{"zoneName":"10a"},{"zoneName":"11b"},{"zoneName":"11a"},{"zoneName":"12b"},{"zoneName":"12a"},{"zoneName":"13b"}]
 
 function getLegendConfig(legendColors) {
@@ -118,6 +133,21 @@ function compileZoneLabelStyle(layer) {
           ]
 }
 
+function compileTempDiffStyle() {
+  var arr = ["match",["get", "temp_diff"]];
+
+  var defaultColor = "#000"
+  
+  for (var i = 0; i < tempDiffColors.length; i++) {
+    arr.push(i-3)
+    arr.push(tempDiffColors[i])
+  }
+  
+
+  arr.push(defaultColor)
+  return arr;
+}
+
 function makePoint(coords) {
   return {
     'type': 'FeatureCollection',
@@ -141,6 +171,7 @@ module.exports = {
   compileLegendStyle,
   getLegendConfig,
   compileZoneLabelStyle,
+  compileTempDiffStyle,
   makePoint
 }
 
