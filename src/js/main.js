@@ -29,6 +29,8 @@ var {
   fetchCSV
 } = require("./helpers/csvUtils");
 
+
+
 require("./video");
 require("./analytics");
 
@@ -53,11 +55,12 @@ let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/
 // global variable for active map layer
 var activeMap = "2012_zone";
 
-// global place variable
+// global place variable...default to Raleigh
 var selectedLocation = {
-  coords:[],
-  placeName: null,
-  placeState: null
+  coords:[78.63475518335247,35.77739896610018],
+  placeName: "Raleigh",
+  placeState: "NC",
+  type: "default"
 };
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
@@ -74,10 +77,15 @@ if (isOne) {
 
 // Initialize map here
 var onWindowLoaded = async function() {
+  // pre-define default location as active 
+  $("span.mod .default").forEach(d=>d.classList.add("active"))
+
+  // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
     locations = data;
   }).catch(error => console.error('Error fetching CSV:', error));
 
+  // load the map
   renderMap();
 }
 
@@ -269,7 +277,7 @@ var renderMap = async function() {
       //   }      
       // },"River")
 
-      console.log(map.getStyle().layers)
+      // console.log(map.getStyle().layers)
     })
 
     // what to do when you click LocateClick  
@@ -277,7 +285,6 @@ var renderMap = async function() {
     var surpriseMeButton = $.one(".surpriseMe");
 
     $.one("#explore-button").addEventListener('click',() => {
-      // console.log()
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
 

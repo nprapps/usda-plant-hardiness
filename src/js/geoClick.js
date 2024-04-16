@@ -1,6 +1,11 @@
 var $ = require("./lib/qsa")
 
 var {
+  getName,
+  tempRange
+} = require("./helpers/textUtils")
+
+var {
   getUserLocation,
   makePoint,
   getZone
@@ -23,7 +28,7 @@ function locateMeClick(evt,selectedLocation,map) {
   getUserLocation().then(userLocation => {
     // Do something with userLocation   
     selectedLocation.coords = [userLocation.longitude,userLocation.latitude];
-    
+    selectedLocation.type = "findMe"
     // restore "locate me text"
     
     setTimeout(() => $.one(".locator-text").classList.add("active"), 1500);
@@ -77,15 +82,13 @@ function surpriseClick(locations,evt,selectedLocation,map,surpriseMeButton) {
   var target = evt.target.parentNode.parentNode.parentNode.parentNode;
 
   // get random place
-  console.log(locations)
   var place = locations[Math.floor(Math.random()*locations.length)];
-  console.log(place)
-  // Get place name from coords?
 
   // update master data
   selectedLocation.coords = [place.lng,place.lat];
   selectedLocation.placeName = place.name;
-  selectedLocation.state = place.state;
+  selectedLocation.placeState = place.state;
+  selectedLocation.type = 'custom'
 
   return geoClick(selectedLocation,target,map);
 }
@@ -99,8 +102,7 @@ var geoClick = function(selectedLocation,target,map) {
   nextSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
-  // nextSlide.dataset.zoom = 8.5;
-  nextSlide.dataset.zoom = 12;
+  nextSlide.dataset.zoom = 8.5;
 
   // move pointer
   map.getSource('point').setData(makePoint(selectedLocation.coords));
@@ -157,53 +159,39 @@ async function updateDom(selectedLocation,map) {
     <b>countAbove</b>: ${temperatures.countAbove}
   `;
   // update DOM
-  // get all spans inside 
-  var spans = $(".content p span.mod")
-  console.log(spans)
-  console.log(zoneInfo)
 
-  spans.forEach(d => {
-    // update 2012 zone
-    if (d.classList.value.includes("oldZone")) {
-      d.innerHTML = zoneInfo.d2012;
-      d.className = "";
-
-      d.classList.add(`mod`)
-      d.classList.add(`t${zoneInfo.d2012}`)
-      d.classList.add(`zoneText`)
-      d.classList.add('oldZone')
-      
+  // change all data items, if possible
+  var changeItems = [
+    {
+      'id':'oldZone',
+      'formula':'tk'
+    },
+    {
+      'id':'yourPlace',
+      'formula':getName(selectedLocation)
+    },
+    {
+      'id':'tempRange-2012',
+      'formula':tempRange(zoneInfo.t2012)
+    },
+    {
+      'id':'tempRange-2023',
+      'formula':tempRange(zoneInfo.t2023)
     }
+  ]
 
-    // update 2023 zone
-    if (d.classList.value.includes("newZone")) {
+  console.log(selectedLocation)
 
-      d.innerHTML = zoneInfo.d2023;
-      d.className = "";
-      d.classList.add(`mod`)    
-      d.classList.add(`t${zoneInfo.d2023}`)
-      d.classList.add("zoneText")
-      d.classList.add('newZone')
-    }
-
-    // change temp ranges
-    if (d.classList.value.includes("tempRange")) {
-      if (d.classList.value.includes("t2012")) {
-        var min = zoneInfo.t2012;
-      } else {
-        var min = zoneInfo.t2023;
-      }
-      if (min == 65) {
-        d.innerHTML = "above 65"  
-      } else if (min == -60) {
-        d.innerHTML = 'Lower than -55'
-      } else {
-        d.innerHTML = `between ${min} and ${min+5}`
-      }
-      
-    }
+  changeItems.forEach(d=> {
+    var items = $(`[data-item='${d.id}']`);        
+    items.forEach(item => item.innerHTML = d.formula)
   })
-  //TKTKTKTK
+  
+
+  // pick which of the three to show
+  var textType = selectedLocation.type;
+  $("span.mod span").forEach(d=>d.classList.remove("active"))
+  $(`span.mod .${textType}`).forEach(d=>d.classList.add("active"))
 }
 
 
@@ -211,7 +199,6 @@ function clickButton(csvData) {
   // Check if csvData is defined and not empty
   if (csvData && csvData.length > 0) {
     // Display or process the CSV data
-    console.log(csvData);
   } else {
     console.error('CSV data is not available.');
   }

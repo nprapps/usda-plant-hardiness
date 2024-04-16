@@ -75,6 +75,16 @@
   padding-right: 10px;
 }
 
+.mod {
+  .default, .custom, .findMe {
+    display: none;
+
+    &.active {
+      display: inline-block;
+    }
+  }
+}
+
 // Base map styles
 #base-map {
   z-index: 0;
@@ -168,6 +178,7 @@
 
   &.locateMe {
     background-color: lightgreen;
+    display: n;
   }
   &.surpriseMe {
     background-color: lightseagreen;
