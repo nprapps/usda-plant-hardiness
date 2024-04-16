@@ -1,11 +1,5 @@
 var $ = require("./lib/qsa")
 
-var d3 = {
-  ...require("d3-dsv/dist/d3-dsv.min"),
-};
-
-var csv_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/2023_GAZEETER.csv";
-
 var {
   getUserLocation,
   makePoint,
@@ -15,9 +9,9 @@ var {
 var {
   getTemps,
   formatTemperatures,
-  temp2zone} = require("./helpers/temperatureUtil");
+  temp2zone} = require("./helpers/temperatureUtils");
 
-export function locateMeClick(evt,selectedLocation,map) {
+function locateMeClick(evt,selectedLocation,map) {
   // get the parent container of this
   var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
@@ -40,7 +34,7 @@ export function locateMeClick(evt,selectedLocation,map) {
 
 }
 
-export async function rotateClick(evt,selectedLocation,map) {
+async function rotateClick(evt,selectedLocation,map) {
   // get random place
   var randomLngLat = [
     -85.04 + (Math.random() - 0.5) * 10,
@@ -70,21 +64,28 @@ export async function rotateClick(evt,selectedLocation,map) {
   }); 
 }
 
-export function surpriseClick(evt,selectedLocation,map) {
-
-  // get the parent container of this
+// function surpriseClick(evt,selectedLocation,map,surpriseMeButton,locations) {
+function surpriseClick(locations,evt,selectedLocation,map,surpriseMeButton) {
+  // Check if locations is defined and not empty
+  if (locations && locations.length > 0) {
+    // Display or process the CSV data
+    // console.log(locations);
+  } else {
+    console.error('CSV data is not available.');
+  }
+  // // get the parent container of this
   var target = evt.target.parentNode.parentNode.parentNode.parentNode;
 
   // get random place
-  var randomLngLat = [
-    -85.04 + (Math.random() - 0.4) * 10,
-    39 + (Math.random() - 0.4) * 10
-  ]
-
+  console.log(locations)
+  var place = locations[Math.floor(Math.random()*locations.length)];
+  console.log(place)
   // Get place name from coords?
 
   // update master data
-  selectedLocation.coords = randomLngLat;
+  selectedLocation.coords = [place.lng,place.lat];
+  selectedLocation.placeName = place.name;
+  selectedLocation.state = place.state;
 
   return geoClick(selectedLocation,target,map);
 }
@@ -98,7 +99,8 @@ var geoClick = function(selectedLocation,target,map) {
   nextSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
-  nextSlide.dataset.zoom = 8.5;
+  // nextSlide.dataset.zoom = 8.5;
+  nextSlide.dataset.zoom = 12;
 
   // move pointer
   map.getSource('point').setData(makePoint(selectedLocation.coords));
@@ -121,8 +123,6 @@ var geoClick = function(selectedLocation,target,map) {
     updateDom(selectedLocation,map)  
     
   }, 1100);
-
-  
 
   // change flyto behavior to disable now that you've clicked? 
 }
@@ -204,4 +204,23 @@ async function updateDom(selectedLocation,map) {
     }
   })
   //TKTKTKTK
+}
+
+
+function clickButton(csvData) {
+  // Check if csvData is defined and not empty
+  if (csvData && csvData.length > 0) {
+    // Display or process the CSV data
+    console.log(csvData);
+  } else {
+    console.error('CSV data is not available.');
+  }
+}
+
+
+module.exports = {
+  surpriseClick,
+  locateMeClick,
+  rotateClick,
+  clickButton
 }

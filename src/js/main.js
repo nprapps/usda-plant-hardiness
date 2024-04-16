@@ -19,7 +19,15 @@ var {
       makePoint
     } = require("./helpers/mapHelpers");
 
-var {getTemps,getData,formatTemperatures} = require("./helpers/temperatureUtil");
+var {
+  getTemps,
+  getData,
+  formatTemperatures
+} = require("./helpers/temperatureUtils");
+
+var {
+  fetchCSV
+} = require("./helpers/csvUtils");
 
 require("./video");
 require("./analytics");
@@ -27,7 +35,8 @@ require("./analytics");
 var {
   surpriseClick,
   locateMeClick,
-  rotateClick
+  rotateClick,
+  clickButton
 } = require("./geoClick");
 
 var slides = $(".sequence .slide").reverse();
@@ -37,6 +46,9 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 var completion = 0;
 var map;
+let locations;
+let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/2023_GAZEETER.csv";
+
 
 // global variable for active map layer
 var activeMap = "2012_zone";
@@ -44,7 +56,8 @@ var activeMap = "2012_zone";
 // global place variable
 var selectedLocation = {
   coords:[],
-  placeName: null
+  placeName: null,
+  placeState: null
 };
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
@@ -61,6 +74,10 @@ if (isOne) {
 
 // Initialize map here
 var onWindowLoaded = async function() {
+  fetchCSV(locations_url).then(data => {
+    locations = data;
+  }).catch(error => console.error('Error fetching CSV:', error));
+
   renderMap();
 }
 
@@ -83,7 +100,6 @@ var renderMap = async function() {
           protocol.tile(request, callback);
       });
   });
-
   
   const PMTILES_URL = 'http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/usda_zones.pmtiles'
   const tempDiffURL =  'http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/temp_diff.pmtiles'  
@@ -94,7 +110,7 @@ var renderMap = async function() {
   protocol.add(p);
 
   p.getHeader().then(h => {
-
+    
     // optionally, get timezone if mobile, to pick which 3rd of country to show
 
     map = new maplibregl.Map({
@@ -275,8 +291,8 @@ var renderMap = async function() {
       locateMeClick(evt,selectedLocation,map)
     })    
 
-    surpriseMeButton.addEventListener('click',(evt) => {      
-      surpriseClick(evt,selectedLocation,map)
+    surpriseMeButton.addEventListener('click',(evt) => {  
+      surpriseClick(locations,evt,selectedLocation,map)
     })
 
     map.on('mousemove', async function(e) {

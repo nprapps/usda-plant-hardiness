@@ -1,6 +1,6 @@
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
-var {temp2zone} = require("./temperatureUtil");
+var {temp2zone} = require("./temperatureUtils");
 
 var legendColors = [
   "#D6D6FD",
