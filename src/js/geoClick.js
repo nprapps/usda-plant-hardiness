@@ -1,14 +1,21 @@
 var $ = require("./lib/qsa")
 
+var d3 = {
+  ...require("d3-dsv/dist/d3-dsv.min"),
+};
+
+var csv_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/2023_GAZEETER.csv";
+
 var {
   getUserLocation,
-  makePoint 
-} = require("./mapHelpers");
+  makePoint,
+  getZone
+} = require("./helpers/mapHelpers");
 
 var {
   getTemps,
   formatTemperatures,
-  temp2zone} = require("./temperatureUtil");
+  temp2zone} = require("./helpers/temperatureUtil");
 
 export function locateMeClick(evt,selectedLocation,map) {
   // get the parent container of this
@@ -198,18 +205,3 @@ async function updateDom(selectedLocation,map) {
   })
   //TKTKTKTK
 }
-
-function getZone(zonesData) {
-  var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];
-  var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];
-
-  var obj = {
-    "t2012":temp2012,
-    "t2023":temp2023,
-    "d2012":temp2zone(temp2012),
-    "d2023":temp2zone(temp2023),
-    "zDiff":((temp2023 - temp2012)/5)
-  }
-  return obj
-}
-

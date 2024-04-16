@@ -1,4 +1,4 @@
-var $ = require("./lib/qsa");
+var $ = require("../lib/qsa");
 var View = require("./view");
 // var player = require("./player");
 

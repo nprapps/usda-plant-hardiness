@@ -6,10 +6,10 @@ var track = require("./lib/tracking");
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 var pmtiles = require("pmtiles/dist");
 
-var mapView = require("./mapView");
-var imageView = require("./imageView");
-var textView = require("./textView");
-var chartView = require("./chartView");
+var mapView = require("./views/mapView");
+var imageView = require("./views/imageView");
+var textView = require("./views/textView");
+var chartView = require("./views/chartView");
 
 var {
       getUserLocation,
@@ -17,9 +17,9 @@ var {
       compileZoneLabelStyle,
       compileTempDiffStyle,
       makePoint
-    } = require("./mapHelpers");
+    } = require("./helpers/mapHelpers");
 
-var {getTemps,getData,formatTemperatures} = require("./temperatureUtil");
+var {getTemps,getData,formatTemperatures} = require("./helpers/temperatureUtil");
 
 require("./video");
 require("./analytics");

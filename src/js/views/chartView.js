@@ -1,7 +1,7 @@
-var $ = require("./lib/qsa");
+var $ = require("../lib/qsa");
 var View = require("./view"); //from Ruth
-var debounce = require("./lib/debounce"); //from Ruth
-var { isMobile } = require("./lib/breakpoints");
+var debounce = require("../lib/debounce"); //from Ruth
+var { isMobile } = require("../lib/breakpoints");
 
 // import d3? 
 

@@ -1,4 +1,4 @@
-var $ = require("./lib/qsa");
+var $ = require("../lib/qsa");
 
 module.exports = class View {
   constructor() {}
