@@ -101,6 +101,11 @@
   }
 }
 
+// hide errant empty para's, <p></p>
+.mod + p:empty {
+  display: none;
+}
+
 // Base map styles
 #base-map {
   z-index: 0;

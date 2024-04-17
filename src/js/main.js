@@ -57,7 +57,7 @@ var activeMap = "2012_zone";
 
 // global place variable...default to Raleigh
 var selectedLocation = {
-  coords:[78.63475518335247,35.77739896610018],
+  coords:[-78.6399539,35.7915083],
   placeName: "Raleigh",
   placeState: "NC",
   type: "default"
@@ -78,7 +78,16 @@ if (isOne) {
 // Initialize map here
 var onWindowLoaded = async function() {
   // pre-define default location as active 
-  $("span.mod .default").forEach(d=>d.classList.add("active"))
+  $("div.mod div.default").forEach(d=>d.classList.add("active"))
+
+  // Preset the second slides' data to default place
+
+  // Set the next slide's dataset to the new place
+  var zoomSlide = $.one("#zoomIn");
+  zoomSlide.dataset.center = JSON.stringify(selectedLocation.coords);
+
+  // Change the zoom level
+  zoomSlide.dataset.zoom = 8.5;  
 
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
@@ -250,13 +259,14 @@ var renderMap = async function() {
         'id': 'point',
         'type': 'circle',
         'source': 'point',
+        "minzoom": 7,
         'paint': {
             'circle-radius': 8,
             'circle-color': 'transparent',
             'circle-stroke-color':'#fff',
-            'circle-stroke-width':2
+            'circle-stroke-width':3
         }
-      });                         
+      },"Place labels");                         
 
       // map.addLayer({
       //   'id': 'water-pattern',
@@ -277,7 +287,7 @@ var renderMap = async function() {
       //   }      
       // },"River")
 
-      // console.log(map.getStyle().layers)
+      console.log(map.getStyle().layers)
     })
 
     // what to do when you click LocateClick  

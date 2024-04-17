@@ -2,7 +2,8 @@ var $ = require("./lib/qsa")
 
 var {
   getName,
-  tempRange
+  tempRange,
+  getTooltip
 } = require("./helpers/textUtils")
 
 var {
@@ -60,8 +61,7 @@ async function rotateClick(evt,selectedLocation,map) {
     essential: true 
   })
 
-  // move pointer
-  map.getSource('point').setData(makePoint(selectedLocation.coords));
+
 
   map.on('moveend', function(e){
     if (rotatorFlying) {
@@ -104,10 +104,7 @@ var geoClick = function(selectedLocation,target,map) {
   nextSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
-  nextSlide.dataset.zoom = 8.5;
-
-  // move pointer
-  map.getSource('point').setData(makePoint(selectedLocation.coords));
+  nextSlide.dataset.zoom = 8.5; 
 
   // deactivate the buttons?
   // var qBtns = target.querySelectorAll("button");
@@ -136,41 +133,30 @@ async function updateDom(selectedLocation,map) {
   var point = map.project(selectedLocation.coords);
   // get marker and use to get data
   const features = map.queryRenderedFeatures(point);
-  // console.log(point)
-  var zonesData = features.filter(d => {
-    return d.source == "usda_zones"
-  })
 
-  // console.log(zonesData)
-  var zoneInfo = getZone(zonesData)
-  var temperatures = await getTemps({
+  selectedLocation.zonesData = features.filter(d => {
+    return d.source == "usda_zones";
+  });
+
+  selectedLocation.tempDiffData = features.filter(d => {
+    return d.source == "temp_diff";
+  });
+
+  selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)
+
+  selectedLocation.temperatures = await getTemps({
     "lng":selectedLocation.coords[0],
     "lat":selectedLocation.coords[1]
   });  
 
-  // get all items that need to be updated
-  $.one(".info-inner").innerHTML = `
-  <b>Lng,Lat:</b> ${selectedLocation.coords}<br>
-  <b>x,y:</b> ${point.x},${point.y}<br>
-  <b>2012 zone:</b> ${zoneInfo.z2012}<br>
-  <b>2023 zone:</b> ${zoneInfo.z2023}<br>
-  <b>zone Diff:</b> ${zoneInfo.zDiff}<br>  
-  <b>Temps:</b> ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
-    <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
-    <b>countBelow</b>: ${temperatures.countBelow} | 
-    <b>countAbove</b>: ${temperatures.countAbove}
-  `;
-  // update DOM
+  var {
+    zoneInfo
+  } = selectedLocation;
 
   // change all data items, if possible
   var changeItems = [
     {
       'id':'yourPlace',
-      'formula':getName(selectedLocation),
-      'classes': 'placeText'
-    },
-    {
-      'id':'yourPlace2',
       'formula':(selectedLocation.placeName ? getName(selectedLocation) : "your area"),
       'classes': 'placeText'
     },
@@ -196,8 +182,6 @@ async function updateDom(selectedLocation,map) {
     }
   ]
 
-  console.log(selectedLocation)
-
   changeItems.forEach(d=> {
     var items = $(`[data-item='${d.id}']`);        
     items.forEach(item => {
@@ -209,13 +193,13 @@ async function updateDom(selectedLocation,map) {
     })
   })
   
-
   // pick which of the three to show
-  var textType = selectedLocation.type;
-  $("span.mod span").forEach(d=>d.classList.remove("active"))
-  $(`span.mod .${textType}`).forEach(d=>d.classList.add("active"))
+  var textType = selectedLocation.type == "default" ? "default" : "custom";
 
-  // if is same, hide
+  $("div.mod div").forEach(d=>d.classList.remove("active"))
+  $(`div.mod div.${textType}`).forEach(d=>d.classList.add("active"))
+
+  // if is same, hide...right now this will only work for the one place where this is likely (2023 slide)
   if (zoneInfo.zDiff != 0) {
     $('.isSame').forEach(d=>d.classList.remove('show'))
     $('.notSame').forEach(d=>d.classList.add('show'))
@@ -223,6 +207,13 @@ async function updateDom(selectedLocation,map) {
     $('.notSame').forEach(d=>d.classList.remove('show'))
     $('.isSame').forEach(d=>d.classList.add('show'))
   }
+
+  // get all items that need to be updated for tooltip
+
+  console.log(zoneInfo)
+  console.log(selectedLocation)
+
+  $.one(".info-inner").innerHTML = getTooltip(selectedLocation)
 }
 
 

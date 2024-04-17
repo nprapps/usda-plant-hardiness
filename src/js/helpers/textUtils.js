@@ -58,7 +58,6 @@ function ap_state(usps) {
 }
 
 function getName(data) {
-	console.log(data)
 	return `${data.placeName}, ${ap_state(data.placeState)}`
 }
 
@@ -74,8 +73,29 @@ function tempRange(min) {
   return minText
 }
 
+function getTooltip(selectedLocation) {
+	var {
+		point,
+		zoneInfo,
+		temperatures,
+		coords
+	}	= selectedLocation;
+
+	return `
+  <b>Lng,Lat:</b> ${coords}<br>
+  <b>2012 zone:</b> ${zoneInfo.z2012}<br>
+  <b>2023 zone:</b> ${zoneInfo.z2023}<br>
+  <b>zone Diff:</b> ${zoneInfo.zDiff}<br>  
+  <b>Temps:</b> ${JSON.stringify(temperatures.data)}<br>
+    <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
+    <b>countBelow</b>: ${temperatures.countBelow} | 
+    <b>countAbove</b>: ${temperatures.countAbove}
+  `;  
+}
+
 module.exports = {
 	ap_state,
 	getName,
-	tempRange
+	tempRange,
+	getTooltip
 }

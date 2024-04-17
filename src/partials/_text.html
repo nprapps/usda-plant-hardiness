@@ -1,14 +1,50 @@
-<% if (slide.textSections) {
-  
-    slide.textSections.forEach(function(d) { %>
-    <div class="text" id="<%= d.id %>">
-      <div class="content">
-        <% if (slide.locator) { %>
-          <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
-        <% } %>
+<% if (slide.isMod) { 
+  // if it is a modified slide, compile the text options into spans
+  // console.log(slide)
+  let defaultText = "";
+  let customText = "";
+  let isSameText = "";
 
-        <%= t.renderMarkdown(d.text) %>
-      </div>
+  if (slide.modText.default) {
+    defaultText = `<div class="default">${slide.modText.default.text}</div>
+    `;
+  } 
+
+
+  if (slide.modText.custom) {
+    if (slide.modText.custom.isSame) {
+      customText = `
+<div class="custom"> 
+  <div class="isSame">
+    ${slide.modText.custom.isSame}
+  </div>
+  <div class="notSame">
+    ${slide.modText.custom.text}
+  </div>
+</div>
+      `
+    } else {
+      customText = `<div class='custom'>${slide.modText.custom.text}</div>
+      `;  
+    }  
+  }
+
+  var text =`<div class='mod'>${defaultText}${customText}</div>`;
+  
+  slide.text = text;
+}
+%>
+
+<% if (slide.textSections) {
+  slide.textSections.forEach(function(d) { %>
+  <div class="text" id="<%= d.id %>">
+    <div class="content">
+      <% if (slide.locator) { %>
+        <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
+      <% } %>
+
+      <%= t.renderMarkdown(d.text) %>
+    </div>
 
     <% if (d.audio) { %>
       <%= t.include(`partials/_audio.html`, { "slide": d }) %>
@@ -23,8 +59,8 @@
     <% if (slide.legend) { %>
       <%= t.include(`legends/_${slide.id}.html`, { slide }) %>
     <% } %>
- </div>
-  <% }) } else if (slide.text) { %>
+  </div>
+<% }) } else if (slide.text) { %>
   <div class="text">
     <% if (slide.hasPot) { %>
     <div class="pot">
@@ -36,7 +72,6 @@
       <% if (slide.locator) { %>
         <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
       <% } %>
-
       <%= t.renderMarkdown(slide.text) %>
     </div>
 

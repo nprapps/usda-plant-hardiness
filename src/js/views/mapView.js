@@ -5,6 +5,10 @@ var debounce = require("../lib/debounce"); //from Ruth
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
+var {
+  makePoint
+} = require("../helpers/mapHelpers");
+
 var mapElement = $.one("#base-map");
 // var mapAssets = {};
 // var classes;
@@ -50,6 +54,10 @@ module.exports = class MapView extends View {
       
 
       if (oldZoom != newZoom || oldCenter != newCenter) {
+
+      // move pointer
+        map.getSource('point').setData(makePoint(newCenter));
+
         map.flyTo({
           center: newCenter,
           zoom: newZoom,
@@ -60,7 +68,7 @@ module.exports = class MapView extends View {
 
       // filter pmtiles data layer to what the slide says
       try {
-        var layers = map.getStyle().layers.filter(a=> a.source == "usda_zones" && a.id != slide.dataset.maplayer)
+        var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
         layers.forEach(d=> {
           map.setPaintProperty(d.id,'fill-opacity',0)
         })
