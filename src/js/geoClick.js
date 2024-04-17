@@ -29,6 +29,8 @@ function locateMeClick(evt,selectedLocation,map) {
     // Do something with userLocation   
     selectedLocation.coords = [userLocation.longitude,userLocation.latitude];
     selectedLocation.type = "findMe"
+    selectedLocation.placeName = null;
+    selectedLocation.placeState = null;
     // restore "locate me text"
     
     setTimeout(() => $.one(".locator-text").classList.add("active"), 1500);
@@ -150,8 +152,8 @@ async function updateDom(selectedLocation,map) {
   $.one(".info-inner").innerHTML = `
   <b>Lng,Lat:</b> ${selectedLocation.coords}<br>
   <b>x,y:</b> ${point.x},${point.y}<br>
-  <b>2012 zone:</b> ${zoneInfo.d2012}<br>
-  <b>2023 zone:</b> ${zoneInfo.d2023}<br>
+  <b>2012 zone:</b> ${zoneInfo.z2012}<br>
+  <b>2023 zone:</b> ${zoneInfo.z2023}<br>
   <b>zone Diff:</b> ${zoneInfo.zDiff}<br>  
   <b>Temps:</b> ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
     <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
@@ -163,20 +165,34 @@ async function updateDom(selectedLocation,map) {
   // change all data items, if possible
   var changeItems = [
     {
-      'id':'oldZone',
-      'formula':'tk'
+      'id':'yourPlace',
+      'formula':getName(selectedLocation),
+      'classes': 'placeText'
     },
     {
-      'id':'yourPlace',
-      'formula':getName(selectedLocation)
+      'id':'yourPlace2',
+      'formula':(selectedLocation.placeName ? getName(selectedLocation) : "your area"),
+      'classes': 'placeText'
+    },
+    {
+      'id':'oldZone',
+      'formula':zoneInfo.z2012,
+      'classes':`z${zoneInfo.z2012} zoneText` 
+    },
+    {
+      'id':'newZone',
+      'formula':zoneInfo.z2023,
+      'classes':`z${zoneInfo.z2023} zoneText` 
     },
     {
       'id':'tempRange-2012',
-      'formula':tempRange(zoneInfo.t2012)
+      'formula':tempRange(zoneInfo.t2012),
+      'classes':`z${zoneInfo.z2012} zoneText`
     },
     {
       'id':'tempRange-2023',
-      'formula':tempRange(zoneInfo.t2023)
+      'formula':tempRange(zoneInfo.t2023),
+      'classes':`z${zoneInfo.z2023} zoneText`
     }
   ]
 
@@ -184,7 +200,13 @@ async function updateDom(selectedLocation,map) {
 
   changeItems.forEach(d=> {
     var items = $(`[data-item='${d.id}']`);        
-    items.forEach(item => item.innerHTML = d.formula)
+    items.forEach(item => {
+      item.innerHTML = d.formula;
+      if (d.classes) {
+        item.className = `${d.classes}`
+      }
+      ;
+    })
   })
   
 
@@ -192,6 +214,15 @@ async function updateDom(selectedLocation,map) {
   var textType = selectedLocation.type;
   $("span.mod span").forEach(d=>d.classList.remove("active"))
   $(`span.mod .${textType}`).forEach(d=>d.classList.add("active"))
+
+  // if is same, hide
+  if (zoneInfo.zDiff != 0) {
+    $('.isSame').forEach(d=>d.classList.remove('show'))
+    $('.notSame').forEach(d=>d.classList.add('show'))
+  } else {
+    $('.notSame').forEach(d=>d.classList.remove('show'))
+    $('.isSame').forEach(d=>d.classList.add('show'))
+  }
 }
 
 

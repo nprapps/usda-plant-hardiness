@@ -173,8 +173,8 @@ function getZone(zonesData) {
   var obj = {
     "t2012":temp2012,
     "t2023":temp2023,
-    "d2012":temp2zone(temp2012),
-    "d2023":temp2zone(temp2023),
+    "z2012":temp2zone(temp2012),
+    "z2023":temp2zone(temp2023),
     "zDiff":((temp2023 - temp2012)/5)
   }
   return obj

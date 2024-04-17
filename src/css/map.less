@@ -1,57 +1,60 @@
 // colors
-@t1a: #D6D6FD;
-@t1b: #c4c4f0;
-@t2a: #DCBAF4;
-@t2b: #DFACF0;
-@t3a: #E29EEC;
-@t3b: #E691E8;
-@t4a: #9C82E8;
-@t4b: #5274E8;
-@t5a: #4B87B8;
-@t5b: #459A89;
-@t6a: #3FAD5A;
-@t6b: #69B764;
-@t7a: #93C16F;
-@t7b: #BDCB79;
-@t8a: #E7D684;
-@t8b: #E4C471;
-@t9a: #E2B35E;
-@t9b: #E0A24B;
-@t10a: #D38643;
-@t10b: #C66A3B;
-@t11a: #B94E33;
-@t11b: #AD332C;
-@t12a: #972A22;
-@t12b: #822218;
-@t13a: #6D1A0E;
-@t13b: #581205;
+@lightText: #fff;
+@darkText: #333;
 
-.t1a {background-color: @t1a;}
-.t1b {background-color: @t1b;}
-.t2a {background-color: @t2a;}
-.t2b {background-color: @t2b;}
-.t3a {background-color: @t3a;}
-.t3b {background-color: @t3b;}
-.t4a {background-color: @t4a;}
-.t4b {background-color: @t4b;}
-.t5a {background-color: @t5a;}
-.t5b {background-color: @t5b;}
-.t6a {background-color: @t6a;}
-.t6b {background-color: @t6b;}
-.t7a {background-color: @t7a;}
-.t7b {background-color: @t7b;}
-.t8a {background-color: @t8a;}
-.t8b {background-color: @t8b;}
-.t9a {background-color: @t9a;}
-.t9b {background-color: @t9b;}
-.t10a {background-color: @t10a;}
-.t10b {background-color: @t10b;}
-.t11a {background-color: @t11a;}
-.t11b {background-color: @t11b;}
-.t12a {background-color: @t12a;}
-.t12b {background-color: @t12b;}
-.t13a {background-color: @t13a;}
-.t13b {background-color: @t13b;}
+@z1a: #D6D6FD;
+@z1b: #c4c4f0;
+@z2a: #DCBAF4;
+@z2b: #DFACF0;
+@z3a: #E29EEC;
+@z3b: #E691E8;
+@z4a: #9C82E8;
+@z4b: #5274E8;
+@z5a: #4B87B8;
+@z5b: #459A89;
+@z6a: #3FAD5A;
+@z6b: #69B764;
+@z7a: #93C16F;
+@z7b: #BDCB79;
+@z8a: #E7D684;
+@z8b: #E4C471;
+@z9a: #E2B35E;
+@z9b: #E0A24B;
+@z10a: #D38643;
+@z10b: #C66A3B;
+@z11a: #B94E33;
+@z11b: #AD332C;
+@z12a: #972A22;
+@z12b: #822218;
+@z13a: #6D1A0E;
+@z13b: #581205;
+
+.z1a  {background-color: @z1a;  color:@darkText;}
+.z1b  {background-color: @z1b;  color:@darkText;}
+.z2a  {background-color: @z2a;  color:@darkText;}
+.z2b  {background-color: @z2b;  color:@darkText;}
+.z3a  {background-color: @z3a;  color:@darkText;}
+.z3b  {background-color: @z3b;  color:@darkText;}
+.z4a  {background-color: @z4a;  color:@darkText;}
+.z4b  {background-color: @z4b;  color:@lightText;}
+.z5a  {background-color: @z5a;  color:@lightText;}
+.z5b  {background-color: @z5b;  color:@lightText;}
+.z6a  {background-color: @z6a;  color:@lightText;}
+.z6b  {background-color: @z6b;  color:@lightText;}
+.z7a  {background-color: @z7a;  color:@darkText;}
+.z7b  {background-color: @z7b;  color:@darkText;}
+.z8a  {background-color: @z8a;  color:@darkText;}
+.z8b  {background-color: @z8b;  color:@darkText;}
+.z9a  {background-color: @z9a;  color:@lightText;}
+.z9b  {background-color: @z9b;  color:@lightText;}
+.z10a {background-color: @z10a; color:@lightText;}
+.z10b {background-color: @z10b; color:@lightText;}
+.z11a {background-color: @z11a; color:@lightText;}
+.z11b {background-color: @z11b; color:@lightText;}
+.z12a {background-color: @z12a; color:@lightText;}
+.z12b {background-color: @z12b; color:@lightText;}
+.z13a {background-color: @z13a; color:@lightText;}
+.z13b {background-color: @z13b; color:@lightText;}
 
 // Diverging temp colors
 // @tDiff-3: #0041D7;
@@ -70,9 +73,10 @@
 // .tDiff2 {background-color: @tDiff2};
 // .tDiff3 {background-color: @tDiff3};
 
-.mod.zoneText {
-  padding-left:10px;
-  padding-right: 10px;
+.mod .zoneText {
+  padding-left:5px;
+  padding-right: 5px;
+  white-space:nowrap;
 }
 
 .mod {
@@ -82,6 +86,18 @@
     &.active {
       display: inline-block;
     }
+  }
+}
+
+.mod .placeText {
+  text-decoration: underline;
+}
+
+.mod .isSame, .mod .notSame {
+  display: none;
+
+  &.show {
+    display: contents;
   }
 }
 
