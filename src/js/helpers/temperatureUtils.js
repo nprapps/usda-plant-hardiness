@@ -56,38 +56,38 @@ var getTemps = async function(lngLat) {
   var inBounds = true;
   if (fileY < 0 || fileY > maxFileY || fileX < 0 || fileX > maxFileX) {
     inBounds = false;
-    console.log(inBounds)
-  } 
+    // console.log(inBounds)
 
-
-  // only get data if the data is a new file
-  if (fileName != tempData.fileName && inBounds) {
-    var url = `./assets/synced/json/minTmin/${fileName}.json`
-    console.log(url)
-    // // get data    
-    var promise = await Promise.all([getData(url)]);
-    tempData = {
-      "fileName":fileName,
-      "data":promise[0]
-    }
-  }
-
-  var data = tempData.data[fileRowNum][fileColNum];
-
-  var avg = average(data);
-  var avgfloor = Math.floor(avg/5)*5;
-  var countBelow = data.filter(e => e < avgfloor);
-  var countAbove = data.filter(e => e > avgfloor+5);
-
-  var thisCellData = {
-        "data":data,
-        "avg": avg,
-        "zone": temp2zone(avgfloor),
-        "countBelow": countBelow.length,
-        "countAbove": countAbove.length
+  } else {
+    // only get data if the data is a new file
+    if (fileName != tempData.fileName && inBounds) {
+      var url = `./assets/synced/json/minTmin/${fileName}.json`
+      console.log(url)
+      // // get data    
+      var promise = await Promise.all([getData(url)]);
+      tempData = {
+        "fileName":fileName,
+        "data":promise[0]
       }
+    }
 
-  return thisCellData
+    var data = tempData.data[fileRowNum][fileColNum];
+
+    var avg = average(data);
+    var avgfloor = Math.floor(avg/5)*5;
+    var countBelow = data.filter(e => e < avgfloor);
+    var countAbove = data.filter(e => e > avgfloor+5);
+
+    var thisCellData = {
+          "data":data,
+          "avg": avg,
+          "zone": temp2zone(avgfloor),
+          "countBelow": countBelow.length,
+          "countAbove": countAbove.length
+        }
+    return thisCellData
+  }
+  
 }    
 
 function temp2zone(temperature) {

@@ -11,14 +11,13 @@ var imageView = require("./views/imageView");
 var textView = require("./views/textView");
 var chartView = require("./views/chartView");
 
-var tileSets = 0;
-
 var {
       getUserLocation,
       compileLegendStyle,
       compileZoneLabelStyle,
       compileTempDiffStyle,
-      makePoint
+      makePoint,
+      checkTilesLoaded
     } = require("./helpers/mapHelpers");
 
 var {
@@ -92,8 +91,6 @@ var onWindowLoaded = async function() {
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
     locations = data;
-    console.log('hello? ')
-    console.log(locations)
   }).catch(error => console.error('Error fetching CSV:', error));
 
   // load the map
@@ -289,11 +286,21 @@ var renderMap = async function() {
       //   }      
       // },"River")
 
-      console.log(map.getStyle().layers)
+      // console.log(map.getStyle().layers)
     })
 
-    map.on('render', function() {
-        checkTilesLoaded();
+    map.on('render', () => {
+        checkTilesLoaded(map,selectedLocation);
+    });
+
+    // disable ability to interact with buttons
+    map.on('movestart', () =>{
+      $.one(".geo-buttons").classList.add("disabled")
+    })
+
+    // restore ability to interact with buttons
+    map.on('moveend', () => {
+      $.one(".geo-buttons").classList.remove("disabled")
     });
 
     // what to do when you click LocateClick  
@@ -319,11 +326,7 @@ var renderMap = async function() {
       $.one(".locator-text").classList.remove("active")
       $.one(".locateMe .lds-ellipsis").classList.add("active")
 
-      locateMeClick(target,selectedLocation,map)
-      
-      // restore "locate me text"
-      setTimeout(() => $.one(".locator-text").classList.add("active"), 1500);
-      setTimeout(() => $.one(".locateMe .lds-ellipsis").classList.remove("active"), 1500);
+      locateMeClick(target,selectedLocation,map)    
     })    
 
     surpriseMeButton.addEventListener('click',(evt) => {  
@@ -358,7 +361,8 @@ var renderMap = async function() {
 
       var temperatures = await getTemps(e.lngLat);
 
-      document.getElementById('info').innerHTML =
+      try {
+        document.getElementById('info').innerHTML =
         // e.point is the x, y coordinates of the mousemove event relative
         // to the top-left corner of the map
         `${
@@ -370,6 +374,10 @@ var renderMap = async function() {
             <b>countBelow</b>: ${temperatures.countBelow} | 
             <b>countAbove</b>: ${temperatures.countAbove} | 
           `;
+        } catch(err) {
+          // console.log(err)
+        }
+      
     });
   })
 }
@@ -481,18 +489,3 @@ var trackLink = function() {
   track(action, label);
 };
 $("[data-track]").forEach(el => el.addEventListener("click", trackLink));
-
-// check if all tiles are loaded and only allow for clicks after that.
-function checkTilesLoaded() {
-    if (map.areTilesLoaded() && selectedLocation.type == "default") {
-      tileSets +=1
-      if (tileSets > 3) {
-        // All tilesets loaded
-        console.log(tileSets)
-        console.log('all tilesets loaded')
-
-        $.one(".geo-buttons").classList.remove("disabled")
-
-      }
-    }
-}

@@ -28,7 +28,9 @@ function locateMeClick(target,selectedLocation,map) {
     selectedLocation.placeName = null;
     selectedLocation.placeState = null;
       
-
+    // restore "locate me text"
+    setTimeout(() => $.one(".locator-text").classList.add("active"), 2000);
+    setTimeout(() => $.one(".locateMe .lds-ellipsis").classList.remove("active"), 2000);
     return geoClick(selectedLocation,target,map);    
   });
 

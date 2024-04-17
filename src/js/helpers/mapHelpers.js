@@ -1,6 +1,10 @@
+var $ = require("../lib/qsa");
+
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
 var {temp2zone} = require("./temperatureUtils");
+
+var tileSets = 0;
 
 var legendColors = [
   "#D6D6FD",
@@ -180,6 +184,20 @@ function getZone(zonesData) {
   return obj
 }
 
+// check if all tiles are loaded and only allow for clicks after that.
+function checkTilesLoaded(map,selectedLocation) {  
+    if (map.areTilesLoaded() && selectedLocation.type == "default") {
+      tileSets +=1
+      if (tileSets > 3) {
+        // All tilesets loaded
+        console.log(tileSets)
+        console.log('all tilesets loaded')
+
+        $.one(".geo-buttons").classList.remove("disabled")
+
+      }
+    }
+}
 
 
 module.exports = {
@@ -189,7 +207,8 @@ module.exports = {
   compileZoneLabelStyle,
   compileTempDiffStyle,
   makePoint,
-  getZone
+  getZone,
+  checkTilesLoaded
 }
 
 
