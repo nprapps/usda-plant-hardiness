@@ -3,6 +3,7 @@ var $ = require("./lib/qsa")
 var {
   getName,
   tempRange,
+  tempDiff,
   getTooltip
 } = require("./helpers/textUtils")
 
@@ -71,20 +72,7 @@ async function rotateClick(evt,selectedLocation,map) {
   }); 
 }
 
-// function surpriseClick(evt,selectedLocation,map,surpriseMeButton,locations) {
-function surpriseClick(locations,evt,selectedLocation,map,surpriseMeButton) {
-  // Check if locations is defined and not empty
-  if (locations && locations.length > 0) {
-    // Display or process the CSV data
-    // console.log(locations);
-  } else {
-    console.error('CSV data is not available.');
-  }
-  // // get the parent container of this
-  var target = evt.target.parentNode.parentNode.parentNode.parentNode;
-
-  // get random place
-  var place = locations[Math.floor(Math.random()*locations.length)];
+function updateLocation(place,target,selectedLocation,map) {  
 
   // update master data
   selectedLocation.coords = [place.lng,place.lat];
@@ -179,6 +167,11 @@ async function updateDom(selectedLocation,map) {
       'id':'tempRange-2023',
       'formula':tempRange(zoneInfo.t2023),
       'classes':`z${zoneInfo.z2023} zoneText`
+    },
+    {
+      'id':'tempDiff',
+      'formula':tempDiff(selectedLocation),
+      'classes':''
     }
   ]
 
@@ -228,7 +221,7 @@ function clickButton(csvData) {
 
 
 module.exports = {
-  surpriseClick,
+  updateLocation,
   locateMeClick,
   rotateClick,
   clickButton

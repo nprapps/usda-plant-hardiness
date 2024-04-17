@@ -35,7 +35,7 @@ require("./video");
 require("./analytics");
 
 var {
-  surpriseClick,
+  updateLocation,
   locateMeClick,
   rotateClick,
   clickButton
@@ -309,7 +309,21 @@ var renderMap = async function() {
     })    
 
     surpriseMeButton.addEventListener('click',(evt) => {  
-      surpriseClick(locations,evt,selectedLocation,map)
+      // Check if locations is defined and not empty
+      if (locations && locations.length > 0) {
+        // Display or process the CSV data
+        // console.log(locations);
+      } else {
+        console.error('CSV data is not available.');
+      }
+
+      // // get the parent container of this
+      var target = evt.target.parentNode.parentNode.parentNode.parentNode;
+
+      // get random place
+      var place = locations[Math.floor(Math.random()*locations.length)];
+
+      updateLocation(place,target,selectedLocation,map)
     })
 
     map.on('mousemove', async function(e) {

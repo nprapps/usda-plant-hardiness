@@ -93,9 +93,23 @@ function getTooltip(selectedLocation) {
   `;  
 }
 
+function tempDiff(selectedLocation) {
+	var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;
+	
+	if (diffAmount === 0) {
+		console.log("EXACTLY 0!")
+		return "stayed the same"
+	} else {
+		var upDown = diffAmount > 0 ? "warmed" : "cooled";	
+		
+		return `<span class="${upDown}">${upDown} by about ${Math.abs(diffAmount)}ºF</span>`
+	}	
+}
+
 module.exports = {
 	ap_state,
 	getName,
 	tempRange,
+	tempDiff,
 	getTooltip
 }
