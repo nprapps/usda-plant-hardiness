@@ -11,6 +11,8 @@ var imageView = require("./views/imageView");
 var textView = require("./views/textView");
 var chartView = require("./views/chartView");
 
+var tileSets = 0;
+
 var {
       getUserLocation,
       compileLegendStyle,
@@ -28,8 +30,6 @@ var {
 var {
   fetchCSV
 } = require("./helpers/csvUtils");
-
-
 
 require("./video");
 require("./analytics");
@@ -92,6 +92,8 @@ var onWindowLoaded = async function() {
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
     locations = data;
+    console.log('hello? ')
+    console.log(locations)
   }).catch(error => console.error('Error fetching CSV:', error));
 
   // load the map
@@ -157,7 +159,7 @@ var renderMap = async function() {
     // let bbox = [[-127.958450,24.367739], [-65.545807,49.979709]];
     // map.fitBounds(bbox, {
     //   padding: {top: 10, bottom:10, left: 10, right: 10}
-    // });
+    // });    
 
     map.on('load', () => {
       map.addSource('userPoint', {
@@ -289,6 +291,10 @@ var renderMap = async function() {
 
       console.log(map.getStyle().layers)
     })
+
+    map.on('render', function() {
+        checkTilesLoaded();
+    });
 
     // what to do when you click LocateClick  
     var locatorButton = $.one(".locateMe");
@@ -475,3 +481,18 @@ var trackLink = function() {
   track(action, label);
 };
 $("[data-track]").forEach(el => el.addEventListener("click", trackLink));
+
+// check if all tiles are loaded and only allow for clicks after that.
+function checkTilesLoaded() {
+    if (map.areTilesLoaded() && selectedLocation.type == "default") {
+      tileSets +=1
+      if (tileSets > 3) {
+        // All tilesets loaded
+        console.log(tileSets)
+        console.log('all tilesets loaded')
+
+        $.one(".geo-buttons").classList.remove("disabled")
+
+      }
+    }
+}
