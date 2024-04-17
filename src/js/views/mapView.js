@@ -56,7 +56,9 @@ module.exports = class MapView extends View {
       if (oldZoom != newZoom || oldCenter != newCenter) {
 
       // move pointer
-        map.getSource('point').setData(makePoint(newCenter));
+        map.getSource('userPoint').setData(makePoint(newCenter));
+        
+        map.setLayerZoomRange('userPoint',7,20)
 
         map.flyTo({
           center: newCenter,

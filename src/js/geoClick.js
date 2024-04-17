@@ -18,13 +18,7 @@ var {
   formatTemperatures,
   temp2zone} = require("./helpers/temperatureUtils");
 
-function locateMeClick(evt,selectedLocation,map) {
-  // get the parent container of this
-  var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-
-  // activate spinner
-  $.one(".locator-text").classList.remove("active")
-  $.one(".lds-ellipsis").classList.add("active")
+function locateMeClick(target,selectedLocation,map) {
 
   // get lat long
   getUserLocation().then(userLocation => {
@@ -33,10 +27,7 @@ function locateMeClick(evt,selectedLocation,map) {
     selectedLocation.type = "findMe"
     selectedLocation.placeName = null;
     selectedLocation.placeState = null;
-    // restore "locate me text"
-    
-    setTimeout(() => $.one(".locator-text").classList.add("active"), 1500);
-    setTimeout(() => $.one(".lds-ellipsis").classList.remove("active"), 1500);
+      
 
     return geoClick(selectedLocation,target,map);    
   });

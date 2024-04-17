@@ -160,7 +160,7 @@ var renderMap = async function() {
     // });
 
     map.on('load', () => {
-      map.addSource('point', {
+      map.addSource('userPoint', {
           'type': 'geojson',
           'data': makePoint([0,0])
       });
@@ -176,6 +176,17 @@ var renderMap = async function() {
         url: `pmtiles://${tempDiffURL}`
       })
 
+      map.addLayer({
+        'id': 'userPoint',
+        'type': 'circle',
+        'source': 'userPoint',
+        'paint': {
+            'circle-radius': 8,
+            'circle-color': 'transparent',
+            'circle-stroke-color':'#fff',
+            'circle-stroke-width':3
+        }
+      },"Place labels"); 
 
       map.addLayer({
         'id': 'temp_diff_layer',
@@ -255,18 +266,7 @@ var renderMap = async function() {
         }      
       },"Water")    
 
-      map.addLayer({
-        'id': 'point',
-        'type': 'circle',
-        'source': 'point',
-        "minzoom": 7,
-        'paint': {
-            'circle-radius': 8,
-            'circle-color': 'transparent',
-            'circle-stroke-color':'#fff',
-            'circle-stroke-width':3
-        }
-      },"Place labels");                         
+                        
 
       // map.addLayer({
       //   'id': 'water-pattern',
@@ -305,7 +305,19 @@ var renderMap = async function() {
     })    
 
     locatorButton.addEventListener('click',(evt) => {      
-      locateMeClick(evt,selectedLocation,map)
+
+      // get the parent container of this
+      var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+
+        // activate spinner
+      $.one(".locator-text").classList.remove("active")
+      $.one(".locateMe .lds-ellipsis").classList.add("active")
+
+      locateMeClick(target,selectedLocation,map)
+      
+      // restore "locate me text"
+      setTimeout(() => $.one(".locator-text").classList.add("active"), 1500);
+      setTimeout(() => $.one(".locateMe .lds-ellipsis").classList.remove("active"), 1500);
     })    
 
     surpriseMeButton.addEventListener('click',(evt) => {  
@@ -318,12 +330,20 @@ var renderMap = async function() {
       }
 
       // // get the parent container of this
-      var target = evt.target.parentNode.parentNode.parentNode.parentNode;
+      var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
 
       // get random place
       var place = locations[Math.floor(Math.random()*locations.length)];
 
+      // activate spinner
+      $.one(".surprise-text").classList.remove("active")
+      $.one(".surpriseMe .lds-ellipsis").classList.add("active")
+
       updateLocation(place,target,selectedLocation,map)
+
+      // restore "surprise me!" text
+      setTimeout(() => $.one(".surprise-text").classList.add("active"), 1500);
+      setTimeout(() => $.one(".surpriseMe .lds-ellipsis").classList.remove("active"), 1500);
     })
 
     map.on('mousemove', async function(e) {

@@ -75,7 +75,6 @@ function tempRange(min) {
 
 function getTooltip(selectedLocation) {
 	var {
-		point,
 		zoneInfo,
 		temperatures,
 		coords
