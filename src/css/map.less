@@ -2,6 +2,9 @@
 @lightText: #fff;
 @darkText: #333;
 
+@warmed: #C73800;
+@cooled: #3F4E6F;
+
 @z1a: #D6D6FD;
 @z1b: #c4c4f0;
 @z2a: #DCBAF4;
@@ -73,13 +76,17 @@
 // .tDiff2 {background-color: @tDiff2};
 // .tDiff3 {background-color: @tDiff3};
 
-.mod .zoneText {
-  padding-left:5px;
-  padding-right: 5px;
-  white-space:nowrap;
-}
-
 .mod {
+  .zoneText, .warmed, .cooled {
+    padding-left:5px;
+    padding-right: 5px;
+    white-space:nowrap;
+  }
+
+  .placeText {
+    text-decoration: underline;
+  }
+
   .default, .custom, .findMe {
     display: none;
 
@@ -87,11 +94,19 @@
       display: inline-block;
     }
   }
-}
 
-.mod .placeText {
-  text-decoration: underline;
-}
+  .warmed, .cooled {
+    border-radius: 5px;
+  }
+
+  .warmed {
+    background-color: @warmed;
+  }
+
+  .cooled {
+    background-color: @cooled;
+  }
+} 
 
 .mod .isSame, .mod .notSame {
   display: none;
