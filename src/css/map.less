@@ -302,3 +302,52 @@
     display: inline-block;
   }
 }
+
+
+// geolocation + lookup slide
+#intro-1 {
+  .text .content {
+    text-align: center;
+  }
+
+  autocomplete-input {
+    color: #333;
+    font-size: 1rem;
+  }
+}
+
+#geo-container {  
+  .search-wrapper {
+    width: 100%;
+    align-content: center;
+    text-align: center;
+    margin-top: .5rem;
+
+    .search-header {
+      margin: 0 0 .5rem 0;
+      padding-top: 0;
+      line-height: 1.2;
+    }
+
+    .search {
+      width: 250px;
+      display: block;
+      margin: 10px auto 20px auto;
+    }
+
+    input[type="text"] {
+      height: 30px;
+      width: 200px;
+    }
+
+    .no-data-msg {
+      .sans();
+      text-align: center;
+      padding: 20px 5px 0px 5px;
+
+      &.is-hidden {
+        display: none;
+      }
+    }
+  }
+}

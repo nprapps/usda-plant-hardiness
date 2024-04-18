@@ -1,6 +1,7 @@
 var $ = require("./lib/qsa")
 var debounce = require("./lib/debounce"); //ruth had in sea level rise...not sure if we need
 var track = require("./lib/tracking");
+require("@nprapps/autocomplete-input");
 // var { isMobile } = require("./lib/breakpoints");
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
@@ -91,10 +92,23 @@ var onWindowLoaded = async function() {
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
     locations = data;
+    initializeLookup();
   }).catch(error => console.error('Error fetching CSV:', error));
 
   // load the map
   renderMap();
+}
+
+var initializeLookup = function() {
+  // append locations to searchbox
+  var searchDatalist = $.one("#lookupLocations");
+  locations.forEach(function(loc, i) {
+    var opt = document.createElement("option");
+    opt.value = i;
+    var optLabel = document.createTextNode(`${ loc.name }, ${ loc.state }`);
+    opt.append(optLabel);
+    searchDatalist.append(opt);
+  });
 }
 
 var renderMap = async function() {
@@ -339,7 +353,9 @@ var renderMap = async function() {
       }
 
       // // get the parent container of this
-      var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+      // var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+      // console.log("CLOSEST -> ", evt.target.closest("section"), "CHAIN OF PARENTNODES -> ", evt.target.parentNode.parentNode.parentNode.parentNode.parentNode);
+      var target = evt.target.closest("section.map");
 
       // get random place
       var place = locations[Math.floor(Math.random()*locations.length)];
@@ -353,7 +369,34 @@ var renderMap = async function() {
       // restore "surprise me!" text
       setTimeout(() => $.one(".surprise-text").classList.add("active"), 1500);
       setTimeout(() => $.one(".surpriseMe .lds-ellipsis").classList.remove("active"), 1500);
-    })
+    });
+
+    // Setup search box listeners
+    var searchBox = $.one("#search-input");
+    var searchNone = $.one("#search .no-data-msg");
+    searchBox.addEventListener("change", function(evt) {
+      var idx = evt.target.entries[evt.target.selectedIndex].value;
+      console.log(locations[idx]);
+
+      if (locations[idx]) {
+        searchNone.classList.add("is-hidden");
+
+        // // get the parent container of this
+        // var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        var target = evt.target.closest("section");
+        var place = locations[idx];
+
+        console.log("place:", place);
+        console.log("target:", target);
+        console.log("selectedLocation:", selectedLocation);
+        console.log("map:", map);
+  
+        updateLocation(place,target,selectedLocation,map)
+
+      } else {
+        searchNone.classList.remove("is-hidden");
+      }
+    });  
 
     map.on('mousemove', async function(e) {
       // get features under point

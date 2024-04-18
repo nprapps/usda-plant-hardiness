@@ -10,7 +10,16 @@
     </div>
   </div>
   <div class="geo-dropdown-container">
-    <div>Or enter your location</div>
-    <div>HERE WILL BE A DROPDOWN</div>
+
+    <!-- Search box -->
+      <div class="search-wrapper">
+        <div id="search" class="search">
+          <div id="search-hed" class="search-header">Or enter your location</div>
+          <autocomplete-input id="search-input" list="lookupLocations" name="lookupLocations" type="text"></autocomplete-input>
+          <datalist id="lookupLocations"></datalist>
+          <div class="no-data-msg is-hidden">No data found.</div>
+        </div>
+      </div>
+
   </div>
 </div>
