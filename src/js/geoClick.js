@@ -151,10 +151,9 @@ async function updateDom(selectedLocation,map) {
   
 
   var {
-    zoneInfo
+    zoneInfo,
+    temperatures
   } = selectedLocation;
-
-  console.log(zoneInfo)
 
   // change all data items, if possible
   var changeItems = [
@@ -186,6 +185,11 @@ async function updateDom(selectedLocation,map) {
     {
       'id':'tempDiff',
       'formula':tempDiff(selectedLocation),
+      'classes':''
+    },
+    {
+      'id':'avg',
+      'formula':`${Math.round(temperatures.avg*10)/10}ºF}`,
       'classes':''
     }
   ]
