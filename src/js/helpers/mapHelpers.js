@@ -169,9 +169,7 @@ function makePoint(coords) {
   };
 }
 
-
 function getZone(zonesData) {
-  console.log(zonesData)
   var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];
   var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];
 
@@ -186,7 +184,7 @@ function getZone(zonesData) {
 }
 
 // check if all tiles are loaded and only allow for clicks after that.
-function checkTilesLoaded(map,selectedLocation) {  
+function checkTilesLoaded(map,selectedLocation) {
     if (map.areTilesLoaded() && selectedLocation.type == "default") {
       tileSets +=1
       if (tileSets > 3) {
@@ -195,7 +193,9 @@ function checkTilesLoaded(map,selectedLocation) {
         // console.log('all tilesets loaded')
 
         $.one(".geo-buttons").classList.remove("disabled")
-
+        return true
+      } else {
+        return false;
       }
     }
 }

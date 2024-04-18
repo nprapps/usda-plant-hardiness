@@ -35,13 +35,12 @@ var {
   fetchCSV
 } = require("./helpers/csvUtils");
 
-
-
 var {
   updateLocation,
   locateMeClick,
   rotateClick,
-  clickButton
+  clickButton,
+  updateDom
 } = require("./geoClick");
 
 var slides = $(".sequence .slide").reverse();
@@ -63,7 +62,8 @@ var selectedLocation = {
   coords:[-78.6399539,35.7915083],
   placeName: "Raleigh",
   placeState: "NC",
-  type: "default"
+  type: "default",
+  loadIterations: 0
 };
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
@@ -80,8 +80,6 @@ if (isOne) {
 
 // Initialize map here
 var onWindowLoaded = async function() {
-  // pre-define default location as active 
-  $("div.mod div.default").forEach(d=>d.classList.add("active"))
 
   // Preset the second slides' data to default place
 
@@ -95,7 +93,7 @@ var onWindowLoaded = async function() {
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
     locations = data;
-    initializeLookup();
+    initializeLookup();    
   }).catch(error => console.error('Error fetching CSV:', error));
 
   // load the map
@@ -282,34 +280,21 @@ var renderMap = async function() {
           "fill-pattern": compileZoneLabelStyle("2023_zone"),
           "fill-opacity": 0
         }      
-      },"Water")    
-
-                        
-
-      // map.addLayer({
-      //   'id': 'water-pattern',
-      //   'source': "maptiler_planet",
-      //   'source-layer': 'water',
-      //   'type': 'fill',
-      //   "paint": {
-      //     "fill-color": "rgba(255, 255, 0, 1)",
-      //     "fill-opacity":0.05,
-      //     "fill-pattern": [
-      //       "case",
-      //       ["==", ["get", "class"], "ocean"],
-      //       "zones:wave",
-      //       ["==", ["get", "class"], "lake"],
-      //       "zones:wave",
-      //       "zones:wave"
-      //     ]
-      //   }      
-      // },"River")
+      },"Water")
 
       // console.log(map.getStyle().layers)
     })
 
+    // Lots of listeners
     map.on('render', () => {
-        checkTilesLoaded(map,selectedLocation);
+      // don't let the buttons be clicked until all things have been clicked
+      var isLoaded = checkTilesLoaded(map,selectedLocation);
+      if (isLoaded && selectedLocation.loadIterations == 0) {
+        updateDom(selectedLocation,map)
+        selectedLocation.loadIterations+=1;
+      }
+      
+      
     });
 
     // disable ability to interact with buttons

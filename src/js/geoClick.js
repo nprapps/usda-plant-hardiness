@@ -126,6 +126,7 @@ var geoClick = function(selectedLocation,target,map) {
 }
 
 async function updateDom(selectedLocation,map) {
+  console.log('updateDom')
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
   // get marker and use to get data
@@ -152,6 +153,8 @@ async function updateDom(selectedLocation,map) {
   var {
     zoneInfo
   } = selectedLocation;
+
+  console.log(zoneInfo)
 
   // change all data items, if possible
   var changeItems = [
@@ -198,11 +201,21 @@ async function updateDom(selectedLocation,map) {
     })
   })
   
-  // pick which of the three to show
-  var textType = selectedLocation.type == "default" ? "default" : "custom";
 
-  $("div.mod div").forEach(d=>d.classList.remove("active"))
-  $(`div.mod div.${textType}`).forEach(d=>d.classList.add("active"))
+
+  // pick which of the three to show
+  if (selectedLocation.type == "default") {
+    // if default, show any default    
+    // pre-define default location as active     
+    $("div.mod div.default").forEach(d=>d.classList.add("active"))
+  } else {
+      $("div.mod div.default").forEach(d=>d.classList.remove("active"))
+  }
+  // var textType = selectedLocation.type == "default" ? "default" : "custom";
+
+  // // $("div.mod div").forEach(d=>d.classList.remove("active"))
+  // if (textType) {}
+  // $(`div.mod div.${textType}`).forEach(d=>d.classList.add("active"))
 
   // if is same, hide...right now this will only work for the one place where this is likely (2023 slide)
   if (zoneInfo.zDiff != 0) {
@@ -214,9 +227,6 @@ async function updateDom(selectedLocation,map) {
   }
 
   // get all items that need to be updated for tooltip
-
-  console.log(zoneInfo)
-  console.log(selectedLocation)
 
   $.one(".info-inner").innerHTML = getTooltip(selectedLocation)
 }
@@ -236,5 +246,6 @@ module.exports = {
   updateLocation,
   locateMeClick,
   rotateClick,
-  clickButton
+  clickButton,
+  updateDom
 }
