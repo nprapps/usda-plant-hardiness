@@ -14,7 +14,6 @@ var chartView = require("./views/chartView");
 
 require("./video");
 require("./analytics");
-var {setupChart} = require("./chart");
 
 var {
       getUserLocation,

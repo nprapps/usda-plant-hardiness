@@ -29,7 +29,7 @@ module.exports = class ChartView extends View {
     super.exit(slide);
     chartElement.classList.add("exiting");
     chartElement.classList.remove("active");
-    setTimeout(() => mapElement.classList.remove("exiting"), 1000);
+    setTimeout(() => chartElement.classList.remove("exiting"), 1000);
   }
 
   preload = async function(slide) {

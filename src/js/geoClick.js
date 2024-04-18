@@ -18,6 +18,10 @@ var {
   formatTemperatures,
   temp2zone} = require("./helpers/temperatureUtils");
 
+var {setupChart} = require("./chart");
+
+// Start functions to export
+
 function locateMeClick(target,selectedLocation,map) {
 
   // get lat long
@@ -126,7 +130,6 @@ var geoClick = function(selectedLocation,target,map) {
 }
 
 async function updateDom(selectedLocation,map) {
-  console.log('updateDom')
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
   // get marker and use to get data
@@ -154,6 +157,8 @@ async function updateDom(selectedLocation,map) {
     zoneInfo,
     temperatures
   } = selectedLocation;
+
+  setupChart(selectedLocation);
 
   // change all data items, if possible
   var changeItems = [
@@ -189,7 +194,7 @@ async function updateDom(selectedLocation,map) {
     },
     {
       'id':'avg',
-      'formula':`${Math.round(temperatures.avg*10)/10}ºF}`,
+      'formula':`${Math.round(temperatures.avg*10)/10}ºF`,
       'classes':''
     }
   ]

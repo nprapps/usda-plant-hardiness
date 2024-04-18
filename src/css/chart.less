@@ -1,0 +1,128 @@
+@import "base-graphics";
+
+#chart-estimate {
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  #temperature-chart {
+    .lines {
+      fill: none;
+      stroke-width: 3px;
+      stroke: #ccc;
+    }
+    .line1,
+    .line2 {
+      transition: stroke-opacity 1s ease;
+    }
+    
+    .value text {
+      font-size: 12px;
+      font-weight: bold;
+      transition: opacity 1s ease;
+      opacity: 0;
+    }
+
+    .annotations text {
+      font-size: 16px;
+      transition: opacity 1s ease;
+      font-style: italic;
+      text-anchor: end;
+      opacity: 0;
+    }
+
+    .value text,
+    .annotations text {
+      &.high {
+        fill: @blue4;
+      }
+      &.intermediate {
+        fill: @blue5;
+      }
+      &.low {
+        fill: @blue6;
+      }
+    }
+
+    .graphic-wrapper {
+      padding-bottom: 40%;
+    }
+        
+    @media screen and @mobile {
+      .value text {
+        font-size: 11px;
+      }
+      .key.one-line {
+        display: none;
+      }
+    }
+    
+    @media screen and @mobile-above {
+      .key {
+        display: none;
+      }
+      
+    }
+  }
+
+  // toggle which chart elements are visible at each stage
+  #temperature-chart[data-frame="galveston-chart-1"] {
+    .line1 {
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: dash 1s linear forwards;
+      stroke-opacity: 1;
+    }
+    .line2 {
+      stroke-opacity: 0;
+      visibility: hidden;
+    }
+    .value text,
+    .annotations text {
+      opacity: 0;
+    }
+    // background: #454545;
+  }
+  #temperature-chart[data-frame="galveston-chart-2"] {
+    .line1 {
+      stroke-opacity: 1;
+    }
+    .line2 {
+      stroke-dasharray: 1300;
+      stroke-dashoffset: 1300;
+      animation: dash 1s linear forwards;
+      stroke-opacity: 1;
+      visibility: visible;
+    }
+    .value text {
+      opacity: 1;
+    }
+    .annotations text {
+      opacity: 0;
+    }
+  }
+  #temperature-chart[data-frame="galveston-chart-3"] {
+    .value text {
+      opacity: 1;
+    }
+    .annotations text.emissions { 
+      opacity: 1;
+    }
+    .line1, .line2 {
+      stroke-opacity: 1;
+    }
+  }
+  #temperature-chart[data-frame="galveston-chart-4"] {
+    .value text {
+      opacity: 1;
+    }
+    .annotations text { 
+      opacity: 1;
+    }
+    .line1, .line2 {
+      stroke-opacity: 1;
+    }
+  }
+}
