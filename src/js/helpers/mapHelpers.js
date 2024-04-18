@@ -191,8 +191,8 @@ function checkTilesLoaded(map,selectedLocation) {
       tileSets +=1
       if (tileSets > 3) {
         // All tilesets loaded
-        console.log(tileSets)
-        console.log('all tilesets loaded')
+        // console.log(tileSets)
+        // console.log('all tilesets loaded')
 
         $.one(".geo-buttons").classList.remove("disabled")
 

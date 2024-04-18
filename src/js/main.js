@@ -150,6 +150,8 @@ var renderMap = async function() {
       zoom: 3.8
     });
     
+    // maybe include some conditional about sprite urls, if one fails, try another
+
     // map.scrollZoom.disable();
     // disable map rotation using right click + drag
     // map.dragRotate.disable();

@@ -1284,7 +1284,7 @@
 		},
 		{
 			"id":"zones",
-			"url":"http://stage-apps.npr.org/enlivened-latitude/assets/zone_sprite@2x"
+			"url":"http://stage-apps.npr.org/enlivened-latitude/assets/zone_sprite"
 		}
   ],
   "bearing": 0,
