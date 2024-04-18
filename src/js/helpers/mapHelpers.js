@@ -171,6 +171,7 @@ function makePoint(coords) {
 
 
 function getZone(zonesData) {
+  console.log(zonesData)
   var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];
   var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];
 

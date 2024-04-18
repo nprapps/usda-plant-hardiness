@@ -80,6 +80,10 @@ function getTooltip(selectedLocation) {
 		coords
 	}	= selectedLocation;
 
+	if (!temperatures) {
+		temperatures.data = 'No data'
+	}
+
 	return `
   <b>Lng,Lat:</b> ${coords}<br>
   <b>2012 zone:</b> ${zoneInfo.z2012}<br>

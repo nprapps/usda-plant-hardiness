@@ -63,7 +63,7 @@ module.exports = class MapView extends View {
         map.flyTo({
           center: newCenter,
           zoom: newZoom,
-          speed:0.7,
+          speed:0.9,
           essential: true 
         })
       }

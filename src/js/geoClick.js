@@ -65,7 +65,7 @@ async function rotateClick(evt,selectedLocation,map) {
   }); 
 }
 
-function updateLocation(place,target,selectedLocation,map) {  
+function updateLocation(place,target,selectedLocation,map) {
 
   // update master data
   selectedLocation.coords = [place.lng,place.lat];
@@ -102,9 +102,25 @@ var geoClick = function(selectedLocation,target,map) {
   setTimeout(() => {
     nextSlide.scrollIntoView({ behavior: "smooth" })
     // update the DOM
-    updateDom(selectedLocation,map)  
+
+    if (selectedLocation.placeState) {
+      if (selectedLocation.placeState != "AK" && selectedLocation.placeState != "HI") {
+        // only update dom immidately if item is in view
+        updateDom(selectedLocation,map)      
+      } else {
+        $("div.mod div").forEach(d=>d.classList.remove("active"))  
+      }
+    }  
     
-  }, 1100);
+    var rotatorFlying = true;
+
+    map.on('moveend', function(e){
+      if (rotatorFlying) {
+        updateDom(selectedLocation,map)    
+        rotatorFlying = false  
+      }    
+    }); 
+  }, 100);
 
   // change flyto behavior to disable now that you've clicked? 
 }
@@ -124,11 +140,14 @@ async function updateDom(selectedLocation,map) {
   });
 
   selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)
-
-  selectedLocation.temperatures = await getTemps({
-    "lng":selectedLocation.coords[0],
-    "lat":selectedLocation.coords[1]
-  });  
+  
+  if (selectedLocation.placeState != "AK" && selectedLocation.placeState != "HI") {
+    selectedLocation.temperatures = await getTemps({
+      "lng":selectedLocation.coords[0],
+      "lat":selectedLocation.coords[1]
+    });    
+  }
+  
 
   var {
     zoneInfo
