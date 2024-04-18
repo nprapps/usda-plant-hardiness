@@ -293,8 +293,6 @@ var renderMap = async function() {
         updateDom(selectedLocation,map)
         selectedLocation.loadIterations+=1;
       }
-      
-      
     });
 
     // disable ability to interact with buttons

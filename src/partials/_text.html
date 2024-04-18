@@ -1,42 +1,51 @@
-<% if (slide.isMod) { 
+<% 
+var modifyText = function(s) {
+
   // if it is a modified slide, compile the text options into spans
-  // console.log(slide)
   let defaultText = "";
   let customText = "";
   let isSameText = "";
 
-  if (slide.modText.default) {
-    defaultText = `<div class="default">${slide.modText.default.text}</div>
+  if (s.modText.default) {
+    defaultText = `<div class="default">${s.modText.default.text}</div>
     `;
   } 
 
-
-  if (slide.modText.custom) {
-    if (slide.modText.custom.isSame) {
+  if (s.modText.custom) {
+    if (s.modText.custom.isSame) {
       customText = `
 <div class="custom"> 
   <div class="isSame">
-    ${slide.modText.custom.isSame}
+    ${s.modText.custom.isSame}
   </div>
   <div class="notSame">
-    ${slide.modText.custom.text}
+    ${s.modText.custom.text}
   </div>
 </div>
       `
     } else {
-      customText = `<div class='custom'>${slide.modText.custom.text}</div>
+      customText = `<div class='custom'>${s.modText.custom.text}</div>
       `;  
     }  
   }
 
   var text =`<div class='mod'>${defaultText}${customText}</div>`;
   
-  slide.text = text;
+  s.text = text;
+  return s;
+}
+
+if (slide.isMod && !slide.textSections) {
+  slide = modifyText(slide)
 }
 %>
 
 <% if (slide.textSections) {
-  slide.textSections.forEach(function(d) { %>
+  slide.textSections.forEach(function(d) { 
+    if (d.isMod) {
+      d = modifyText(d);
+    }    
+  %>
   <div class="text" id="<%= d.id %>">
     <div class="content">
       <% if (slide.locator) { %>
