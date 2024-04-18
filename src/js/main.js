@@ -12,6 +12,10 @@ var imageView = require("./views/imageView");
 var textView = require("./views/textView");
 var chartView = require("./views/chartView");
 
+require("./video");
+require("./analytics");
+var {setupChart} = require("./chart");
+
 var {
       getUserLocation,
       compileLegendStyle,
@@ -31,8 +35,7 @@ var {
   fetchCSV
 } = require("./helpers/csvUtils");
 
-require("./video");
-require("./analytics");
+
 
 var {
   updateLocation,
