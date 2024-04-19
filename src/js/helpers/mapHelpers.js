@@ -93,6 +93,7 @@ async function getUserLocation() {
 
 function compileLegendStyle(layer) {
   var legendConfig = getLegendConfig(legendColors)
+  console.log(legendConfig)
   var colorCombos = ["step", ["get", layer],legendConfig[0].color];
   legendConfig.forEach((zone,i) => {
     // skip the first one
@@ -209,7 +210,8 @@ module.exports = {
   compileTempDiffStyle,
   makePoint,
   getZone,
-  checkTilesLoaded
+  checkTilesLoaded,
+  legendColors
 }
 
 

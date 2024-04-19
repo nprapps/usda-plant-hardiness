@@ -17,12 +17,13 @@ var { COLORS, classify, makeTranslate, wrapText } = require("./lib/helpers");
 var { yearFull, yearAbbrev } = require("./lib/helpers/formatDate");
 var { isMobile, isDesktop } = require("./lib/breakpoints");
 
+var { getLegendConfig, legendColors } = require("./helpers/mapHelpers")
+var legendConfig = getLegendConfig(legendColors)
+
 // Render a line chart.
 var renderDotChart = function(config) {
   // Setup
-  var { dateColumn, valueColumn } = config;
-
-  console.log(config)
+  var { dateColumn, valueColumn, selectedLocation } = config;
 
   // figure out chart dimensions and margins
   var margins = {
@@ -75,7 +76,6 @@ var renderDotChart = function(config) {
     (acc, d) => acc.concat(d.values.map(v => v[valueColumn])),
     []
   );
-  console.log(values);
 
   var floors = values.map(
     v => Math.floor(v / roundTicksFactor) * roundTicksFactor
@@ -91,10 +91,20 @@ var renderDotChart = function(config) {
   );
   var max = Math.max.apply(null, ceilings);
 
+  
+  var bucketArray = []
+  for (var i = min+5; i < max+1; i+=5) {
+    bucketArray.push(i)
+  }
+
   var yScale = d3
     .scaleLinear()
     .domain([min, max])
     .range([chartHeight, 0]);
+
+  let bandwidth = yScale(5) - yScale(10);
+
+  console.log(selectedLocation)
 
 //   var colorScale = d3
 //     .scaleOrdinal()
@@ -185,14 +195,30 @@ var renderDotChart = function(config) {
   };
 
   chartElement
-    .append("g")
-    .attr("class", "x grid")
-    .attr("transform", makeTranslate(0, chartHeight))
-    .call(
-      xAxisGrid()
-        .tickSize(-chartHeight, 0, 0)
-        .tickFormat("")
-    );
+  .append("g")
+  .attr("class","buckets")
+  .selectAll("rect")
+  .data(bucketArray)
+  .enter()
+    .append("rect")
+    .attr("class","bucket zone ")
+    .attr("fill",d => {
+      return legendConfig.filter(q=>q.zoneMin == d)[0].color
+    })
+    .attr("x",xScale(1990))
+    .attr("y",d => yScale(d))
+    .attr("width",chartWidth)
+    .attr("height",yScale(5)-yScale(10));
+
+  // chartElement
+  //   .append("g")
+  //   .attr("class", "x grid")
+  //   .attr("transform", makeTranslate(0, chartHeight))
+  //   .call(
+  //     xAxisGrid()
+  //       .tickSize(-chartHeight, 0, 0)
+  //       .tickFormat("")
+  //   );
 
   chartElement
     .append("g")
@@ -203,125 +229,50 @@ var renderDotChart = function(config) {
         .tickFormat("")
     );
 
-//   // Render 0 value line.
+// create the bucket grid
 
-//   if (min < 0) {
-//     chartElement
-//       .append("line")
-//       .attr("class", "zero-line")
-//       .attr("x1", 0)
-//       .attr("x2", chartWidth)
-//       .attr("y1", yScale(0))
-//       .attr("y2", yScale(0));
-//   }
 
-//   // Render lines to chart.
-//   var line = d3
-//     .line()
-//     .x(d => xScale(d[dateColumn]))
-//     .y(d => yScale(d[valueColumn]));
 
-//   // First line part
-//   chartElement
-//     .append("g")
-//     .attr("class", "lines")
-//     .selectAll("path")
-//     .data(config.data)
-//     .enter()
-//       .append("path")
-//       .attr("class", d => "line1 " + classify(d.name))
-//       .attr("stroke", d => colorScale(d.name))
-//       //First line part until 2050
-//       .attr("d", d => line(d.values.slice(0, 4)));
-//   // Second line part 
-//   chartElement
-//     .append("g")
-//     .attr("class", "lines")
-//     .selectAll("path")
-//     .data(config.data)
-//     .enter()
-//       .append("path")
-//       .attr("class", d => "line2") //+ classify(d.name)
-//       .attr("stroke", d => colorScale(d.name))
-//       .attr("d", d => line(d.values.slice(3, d.values.length)));
-//     // console.log(values)
-//   var lastItem = d => d.values[d.values.length - 1];
-  
-//   /*Add event listener for second line part
-//   var chart = document.querySelector("#line-chart");
-//   var line2 = document.getElementsByClassName("line2")
-//   chart.addEventListener("click", (e) => {
-//     for (let i = 0; i < 3; i++) {
-//       line2[i].classList.toggle("hidden");
-//     }
-//     console.log(line2[0].classList);
-//     //e.stopPropagation();
-//     //e.preventDefault();
-// })*/
+chartElement
+  .append("g")
+  .attr("class","dots")
+  .selectAll("circle")
+  .data(config.data[0].values)
+  .enter()
+    .append("circle")
+    .attr("class","dot temperature ")
+    .attr("fill","#fff")
+    .attr("cx",d => {
+      return xScale(d[dateColumn])
+    })
+    .attr("cy",d => yScale(d[valueColumn]))
+    .attr("r",10)
 
-//   //Display final values
-//   chartElement
-//     .append("g")
-//     .attr("class", "value")
-//     .selectAll("text")
-//     .data(config.data)
-//     .enter()
-//       .append("text")
-//       .attr("x", d => xScale(lastItem(d)[dateColumn]) + 10)
-//       .attr("y", d => yScale(lastItem(d)[valueColumn]) + 3)
-//       .text(function(d) {
-//         var item = lastItem(d);
-//         var value = item[valueColumn];
-//         var label = value.toFixed(1) + " ft.";
+  // render zone labels
+  chartElement
+  .append("g")
+  .attr("class","zone-labels")
+  .selectAll("text")
+  .data(bucketArray)
+  .enter()
+    .append("text")
+    .attr("class","text zone ")
+    .attr("x",xScale(1990)+10)
+    .attr("y",d => {
+      return yScale(d) + bandwidth/2
+    })
+    .attr("dy",5)
+    .text(d => {
+      return legendConfig.filter(q=>q.zoneMin == d)[0].zoneName
+    })
 
-//         if (!isMobile.matches) {
-//           label = d.name + ": " + label;
-//         }
-
-//         return label;
-//       })
-//       .attr("class", d => classify(d.name))
-//       .call(wrapText, (margins.right - 10), 20);
-
-//   //Display annotations on side
-//   var annotations = chartElement
-//     .append("g")
-//     .attr("class", "annotations");
-  
-//   config.data.forEach(function(level) {
-//     var pos = level.values[level.values.length - 1];
-//     var thisPos = [];
-//     switch(level.name) {
-//       case "High":
-//         // thisPos = { "x": pos[dateColumn], "y": pos[valueColumn] };
-//         thisPos = { "x": pos[dateColumn], "y": 13 };
-//         annotations.append("text")
-//           .text("Higher emissions")
-//           .attr("class", "high emissions")
-//           .attr("x", d => xScale(thisPos.x) - 20)
-//           .attr("y", d => yScale(thisPos.y));
-//         annotations.append("text")
-//           .text("and faster ice melt")
-//           .attr("class", "high ice")
-//           .attr("x", d => xScale(thisPos.x) - 20)
-//           .attr("y", d => yScale(thisPos.y) + 22);
-//         break;
-//       case "Low":
-//         // thisPos = { "x": pos[dateColumn], "y": pos[valueColumn] };
-//         thisPos = { "x": pos[dateColumn], "y": 1.25 };
-//         annotations.append("text")
-//           .text("Lower emissions")
-//           .attr("class", "low emissions")
-//           .attr("x", d => xScale(thisPos.x) - 20)
-//           .attr("y", d => yScale(thisPos.y));
-//         annotations.append("text")
-//           .text("and slower ice melt")
-//           .attr("class", "low ice")
-//           .attr("x", d => xScale(thisPos.x) - 20)
-//           .attr("y", d => yScale(thisPos.y) + 22);
-//         break;
-//     }
-//   });
+  chartElement
+    .append("line")
+    .attr("class", "avg-line")
+    .attr("x1", 0)
+    .attr("x2", chartWidth)
+    .attr("y1", yScale(selectedLocation.temperatures.avg))
+    .attr("y2", yScale(selectedLocation.temperatures.avg));
 
 }
 
@@ -345,7 +296,7 @@ var formatData = function(data) {
 };
 
 // Render the graphic(s)
-var renderTemperatureChart = function(data) {
+var renderTemperatureChart = function(data,selectedLocation) {
   var container = "#dot-chart";
   // var element = chartSlide.querySelector(container);
   var width = window.innerWidth;
@@ -359,7 +310,8 @@ var renderTemperatureChart = function(data) {
     dateColumn: "date",
     valueColumn: "amt",
     minWidth: 270,
-    maxWidth: 1000
+    maxWidth: 1000,
+    selectedLocation
   });
 };
 
@@ -370,9 +322,9 @@ var setupChart = function(selectedLocation) {
   // get data
   var series = formatData(selectedLocation.temperatures.data);
 
-  renderTemperatureChart(series);
+  renderTemperatureChart(series,selectedLocation);
 
-  window.addEventListener("resize", () => renderTemperatureChart(series));
+  window.addEventListener("resize", () => renderTemperatureChart(series,selectedLocation));
 }
 
 //Initially load the graphic

@@ -143,7 +143,12 @@ async function updateDom(selectedLocation,map) {
     return d.source == "temp_diff";
   });
 
-  selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)
+  try {
+    selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  
+  } catch(err) {
+    console.log(err)
+  }
+  
   
   if (selectedLocation.placeState != "AK" && selectedLocation.placeState != "HI") {
     selectedLocation.temperatures = await getTemps({
