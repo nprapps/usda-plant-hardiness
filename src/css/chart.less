@@ -1,6 +1,32 @@
 @import "base-graphics";
 
-#temperature-chart {
+#base-chart {
+  z-index: 0;
+  clear: right;
+  position: fixed;
+  overflow: hidden;
+  object-fit: cover;
+  width: 100vw;
+  height: calc(100 * var(--vh));
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  animation: none;
+  opacity: 0;
+
+  &.active {
+    animation: fade-in 0.2s linear;
+    opacity: 1;
+  }
+
+  &.exiting {
+    animation: fade-out 0.2s linear;
+    opacity: 0;
+  }
+}
+
+
+#base-chart {
   @keyframes dash {
     to {
       stroke-dashoffset: 0;
@@ -107,6 +133,7 @@
     .dot.temperature {  
       opacity: 1;
       fill-opacity: 1;
+      animation: dash 1s linear forwards;
     }   
   }
     #dot-chart[data-frame="chart-2"] {

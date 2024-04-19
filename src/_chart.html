@@ -1,16 +1,6 @@
 <section class="chart slide align-<%= slide.align || "right" %> <%= slide.classes %>" id="<%= slide.id %>"  
   data-type="chart"  
   >  
-
-  <div
-      id="base-chart"
-      aria-hidden="true"
-      class="backdrop"
-      alt="chart of yearly minimum temperatures"
-      style="z-index:-1"
-    >     
-      <div id="dot-chart" class="graphic" role="img"></div> 
-    </div>
   <% if (slide.inset) { %>
   <img class="inset" src="./assets/synced/<%= slide.inset%>" alt="">
   <% } %>
