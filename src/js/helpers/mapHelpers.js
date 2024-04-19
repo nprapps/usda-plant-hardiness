@@ -50,7 +50,33 @@ var tempDiffColors = [
 "#C73800"
 ]
 
-var legendConfigSeed = [{"zoneName":"1a"},{"zoneName":"1b"},{"zoneName":"1a"},{"zoneName":"2b"},{"zoneName":"2a"},{"zoneName":"3b"},{"zoneName":"3a"},{"zoneName":"4b"},{"zoneName":"4a"},{"zoneName":"5b"},{"zoneName":"5a"},{"zoneName":"6b"},{"zoneName":"6a"},{"zoneName":"7b"},{"zoneName":"7a"},{"zoneName":"8b"},{"zoneName":"8a"},{"zoneName":"9b"},{"zoneName":"9a"},{"zoneName":"10b"},{"zoneName":"10a"},{"zoneName":"11b"},{"zoneName":"11a"},{"zoneName":"12b"},{"zoneName":"12a"},{"zoneName":"13b"}]
+var legendConfigSeed = [
+{"zoneName":"1a"},
+{"zoneName":"1b"},
+{"zoneName":"2a"},
+{"zoneName":"2b"},
+{"zoneName":"3a"},
+{"zoneName":"3b"},
+{"zoneName":"4a"},
+{"zoneName":"4b"},
+{"zoneName":"5a"},
+{"zoneName":"5b"},
+{"zoneName":"6a"},
+{"zoneName":"6b"},
+{"zoneName":"7a"},
+{"zoneName":"7b"},
+{"zoneName":"8a"},
+{"zoneName":"8b"},
+{"zoneName":"9a"},
+{"zoneName":"9b"},
+{"zoneName":"10a"},
+{"zoneName":"10b"},
+{"zoneName":"11a"},
+{"zoneName":"11b"},
+{"zoneName":"12a"},
+{"zoneName":"12b"},
+{"zoneName":"13a"},
+{"zoneName":"13b"}]
 
 function getLegendConfig(legendColors) {
   var legendConfig = legendConfigSeed.map((d,i)=>{
@@ -93,7 +119,6 @@ async function getUserLocation() {
 
 function compileLegendStyle(layer) {
   var legendConfig = getLegendConfig(legendColors)
-  console.log(legendConfig)
   var colorCombos = ["step", ["get", layer],legendConfig[0].color];
   legendConfig.forEach((zone,i) => {
     // skip the first one

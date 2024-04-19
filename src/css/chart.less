@@ -1,23 +1,54 @@
 @import "base-graphics";
 
-#chart-estimate {
+#temperature-chart {
   @keyframes dash {
     to {
       stroke-dashoffset: 0;
     }
   }
 
-  #temperature-chart {
-    .lines {
-      fill: none;
-      stroke-width: 3px;
-      stroke: #ccc;
+  #dot-chart {
+
+    text.text.zone {
+      font-style: italic;
+      color: #fff;
+      fill: #fff;
     }
-    .line1,
-    .line2 {
-      transition: stroke-opacity 1s ease;
+
+    .axis path {
+      display: none;
+    }
+
+    .grid .tick, .axis line {
+      stroke: #fff;
+      color: #fff;
+    }
+
+    .y.grid .tick {
+      &:first-child, &:last-child {
+        display: none;
+      }
     }
     
+    .avg-line {
+      stroke-width: 3px;
+      stroke: #fff;
+      stroke-dasharray: 10 5;
+    }
+
+    .dot.temperature {
+      fill: #fff;
+      fill-opacity: 0.3;
+      stroke: #333;
+      stroke-width:2px;
+    }
+
+    .bucket-outline {
+      // fill: none;
+      stroke: white;
+      stroke-width: 5px;
+    }
+
     .value text {
       font-size: 12px;
       font-weight: bold;
@@ -35,15 +66,7 @@
 
     .value text,
     .annotations text {
-      &.high {
-        fill: @blue4;
-      }
-      &.intermediate {
-        fill: @blue5;
-      }
-      &.low {
-        fill: @blue6;
-      }
+
     }
 
     .graphic-wrapper {
@@ -68,7 +91,7 @@
   }
 
   // toggle which chart elements are visible at each stage
-  #temperature-chart[data-frame="galveston-chart-1"] {
+  #dot-chart[data-frame="galveston-chart-1"] {
     .line1 {
       stroke-dasharray: 500;
       stroke-dashoffset: 500;
@@ -85,7 +108,7 @@
     }
     // background: #454545;
   }
-  #temperature-chart[data-frame="galveston-chart-2"] {
+  #dot-chart[data-frame="galveston-chart-2"] {
     .line1 {
       stroke-opacity: 1;
     }
@@ -103,7 +126,7 @@
       opacity: 0;
     }
   }
-  #temperature-chart[data-frame="galveston-chart-3"] {
+  #dot-chart[data-frame="galveston-chart-3"] {
     .value text {
       opacity: 1;
     }
@@ -114,7 +137,7 @@
       stroke-opacity: 1;
     }
   }
-  #temperature-chart[data-frame="galveston-chart-4"] {
+  #dot-chart[data-frame="galveston-chart-4"] {
     .value text {
       opacity: 1;
     }

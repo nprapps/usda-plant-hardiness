@@ -65,7 +65,7 @@ var renderDotChart = function(config) {
 
   var dates = config.data[0].values.map(d => d[dateColumn]);
   // var extent = [dates[0], dates[dates.length - 1]];
-  var extent = [1990,2020]
+  var extent = [1990,2022]
 
   var xScale = d3
     .scaleLinear()
@@ -93,7 +93,7 @@ var renderDotChart = function(config) {
 
   
   var bucketArray = []
-  for (var i = min+5; i < max+1; i+=5) {
+  for (var i = min; i < max-5+1; i+=5) {
     bucketArray.push(i)
   }
 
@@ -102,40 +102,11 @@ var renderDotChart = function(config) {
     .domain([min, max])
     .range([chartHeight, 0]);
 
-  let bandwidth = yScale(5) - yScale(10);
+  let bandHeight = yScale(5) - yScale(10);
 
   console.log(selectedLocation)
 
-//   var colorScale = d3
-//     .scaleOrdinal()
-//     .domain(
-//       config.data.map(function(d) {
-//         return d.name;
-//       })
-//     )
-//     .range([
-//       "#ff00ff",
-//       "#00ff00",
-//       "#ffff00"
-//     ]);
-
-//   // Render the HTML legend.
-//   // var oneLine = config.data.length > 1 ? "" : " one-line";
-
-//   // var legend = containerElement
-//   //   .append("ul")
-//   //   .attr("class", "key" + oneLine)
-//   //   .selectAll("g")
-//   //   .data(config.data)
-//   //   .enter()
-//   //   .append("li")
-//   //   .attr("class", d => "key-item " + classify(d.name));
-
-//   // legend.append("b").style("background-color", d => colorScale(d.name));
-
-//   // legend.append("label").text(d => d.name);
-
-//   // Create the root SVG element.
+  // Create the root SVG element.
 
   var chartWrapper = containerElement
     .append("div")
@@ -147,6 +118,14 @@ var renderDotChart = function(config) {
     .attr("height", chartHeight + margins.top + margins.bottom)
     .append("g")
     .attr("transform", `translate(${margins.left},${margins.top})`);
+
+  chartElement.append("defs").html(`<defs>
+    <filter id="f3" width="120" height="1020">
+      <feOffset in="SourceAlpha" dx="2" dy="2" />
+      <feGaussianBlur stdDeviation="2" />
+      <feBlend in="SourceGraphic" in2="blurOut" />
+    </filter>
+  </defs>`)
 
 //   // Create D3 axes.
 
@@ -194,6 +173,9 @@ var renderDotChart = function(config) {
     return yAxis;
   };
 
+
+  console.log(bucketArray)
+  // create the bucket grid
   chartElement
   .append("g")
   .attr("class","buckets")
@@ -206,9 +188,9 @@ var renderDotChart = function(config) {
       return legendConfig.filter(q=>q.zoneMin == d)[0].color
     })
     .attr("x",xScale(1990))
-    .attr("y",d => yScale(d))
+    .attr("y",d => yScale(d+5))
     .attr("width",chartWidth)
-    .attr("height",yScale(5)-yScale(10));
+    .attr("height",bandHeight);
 
   // chartElement
   //   .append("g")
@@ -229,9 +211,15 @@ var renderDotChart = function(config) {
         .tickFormat("")
     );
 
-// create the bucket grid
-
-
+chartElement
+  .append("rect")
+  .attr("class","bucket-outline")  
+    .attr("x",xScale(1990))
+    .attr("y",d => yScale(selectedLocation.zoneInfo.t2023) - bandHeight)
+    .attr("width",chartWidth)
+    .attr("height",bandHeight)
+    .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2023)[0].color)
+    .attr("filter","url(#f3)");
 
 chartElement
   .append("g")
@@ -240,13 +228,20 @@ chartElement
   .data(config.data[0].values)
   .enter()
     .append("circle")
-    .attr("class","dot temperature ")
-    .attr("fill","#fff")
+    .attr("class","dot temperature")
     .attr("cx",d => {
       return xScale(d[dateColumn])
     })
     .attr("cy",d => yScale(d[valueColumn]))
     .attr("r",10)
+
+  chartElement
+    .append("line")
+    .attr("class", "avg-line")
+    .attr("x1", -10)
+    .attr("x2", chartWidth+10)
+    .attr("y1", yScale(selectedLocation.temperatures.avg))
+    .attr("y2", yScale(selectedLocation.temperatures.avg));
 
   // render zone labels
   chartElement
@@ -257,22 +252,14 @@ chartElement
   .enter()
     .append("text")
     .attr("class","text zone ")
-    .attr("x",xScale(1990)+10)
+    .attr("x",xScale(2021))
     .attr("y",d => {
-      return yScale(d) + bandwidth/2
+      return yScale(d) - bandHeight/2
     })
     .attr("dy",5)
     .text(d => {
       return legendConfig.filter(q=>q.zoneMin == d)[0].zoneName
     })
-
-  chartElement
-    .append("line")
-    .attr("class", "avg-line")
-    .attr("x1", 0)
-    .attr("x2", chartWidth)
-    .attr("y1", yScale(selectedLocation.temperatures.avg))
-    .attr("y2", yScale(selectedLocation.temperatures.avg));
 
 }
 
