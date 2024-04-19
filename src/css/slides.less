@@ -268,9 +268,11 @@
   }
 
   .caption {
-    font-size: 80%;
-    padding-top: 20px;
+    font-size: 75%;
+    padding-top: 10px;
     font-style: italic;
+    display: block;
+    color: #aaa;
 
     i { font-style: normal; }
 
@@ -278,7 +280,14 @@
       padding-top: 10px;
     }
   }
-  
+  .credit {
+    font-style: italic;
+    color: #787878;
+    display: block;
+    margin-top: 3px;
+    font-size: 75%;
+  }
+
   .content + .caption {
     // .sketchy-divider();
   }
@@ -444,6 +453,7 @@ figure.audio {
 }
 
 // slide types
+@import "text";
 @import "map";
 @import "plants";
 @import "chart";

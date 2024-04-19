@@ -1,0 +1,129 @@
+.slide.text {
+  background: #111;
+  color: #ccc;
+  padding: 20vh 0 60vh;
+
+  .text {
+    background: inherit;
+    color: inherit;
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px;
+    float: none;
+    box-shadow: none;
+    line-height: 1.7;
+    font-size: 18px;
+    max-width: unset;
+
+    // .divider {
+    //   width: 50%;
+    //   border-top: 2px solid @gray-medium;
+    // }
+
+    @media @mobile {
+      font-size: 16px;
+    }
+
+    .section-opener&::before {
+      display: block;
+      border-top: 1px solid white;
+      content: "";
+      margin: 32px auto;
+      width: 50%;
+      max-width: 200px;
+    }
+
+    .content {
+      > div,
+      hr,
+      h3,
+      p {
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+  
+        &.full-width {
+          max-width: 1024px;
+        }
+      }  
+    }
+
+    hr {
+      margin-top: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    h3 {
+      .serif();
+      font-weight: bold;
+      margin-top: 4rem;
+      color: #fff;
+      font-size: 1.3rem;
+    }
+
+    hr + h3 {
+      margin-top: 0;
+    }
+
+    b {
+      color: #fff;
+    }
+
+    .full-width {
+      video {
+        @media @mobile {
+          object-fit: cover;
+          width: 100%;
+        }
+      }
+    }
+
+    .image-container {
+      display: grid;
+      grid-auto-flow: column;
+      justify-items: center;
+      align-items: center;
+      grid-gap: 8px;
+      max-width: 100%;
+
+      img,
+      video {
+        width: 100%;
+        height: auto;
+      }
+
+      @media @portrait {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr !important;
+      }
+    }
+  }
+
+  & + .slide .text {
+    margin-top: 60vh;
+  }
+
+  .photo-wrapper,
+  .video-wrapper {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+}
+
+p.centered {
+  text-align: center;  
+  margin: 0px;
+  font-size: 23px;
+
+  .red {
+    // text-transform: uppercase;
+    // display: block;
+    // font-size: xx-large;
+    // background-color: #d7191c;
+    // background: linear-gradient(45deg, #450d0f, #d7191c);
+    // background: -webkit-linear-gradient(45deg, #fdae61, #d7191c,#450d0f);
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+    // text-shadow: 2px 2px #fff;
+  }
+}

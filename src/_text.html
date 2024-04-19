@@ -13,10 +13,6 @@
   <div class="text">
     <div class="divider"></div>
     <div class="content">
-      <% if (slide.locator) { %>
-        <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
-      <% } %>
-
       <%= t.renderMarkdown(slide.text) %>
     </div>
     <% if (slide.caption) { %>
