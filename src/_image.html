@@ -35,7 +35,7 @@
       <div class="diptych">
         <% diptych.forEach(function(img) { %>
           <div class="image-container">
-            <img src="./assets/synced/images/resized/<%= img %>" alt="">
+            <img src="./assets/synced/images/<%= img %>" alt="">
           </div>
         <% }) %>
       </div>
@@ -43,7 +43,7 @@
   <% } %>
     
   <% if (slide.inset) { %>
-  <img class="inset" src="./assets/synced/images/resized/<%= slide.inset%>" alt="">
+  <img class="inset" src="./assets/synced/images/<%= slide.inset%>" alt="">
   <% } %>
   <% if (slide.credit) { %>
   <span class="watermark" alt=""><%=slide.credit%></span>
