@@ -25,7 +25,7 @@
     }
 
     .y.grid .tick {
-      &:first-child, &:last-child {
+      &:first-child {
         display: none;
       }
     }
@@ -49,6 +49,15 @@
       stroke-width: 5px;
     }
 
+    .bucket-outline, .bucket, .dot.temperature, .avg-line, text.text.zone {
+      transition: opacity 1s ease;
+      opacity: 0;  
+
+      &.active {
+        opacity: 1;
+      }
+    }
+
     .value text {
       font-size: 12px;
       font-weight: bold;
@@ -64,10 +73,6 @@
       opacity: 0;
     }
 
-    .value text,
-    .annotations text {
-
-    }
 
     .graphic-wrapper {
       padding-bottom: 40%;
@@ -91,61 +96,33 @@
   }
 
   // toggle which chart elements are visible at each stage
-  #dot-chart[data-frame="galveston-chart-1"] {
-    .line1 {
-      stroke-dasharray: 500;
-      stroke-dashoffset: 500;
+  #dot-chart[data-frame="chart-1"] {
+    .dot.temperature {
       animation: dash 1s linear forwards;
-      stroke-opacity: 1;
-    }
-    .line2 {
-      stroke-opacity: 0;
-      visibility: hidden;
-    }
-    .value text,
-    .annotations text {
-      opacity: 0;
-    }
-    // background: #454545;
+      opacity: 1;
+      fill-opacity: 1; 
+    }   
   }
-  #dot-chart[data-frame="galveston-chart-2"] {
-    .line1 {
-      stroke-opacity: 1;
-    }
-    .line2 {
-      stroke-dasharray: 1300;
-      stroke-dashoffset: 1300;
+  #dot-chart[data-frame="chart-1-1"] {
+    .dot.temperature {  
+      opacity: 1;
+      fill-opacity: 1;
+    }   
+  }
+    #dot-chart[data-frame="chart-2"] {
+    .dot.temperature, .avg-line {  
+      opacity: 1;
       animation: dash 1s linear forwards;
-      stroke-opacity: 1;
-      visibility: visible;
-    }
-    .value text {
-      opacity: 1;
-    }
-    .annotations text {
-      opacity: 0;
-    }
+    }       
   }
-  #dot-chart[data-frame="galveston-chart-3"] {
-    .value text {
+    #dot-chart[data-frame="chart-3"] {
+    .dot.temperature, .avg-line,
+    .bucket-outline, .bucket,
+    .text.text.zone {  
       opacity: 1;
-    }
-    .annotations text.emissions { 
-      opacity: 1;
-    }
-    .line1, .line2 {
-      stroke-opacity: 1;
-    }
-  }
-  #dot-chart[data-frame="galveston-chart-4"] {
-    .value text {
-      opacity: 1;
-    }
-    .annotations text { 
-      opacity: 1;
-    }
-    .line1, .line2 {
-      stroke-opacity: 1;
+    }   
+    .bucket-outline, .bucket, .text.text.zone {
+      animation: dash 1s linear forwards;
     }
   }
 }

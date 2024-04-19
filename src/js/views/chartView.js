@@ -3,9 +3,6 @@ var View = require("./view"); //from Ruth
 var debounce = require("../lib/debounce"); //from Ruth
 var { isMobile } = require("../lib/breakpoints");
 
-// import d3? 
-
-// var mapElement = $.one("#base-map"); //Need this?
 var chartElement = $.one("#base-chart"); //I put this in index.html in the same place that the other one is, but plausibly, it ought to be somewhere else. 
 
 module.exports = class ChartView extends View {

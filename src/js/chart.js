@@ -104,8 +104,6 @@ var renderDotChart = function(config) {
 
   let bandHeight = yScale(5) - yScale(10);
 
-  console.log(selectedLocation)
-
   // Create the root SVG element.
 
   var chartWrapper = containerElement
@@ -173,8 +171,6 @@ var renderDotChart = function(config) {
     return yAxis;
   };
 
-
-  console.log(bucketArray)
   // create the bucket grid
   chartElement
   .append("g")
@@ -277,7 +273,6 @@ var formatData = function(data) {
         amt: d
       }))
     });
-  console.log(series)
 
   return series;
 };

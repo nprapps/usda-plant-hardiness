@@ -494,6 +494,26 @@ var onScroll = function() {
       (!isAfterTitleCard && (bounds.top < window.innerHeight * .9 && bounds.bottom > 0))
       ) {
 
+        // chart triggers
+        if (slide.id == "temperature-chart" || slide.id == "temperature-chart-return") {          
+          var textBlocks = $(`#${slide.id} > .text`);
+
+          var chartWrapper = $.one("#dot-chart");
+          // var line2 = document.getElementsByClassName("line2");
+          // var annot = document.getElementsByClassName("annotations");
+          
+          textBlocks.forEach(function(frame, n) {
+            var bounds = frame.getBoundingClientRect();
+            if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
+              frame.classList.add("active");
+              chartWrapper.dataset.frame = frame.id;              
+            }
+          else {
+              frame.classList.remove("active");
+          }
+          });
+        }
+
         var complete = ((slides.length - i) / slides.length * 100) | 0;
         if (complete > completion) {
           completion = complete;
