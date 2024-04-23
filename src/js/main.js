@@ -50,7 +50,7 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 var completion = 0;
 var map;
 let locations;
-let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/2023_GAZEETER.csv";
+let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/GAZEETER.csv";
 
 
 // global variable for active map layer
