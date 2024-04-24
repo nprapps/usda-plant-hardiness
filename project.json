@@ -6,7 +6,7 @@
     },
     "live": {
       "bucket": "apps.npr.org",
-      "path": "usda-plant-hardiness"
+      "path": "plant-hardiness-garden-map"
     }
   },
   "styles": {
@@ -16,9 +16,9 @@
   "scripts": {
     "src/js/main.js": "build/app.js"
   },
-  "title": "",
-  "description": "",
-  "url": "",
+  "title": "TKTK",
+  "description": "TKTK",
+  "url": "https://apps.npr.org/plant-hardiness-garden-map/",
   "image": "assets/logo.png",
   "analytics": {
     "topicIDs": [],

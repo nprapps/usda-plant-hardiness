@@ -14,7 +14,7 @@ module.exports = class View {
     setTimeout(() => slide.classList.remove("exiting"), 1000);
   }
 
-  preload(slide, active) {
+  preload(slide, active,i) {
     var images = $("[data-src]", slide);
     images.forEach(function (img) {
       img.src = img.dataset.src;

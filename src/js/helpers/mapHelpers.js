@@ -35,10 +35,17 @@ var legendColors = [
   "#581205"
 ]
 
+// https://rampgenerator.com/?unique_colors=3&steps=17&step_color%5B1%5D=%233f4e6f&at_step%5B1%5D=1&step_color%5B2%5D=%23ffffff&at_step%5B2%5D=9&step_color%5B3%5D=%23c73800&at_step%5B3%5D=16&min_value=-8&max_value=8&decimals=0&opacity=1&col=COLUMN_NAME&null_color=%23EEEEEE&legend_labels=&legendContainer_css=width%3A+86px%3B%0D%0Abackground%3A+%23fff%3B%0D%0Aborder%3A+1px+solid+%23000%3B%0D%0Aborder-radius%3A10px%3B%0D%0Amargin-top%3A10px%3B%0D%0Apadding%3A10px%3B%0D%0Adisplay%3A+grid%3B%0D%0Agrid-template-columns%3A+25px+50px%3B&legendColor_css=display%3A+inline-grid%3B%0D%0Awidth%3A20px%3B%0D%0Aheight%3A14px%3B&legendLabel_css=display%3A+inline-grid%3B%0D%0Afont-size%3A9px%3B%0D%0Aline-height%3A0%3B%0D%0Amargin-top%3A6px%3B&units=%C2%B0C&default_tab=TABLE&ssn=1&updated=1
+
 var tempDiffColors = [
-  "#3F4E6F",
-"#7F899F",
-"#BFC4CF",
+"#3F4E6F",
+"#576481",
+"#6F7A93",
+"#8790A5",
+"#9FA6B7",
+"#B7BCC9",
+"#CFD2DB",
+"#E7E8ED",
 "#FFFFFF",
 "#F8E6DF",
 "#F1CDBF",
@@ -132,6 +139,23 @@ function compileLegendStyle(layer) {
   return colorCombos
 }
 
+function compileTempDiffStyle() {
+  var arr = ["step",["get", "temp_diff"]];
+
+  var defaultColor = "#000"
+  
+  arr.push(defaultColor)
+
+  for (var i = 0; i < tempDiffColors.length; i++) {
+    arr.push(i-8)
+    arr.push(tempDiffColors[i])
+  }
+  
+
+  
+  return arr;
+}
+
 function compileZoneLabelStyle(layer) {
   return [
             "case",
@@ -163,21 +187,6 @@ function compileZoneLabelStyle(layer) {
             ["==",["get",layer], 65], "zones:z13b",
             "zones:z13b"
           ]
-}
-
-function compileTempDiffStyle() {
-  var arr = ["match",["get", "temp_diff"]];
-
-  var defaultColor = "#000"
-  
-  for (var i = 0; i < tempDiffColors.length; i++) {
-    arr.push(i-3)
-    arr.push(tempDiffColors[i])
-  }
-  
-
-  arr.push(defaultColor)
-  return arr;
 }
 
 function makePoint(coords) {

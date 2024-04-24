@@ -50,7 +50,7 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 var completion = 0;
 var map;
 let locations;
-let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/2023_GAZEETER.csv";
+let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/GAZEETER.csv";
 
 
 // global variable for active map layer
@@ -210,13 +210,10 @@ var renderMap = async function() {
         'type': 'fill',
         'paint': {
           "fill-color": [
-          'interpolate',
-          ['linear'],
-          ['get', 'temp_diff'],
-          -10, '#3F4E6F', // Low population density (transparent)
-          0, '#fff', // Medium population density (semi-transparent red)
-          10, '#C73800' // High population density (semi-transparent blue)
-        ],
+          "case",
+          ["==", ["get", "temp_diff"], null],
+          "#aaffff",compileTempDiffStyle()         
+          ],
           "fill-opacity": 0
         }      
       },
@@ -363,7 +360,6 @@ var renderMap = async function() {
     var searchNone = $.one("#search .no-data-msg");
     searchBox.addEventListener("change", function(evt) {
       var idx = evt.target.entries[evt.target.selectedIndex].value;
-      console.log(locations[idx]);
 
       if (locations[idx]) {
         searchNone.classList.add("is-hidden");
@@ -371,12 +367,7 @@ var renderMap = async function() {
         // // get the parent container of this
         // var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
         var target = evt.target.closest("section");
-        var place = locations[idx];
-
-        console.log("place:", place);
-        console.log("target:", target);
-        console.log("selectedLocation:", selectedLocation);
-        console.log("map:", map);
+        var place = locations[idx];        
   
         updateLocation(place,target,selectedLocation,map)
 
@@ -416,7 +407,7 @@ var handler;
 
 var handlers = {
   map: new mapView(map),
-  chart: new chartView(),
+  chart: new chartView(selectedLocation),
   image: new imageView(),
   video: new imageView(),
   text: new textView(),
@@ -427,6 +418,7 @@ var active = null;
 
 var activateSlide = function(slide, slideNumber) {  
   handlers.map.map = map;
+  handlers.chart.selectedLocation = selectedLocation;
 
   // skip if already in the slide
   if (active == slide) return;
@@ -452,14 +444,15 @@ var activateSlide = function(slide, slideNumber) {
   var neighbors = [-1, 0, 1, 2];
   var all = $(".sequence .slide");
   var index = all.indexOf(slide);
-  neighbors.forEach(function(offset) {
+  neighbors.forEach(function(offset,i) {
     var neighbor = all[index + offset];
     if (!neighbor) return;
     var nextType = neighbor.dataset.type || "image";
     var neighborHandler = handlers[nextType];
     neighborHandler.preload(
       neighbor,
-      handler != neighborHandler && offset == 1
+      handler != neighborHandler && offset == 1,
+      offset
     );
     // var images = $("[data-src]", neighbor);
     // images.forEach(function(img) {
