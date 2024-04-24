@@ -33,9 +33,6 @@ var getTemps = async function(lngLat) {
   //x is lon
   var x = lngLat.lng
   var y = lngLat.lat
-  console.log(x)
-  console.log(y)
-  console.log(lngLat)
   var rowNum = (uly-y)/yres
   var colNum = (ulx-x)/xres
 
@@ -50,7 +47,7 @@ var getTemps = async function(lngLat) {
   // //get file
   var fileRowNum = adjustedRowNum - (fileY*c)
   var fileColNum = adjustedColNum - (fileX*c)
-  // console.log(fileRowNum)
+
   var maxFileY = 15;
   var maxFileX = 35;
   // var fileRowMax = 
@@ -58,13 +55,12 @@ var getTemps = async function(lngLat) {
   var inBounds = true;
   if (fileY < 0 || fileY > maxFileY || fileX < 0 || fileX > maxFileX) {
     inBounds = false;
-    // console.log(inBounds)
 
   } else {
     // only get data if the data is a new file
     if (fileName != tempData.fileName && inBounds) {
       var url = `./assets/synced/json/minTmin/${fileName}.json`
-      console.log(url)
+
       // // get data    
       var promise = await Promise.all([getData(url)]);
       tempData = {

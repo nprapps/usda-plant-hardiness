@@ -25,9 +25,6 @@ module.exports = class MapView extends View {
     super.enter(slide);
     var map = this.map;
 
-    console.log(slide)
-    console.log(slide.dataset.maplayer)
-
     mapElement.classList.add("active");
     mapElement.classList.remove("exiting");
     

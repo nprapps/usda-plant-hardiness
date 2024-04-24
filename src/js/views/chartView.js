@@ -16,28 +16,20 @@ var {setupChart} = require("../chart");
 
 
 module.exports = class ChartView extends View {
-  constructor() {
+  constructor(selectedLocation) {
     super();
+    this.selectedLocation = selectedLocation;
   }
 
-  enter(slide) {
+  async enter(slide) {
     super.enter(slide);
     chartElement.classList.add("active");
     chartElement.classList.remove("exiting");
     
     // do some d3 code? transition the thing in?
-    
-  }
+    var selectedLocation = this.selectedLocation;
 
-  exit(slide) {
-    super.exit(slide);
-    chartElement.classList.add("exiting");
-    chartElement.classList.remove("active");
-    setTimeout(() => chartElement.classList.remove("exiting"), 1000);
-  }
-
-  preload = async function(slide) {
-    if (slide.id == "temperature-chart-st-louis") {
+    if (slide.id == "temperature-chart-return") {
 
       // get temp data for selected center
       var exampleLocation = {};
@@ -57,9 +49,24 @@ module.exports = class ChartView extends View {
         "zDiff":((temp2023 - temp2012)/5)
       }
       // update d3
-      // console.log(selectedLocation)
       setupChart(exampleLocation);
 
-    }
+    } else if (slide.id == "temperature-chart") {
+      setupChart(selectedLocation);
+    }    
+
+
+
   }
+
+  exit(slide) {
+    super.exit(slide);
+    chartElement.classList.add("exiting");
+    chartElement.classList.remove("active");
+    setTimeout(() => chartElement.classList.remove("exiting"), 1000);
+  }
+
+  // preload(slide,active,i) {
+
+  // }
 };
