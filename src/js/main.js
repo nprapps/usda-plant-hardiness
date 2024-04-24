@@ -203,8 +203,6 @@ var renderMap = async function() {
         }
       },"Place labels"); 
 
-      console.log(compileTempDiffStyle())
-
       map.addLayer({
         'id': 'temp_diff_layer',
         'source': 'temp_diff',
