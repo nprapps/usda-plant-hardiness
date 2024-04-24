@@ -66,7 +66,7 @@ if (slide.isMod && !slide.textSections) {
     <% } %>
 
     <% if (slide.legend) { %>
-      <%= t.include(`legends/_${slide.id}.html`, { slide }) %>
+      <%= t.include(`legends/_${ slide.legend }.html`, { slide }) %>
     <% } %>
   </div>
 <% }) } else if (slide.text) { %>
