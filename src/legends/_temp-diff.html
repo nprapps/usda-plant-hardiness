@@ -1,0 +1,39 @@
+<div class="legend <%= slide.legend %>">
+  <% if (slide.legendTitle) { %>
+    <h3><%= slide.legendTitle %></h3>
+  <% } %>
+  <% if (slide.legendDesc) { %>
+    <%= t.renderMarkdown(slide.legendDesc) %>
+  <% } %>
+  <ul>
+    <li data-range="-4" class="custom--4"></li>
+    <li data-range="-3" class="custom--3"></li>
+    <li data-range="-2" class="custom--2"></li>
+    <li data-range="-1" class="custom--1"></li>
+    <li data-range="0" class="custom-0"></li>
+    <li data-range="1" class="custom-1"></li>
+    <li data-range="2" class="custom-2"></li>
+    <li data-range="3" class="custom-3"></li>
+    <li data-range="4" class="custom-4"></li>
+    <li data-range="5" class="custom-5"></li>
+    <li data-range="6" class="custom-6"></li>
+    <li data-range="7" class="custom-7"></li>
+    <li data-range="8" class="custom-8"></li>
+  </ul>
+  <div class="bottom-labels">
+    <p>-4</p>
+    <p>-3</p>
+    <p>-2</p>
+    <p>-1</p>
+    <p>0</p>
+    <p>+1</p>
+    <p>+2</p>
+    <p>+3</p>
+    <p>+4</p>
+    <p>+5</p>
+    <p>+6</p>
+    <p>+7</p>
+    <p>+8&deg;&nbsp;F</p>
+    <!-- <p class="max">+9&deg;&nbsp;C</p> -->
+  </div>
+</div>
