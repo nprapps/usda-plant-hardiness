@@ -203,6 +203,8 @@ var renderMap = async function() {
         }
       },"Place labels"); 
 
+      console.log(compileTempDiffStyle())
+
       map.addLayer({
         'id': 'temp_diff_layer',
         'source': 'temp_diff',
@@ -210,13 +212,10 @@ var renderMap = async function() {
         'type': 'fill',
         'paint': {
           "fill-color": [
-          'interpolate',
-          ['linear'],
-          ['get', 'temp_diff'],
-          -10, '#3F4E6F', // Low population density (transparent)
-          0, '#fff', // Medium population density (semi-transparent red)
-          10, '#C73800' // High population density (semi-transparent blue)
-        ],
+          "case",
+          ["==", ["get", "temp_diff"], null],
+          "#aaffff",compileTempDiffStyle()         
+          ],
           "fill-opacity": 0
         }      
       },

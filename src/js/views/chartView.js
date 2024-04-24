@@ -22,9 +22,6 @@ module.exports = class ChartView extends View {
 
   enter(slide) {
     super.enter(slide);
-    
-    console.log('hello slide of chart')
-
     chartElement.classList.add("active");
     chartElement.classList.remove("exiting");
     
@@ -40,12 +37,8 @@ module.exports = class ChartView extends View {
   }
 
   preload = async function(slide) {
-    console.log("preload of chart?")
-
     if (slide.id == "temperature-chart-st-louis") {
-      console.log("st. louis")
 
-      console.log(slide.dataset.center);
       // get temp data for selected center
       var exampleLocation = {};
       exampleLocation.temperatures = await getTemps({
@@ -63,10 +56,6 @@ module.exports = class ChartView extends View {
         "z2023":temp2zone(temp2023),
         "zDiff":((temp2023 - temp2012)/5)
       }
-      console.log(exampleLocation)
-      
-
-
       // update d3
       // console.log(selectedLocation)
       setupChart(exampleLocation);
