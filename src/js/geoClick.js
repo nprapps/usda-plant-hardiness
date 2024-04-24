@@ -143,6 +143,9 @@ async function updateDom(selectedLocation,map) {
     return d.source == "temp_diff";
   });
 
+  console.log("p000000000")
+  console.log(selectedLocation)
+
   try {
     selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  
   } catch(err) {

@@ -313,7 +313,7 @@ var setupChart = function(selectedLocation) {
 // don't do anything if this doesn't exist on the page;
 // if (chartSlide) {
   // console.log('setupChart')
-  // window.addEventListener("load", setupChart);
+  // window.addEventListener("load", dr);
 // }
 
 module.exports = {

@@ -33,7 +33,9 @@ var getTemps = async function(lngLat) {
   //x is lon
   var x = lngLat.lng
   var y = lngLat.lat
-
+  console.log(x)
+  console.log(y)
+  console.log(lngLat)
   var rowNum = (uly-y)/yres
   var colNum = (ulx-x)/xres
 
