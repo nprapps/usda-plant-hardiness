@@ -4,7 +4,7 @@
   "name": "Basic",
   "sources": {
     "npr_osm": {
-      "url": "pmtiles://http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/osm-basemap-z10.pmtiles",
+      "url": "pmtiles://https://apps.npr.org/plant-hardiness-garden-map/assets/osm.pmtiles",
       "type": "vector"
     },
     "maptiler_attribution": {

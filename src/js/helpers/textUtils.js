@@ -103,9 +103,9 @@ function tempDiff(selectedLocation) {
 		console.log("EXACTLY 0!")
 		return "stayed the same"
 	} else {
-		var upDown = diffAmount > 0 ? "warmed" : "cooled";	
+		var upDown = diffAmount > 0 ? "warmer" : "cooler";	
 		
-		return `<span class="${upDown}">${upDown} by about ${Math.abs(diffAmount)}ºF</span>`
+		return `<span class="${upDown}">${Math.abs(diffAmount)}ºF ${upDown}</span>`
 	}	
 }
 
