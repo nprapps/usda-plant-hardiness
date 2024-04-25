@@ -67,6 +67,7 @@
       fill-opacity: 0.3;
       stroke: #333;
       stroke-width:2px;
+      animation: dash 1s linear forwards;
     }
 
     .bucket-outline {
@@ -75,8 +76,13 @@
       stroke-width: 5px;
     }
 
+    .bucket-outline.previous {
+      stroke: #dedede;
+      stroke-width: 3px;
+    }
+
     .bucket-outline, .bucket, .dot.temperature, .avg-line, text.text.zone {
-      transition: opacity 1s ease;
+      transition: all 1s ease;
       opacity: 0;  
 
       &.active {
@@ -145,7 +151,7 @@
   }
   #dot-chart[data-frame="chart-3"] {
     .dot.temperature, .avg-line,
-    .bucket-outline, .bucket,
+    .bucket-outline.current, .bucket,
     .text.text.zone {  
       opacity: 1;
     }   
@@ -154,12 +160,40 @@
     }
   }
   #dot-chart[data-frame="return-1"] {
-
+    .dot.temperature, .avg-line,
+    .bucket-outline.current, .bucket-outline.previous, .bucket,
+    .text.text.zone {  
+      opacity: 1;
+    }   
   }
   #dot-chart[data-frame="return-2"] {
+    .dot.temperature, .avg-line,
+    .bucket-outline.current, .bucket,
+    .text.text.zone {  
+      opacity: 1;
+    }   
+    .dot.temperature {
+      opacity: 0.2;      
 
+      &.below {
+        opacity: 1;
+        fill-opacity: 1;
+      }
+    }
   }
   #dot-chart[data-frame="return-3"] {
+    .dot.temperature, .avg-line,
+    .bucket-outline.current, .bucket,
+    .text.text.zone {  
+      opacity: 1;
+    }
+    .dot.temperature {
+      opacity: 0.2;      
 
+      &.superLow {
+        opacity: 1;
+        fill-opacity: 1;
+      }
+    }
   }
 }

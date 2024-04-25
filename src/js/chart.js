@@ -209,13 +209,24 @@ var renderDotChart = function(config) {
 
 chartElement
   .append("rect")
-  .attr("class","bucket-outline")  
+  .attr("class","bucket-outline previous")  
+    .attr("x",xScale(1990))
+    .attr("y",d => yScale(selectedLocation.zoneInfo.t2012) - bandHeight)
+    .attr("width",chartWidth)
+    .attr("height",bandHeight)
+    .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2012)[0].color)
+    // .attr("filter","url(#f3)");
+
+chartElement
+  .append("rect")
+  .attr("class","bucket-outline current")  
     .attr("x",xScale(1990))
     .attr("y",d => yScale(selectedLocation.zoneInfo.t2023) - bandHeight)
     .attr("width",chartWidth)
     .attr("height",bandHeight)
     .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2023)[0].color)
     .attr("filter","url(#f3)");
+
 
 chartElement
   .append("g")
@@ -224,7 +235,17 @@ chartElement
   .data(config.data[0].values)
   .enter()
     .append("circle")
-    .attr("class","dot temperature")
+    .attr("class",d => {
+      var below = "";
+      var superLow = "";
+      if (d[valueColumn] < selectedLocation.zoneInfo.t2023) {
+        below = 'below';
+      }
+      if (d[valueColumn]< -10) {
+        superLow = 'superLow';
+      }
+      return `dot temperature ${below} ${superLow}`
+    })
     .attr("cx",d => {
       return xScale(d[dateColumn])
     })
