@@ -59,7 +59,7 @@ var renderDotChart = function(config) {
   
 //   // set up ticks and rounding
   var ticksX = 5;
-  var ticksY = isMobile.matches ? 5 : 5;
+  var ticksY = 5;
   var roundTicksFactor = 5;
 
 //   // Clear existing graphic (for redraw)
@@ -108,7 +108,9 @@ var renderDotChart = function(config) {
     v => Math.ceil(v / roundTicksFactor) * roundTicksFactor
   );
   var max = Math.max.apply(null, ceilings);
-
+  console.log(max-min)
+  console.log()
+  var ticksY = ((max - min)/5)+1
   
   var bucketArray = []
   for (var i = min; i < max-5+1; i+=5) {
@@ -160,13 +162,7 @@ var renderDotChart = function(config) {
     .axisLeft()
     .scale(yScale)
     .ticks(ticksY)
-    .tickFormat(function(d, i) {
-      if (d == 0) {
-        return d;
-      } else {
-        return d + " ºF";
-      }
-  });
+    .tickFormat( d =>  d + " ºF");
 
   // Render axes to chart.
 
@@ -255,7 +251,9 @@ chartElement
   .data(config.data[0].values)
   .enter()
     .append("circle")
-    .attr("class",d => {
+    .attr("class",(d,i) => {
+      console.log(d)
+      console.log(i)
       var below = "";
       var superLow = "";
       if (d[valueColumn] < selectedLocation.zoneInfo.t2023) {
@@ -264,7 +262,7 @@ chartElement
       if (d[valueColumn]< -10) {
         superLow = 'superLow';
       }
-      return `dot temperature ${below} ${superLow}`
+      return `dot temperature ${below} ${superLow} i-${i}`
     })
     .attr("cx",d => {
       return xScale(d[dateColumn])
@@ -298,7 +296,7 @@ chartElement
     .attr("y",maxLabelConfig.textOffset.y)
     .attr("dx",maxLabelConfig.xSide * 3)
     .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
-    .text(() => `Lowest temperature, ${maxItem[dateColumn]}`)
+    .text(() => `Coldest night, ${maxItem[dateColumn]}`)
 
   chartElement
     .append("line")

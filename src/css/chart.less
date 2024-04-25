@@ -25,11 +25,14 @@
   }
 }
 
+.average-text {
+  border-bottom: 2px #fff dashed;
+}
 
 #base-chart {
   @keyframes dash {
     to {
-      stroke-dashoffset: 0;
+      stroke-dashoffset: 0; 
     }
   }
 
@@ -49,13 +52,19 @@
       fill: #fff;
     }
 
+    &[data-frame="return-1"], &[data-frame="return-2"], &[data-frame="return-3"] {
+      .label-max, .label-line {
+        display: none;
+      }
+    }
+
     .axis path {
       display: none;
     }
 
     .grid .tick, .axis line {
       stroke: #fff;
-      color: #fff;
+      color: #454545;
     }
 
     .y.grid .tick {
@@ -169,10 +178,13 @@
   }
   #dot-chart[data-frame="return-1"] {
     .dot.temperature, .avg-line,
-    .bucket-outline.current, .bucket-outline.previous, .bucket,
+    .bucket-outline.current, .bucket,
     .text.text.zone {  
       opacity: 1;
     }   
+    // .bucket-outline.previous {
+      // opacity: 1;
+    // }
   }
   #dot-chart[data-frame="return-2"] {
     .dot.temperature, .avg-line,
@@ -198,7 +210,7 @@
     .dot.temperature {
       opacity: 0.2;      
 
-      &.superLow {
+      &.superLow.i-23 {
         opacity: 1;
         fill-opacity: 1;
       }
