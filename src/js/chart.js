@@ -290,7 +290,7 @@ chartElement
     .attr("y",maxLabelConfig.textOffset.y)
     .attr("dx",maxLabelConfig.xSide * 3)
     .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
-    .text(() => `Coldest night, ${maxItem[dateColumn]}`)
+    .text(() => `Coldest night in ${maxItem[dateColumn]}`)
 
   chartElement
     .append("line")
