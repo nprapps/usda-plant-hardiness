@@ -199,7 +199,12 @@ async function updateDom(selectedLocation,map) {
     },
     {
       'id':'avg',
-      'formula':`${Math.round(temperatures.avg*10)/10}ºF`,
+      'formula':`${Math.round(temperatures.avg)}ºF`,
+      'classes':''
+    },
+    {
+      'id':'wrongZone',
+      'formula':temp2zone(Math.floor(temperatures.avg/5)*5),
       'classes':''
     }
   ]
@@ -227,9 +232,14 @@ async function updateDom(selectedLocation,map) {
   }
   // var textType = selectedLocation.type == "default" ? "default" : "custom";
 
-  // // $("div.mod div").forEach(d=>d.classList.remove("active"))
-  // if (textType) {}
-  // $(`div.mod div.${textType}`).forEach(d=>d.classList.add("active"))
+  // if avg is NOT wrong OR if it is within 1/2 degree
+  if (Math.floor(temperatures.avg/5)*5 == zoneInfo.t2023 || Math.round(temperatures.avg) == zoneInfo.t2023+5 ||  Math.round(temperatures.avg) == zoneInfo.t2023) {
+    $('.isDiff').forEach(d=>d.classList.remove('show'))
+    $('.notDiff').forEach(d=>d.classList.add('show'))
+  } else {
+    $('.isDiff').forEach(d=>d.classList.add('show'))
+    $('.notDiff').forEach(d=>d.classList.remove('show'))
+  }
 
   // if is same, hide...right now this will only work for the one place where this is likely (2023 slide)
   if (zoneInfo.zDiff != 0) {

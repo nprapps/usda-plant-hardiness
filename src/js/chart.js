@@ -297,8 +297,8 @@ chartElement
     .attr("class", "avg-line")
     .attr("x1", -10)
     .attr("x2", chartWidth+10)
-    .attr("y1", yScale(selectedLocation.temperatures.avg))
-    .attr("y2", yScale(selectedLocation.temperatures.avg));
+    .attr("y1", yScale(Math.round(selectedLocation.temperatures.avg)))
+    .attr("y2", yScale(Math.round(selectedLocation.temperatures.avg)));
 
   // render zone labels
   chartElement

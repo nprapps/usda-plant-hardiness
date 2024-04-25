@@ -131,13 +131,15 @@
   }
 } 
 
-.mod .isSame, .mod .notSame {
+.mod .isDiff, .mod .notDiff, .mod .isSame, .mod .notSame {
   display: none;
 
   &.show {
     display: contents;
   }
 }
+
+
 
 // hide errant empty para's, <p></p>
 .mod + p:empty {
