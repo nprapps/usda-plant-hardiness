@@ -10,7 +10,8 @@ var d3 = {
   ...require("d3-scale/dist/d3-scale.min"),
   ...require("d3-selection/dist/d3-selection.min"),
   ...require("d3-shape/dist/d3-shape.min"),
-  ...require("d3-interpolate/dist/d3-interpolate.min")
+  ...require("d3-interpolate/dist/d3-interpolate.min"),
+  ...require("d3-arrow/dist/d3-arrow.min")
 };
 
 var { COLORS, classify, makeTranslate, wrapText } = require("./lib/helpers");
@@ -19,6 +20,8 @@ var { isMobile, isDesktop } = require("./lib/breakpoints");
 
 var { getLegendConfig, legendColors } = require("./helpers/mapHelpers")
 var legendConfig = getLegendConfig(legendColors)
+
+var { labelConfig } = require("./helpers/chartHelpers")
 
 // Render a line chart.
 var renderDotChart = function(config) {
@@ -66,6 +69,21 @@ var renderDotChart = function(config) {
   var dates = config.data[0].values.map(d => d[dateColumn]);
   // var extent = [dates[0], dates[dates.length - 1]];
   var extent = [1990,2022]
+
+  // Render lines to chart.
+
+  var curve = d3.curveBasis;
+
+  var line = d3
+    .line()
+    .x(d=>d.x)
+    .y(d=>d.y)
+    .curve(curve);
+
+  const arrow = d3.arrow5()
+    .id("my-arrow")
+    .attr("fill", "#fff")
+    .attr("stroke", "#fff");
 
   var xScale = d3
     .scaleLinear()
@@ -116,6 +134,8 @@ var renderDotChart = function(config) {
     .attr("height", chartHeight + margins.top + margins.bottom)
     .append("g")
     .attr("transform", `translate(${margins.left},${margins.top})`);
+
+  chartElement.call(arrow);
 
   chartElement.append("defs").html(`<defs>
     <filter id="f3" width="120" height="1020">
@@ -252,6 +272,34 @@ chartElement
     .attr("cy",d => yScale(d[valueColumn]))
     .attr("r",10)
 
+
+  var maxItem = config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] > current[valueColumn]) ? prev : current)
+  var maxLabelConfig = labelConfig(
+    chartWidth,
+    chartHeight,
+    xScale(maxItem[dateColumn]),
+    yScale(maxItem[valueColumn])
+  )
+
+  console.log(maxItem)
+
+  chartElement
+    .append("path")
+    .attr("class",`label-line`)
+    .attr("stroke", "#fff")
+    .attr("fill", "transparent")
+    .attr("marker-end", "url(#my-arrow)")
+    .attr("d",line(maxLabelConfig.arr))
+
+  chartElement
+    .append("text")
+    .attr("class","label-max")
+    .attr("x",maxLabelConfig.textOffset.x)
+    .attr("y",maxLabelConfig.textOffset.y)
+    .attr("dx",maxLabelConfig.xSide * 3)
+    .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
+    .text(() => `Lowest temperature, ${maxItem[dateColumn]}`)
+
   chartElement
     .append("line")
     .attr("class", "avg-line")
@@ -269,11 +317,12 @@ chartElement
   .enter()
     .append("text")
     .attr("class","text zone ")
-    .attr("x",xScale(2021))
+    .attr("x",isMobile.matches ? (chartWidth + 5) : xScale(2021))
     .attr("y",d => {
       return yScale(d) - bandHeight/2
     })
     .attr("dy",5)
+    .attr("dx",isMobile.matches ? 20 : 5)
     .text(d => {
       return legendConfig.filter(q=>q.zoneMin == d)[0].zoneName
     })
