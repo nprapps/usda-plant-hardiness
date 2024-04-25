@@ -56,6 +56,26 @@ header.splash {
     color: #eee;
   }
 
+  .half-container {
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-evenly; 
+    align-items: center; 
+    width: 100%; 
+
+    @media @mobile {
+      flex-direction: column; 
+    }
+  }
+
+  .half {
+    width: 50%; 
+
+    @media @mobile {
+      width: 100%; 
+    }
+  }
+
   .chatter {
     // .sans();
     width: 650px;
@@ -70,12 +90,22 @@ header.splash {
 
     @media @mobile {
       margin-top: 0;
+      max-width: 100%;
     }
   }
 
   .logo {
     height: 32px;
     margin-bottom: 6px;
+  }
+
+  .title-gif {
+    padding: 10px; 
+    max-width: 400px; 
+
+    @media @mobile {
+      max-width: 200px; 
+    }
   }
 
   h1 {

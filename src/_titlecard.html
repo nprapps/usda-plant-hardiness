@@ -37,25 +37,35 @@
   <% } %>
 
   <div class="darken">
-    <div class="chatter">
-      <img class="logo" src="./assets/logo-outline.svg" alt="NPR" />
-      <h1><%= slide.headline %></h1>
-      <%= t.renderMarkdown(slide.text) %>
-    
-      <hr>
+    <div class="half-container">
+      <div class="half">
+        <div class="chatter">
+          <img class="logo" src="./assets/logo-outline.svg" alt="NPR" />
+          <h1><%= slide.headline %></h1>
+          <div class="chatter-text">
+            <%= t.renderMarkdown(slide.text) %>
+          </div>
+        
+          <hr>
 
-      <% if (slide.bylines) { %>
-      <div class="bylines">
-        <%= t.renderMarkdown(slide.bylines) %>
+          <% if (slide.bylines) { %>
+          <div class="bylines">
+            <%= t.renderMarkdown(slide.bylines) %>
+          </div>
+          <% } %>
+        </div>
+
+        <div class="scroll-bug" aria-hidden="true">
+          scroll
+          <svg class="drop" viewBox="0 0 50 50" height="0">
+            <path d="M 0,0 L 25,25 50,0"></path>
+          </svg>
+        </div>
       </div>
-      <% } %>
-    </div>
 
-    <div class="scroll-bug" aria-hidden="true">
-      scroll
-      <svg class="drop" viewBox="0 0 50 50" height="0">
-        <path d="M 0,0 L 25,25 50,0"></path>
-      </svg>
+      <div class="half">
+        <img class="title-gif" src="./assets/walker.gif" alt="Cute plant walking">
+      </div>
     </div>
 
     <% if (slide.video) { %>
