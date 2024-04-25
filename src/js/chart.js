@@ -108,8 +108,6 @@ var renderDotChart = function(config) {
     v => Math.ceil(v / roundTicksFactor) * roundTicksFactor
   );
   var max = Math.max.apply(null, ceilings);
-  console.log(max-min)
-  console.log()
   var ticksY = ((max - min)/5)+1
   
   var bucketArray = []
@@ -251,9 +249,7 @@ chartElement
   .data(config.data[0].values)
   .enter()
     .append("circle")
-    .attr("class",(d,i) => {
-      console.log(d)
-      console.log(i)
+    .attr("class",(d,i) => {      
       var below = "";
       var superLow = "";
       if (d[valueColumn] < selectedLocation.zoneInfo.t2023) {
@@ -278,8 +274,6 @@ chartElement
     xScale(maxItem[dateColumn]),
     yScale(maxItem[valueColumn])
   )
-
-  console.log(maxItem)
 
   chartElement
     .append("path")
