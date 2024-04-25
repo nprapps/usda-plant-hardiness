@@ -5,6 +5,7 @@ var modifyText = function(s) {
   let defaultText = "";
   let customText = "";
   let isSameText = "";
+  let isWrongText = "";
 
   if (s.modText.default) {
     defaultText = `<div class="default">${s.modText.default.text}</div>
@@ -23,9 +24,19 @@ var modifyText = function(s) {
   </div>
 </div>
       `
+    } else if(s.modText.custom.difference){
+      customText = `
+<div class="custom"> 
+  <div class="isDiff">
+    ${s.modText.custom.difference}
+  </div>
+  <div class="notDiff">
+    ${s.modText.custom.text}
+  </div>
+</div>
+      `
     } else {
-      customText = `<div class='custom'>${s.modText.custom.text}</div>
-      `;  
+      customText = `<div class='custom'>${s.modText.custom.text}</div>`;  
     }  
   }
 

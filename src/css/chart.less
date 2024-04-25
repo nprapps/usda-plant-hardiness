@@ -25,11 +25,14 @@
   }
 }
 
+.average-text {
+  border-bottom: 2px #fff dashed;
+}
 
 #base-chart {
   @keyframes dash {
     to {
-      stroke-dashoffset: 0;
+      stroke-dashoffset: 0; 
     }
   }
 
@@ -39,6 +42,20 @@
       font-style: italic;
       color: #fff;
       fill: #fff;
+      text-anchor: end;
+      filter: drop-shadow(0px 0px 1px rgb(0 0 0 / 1));
+    }
+
+    .label-max {
+      font-style: italic;
+      color: #fff;
+      fill: #fff;
+    }
+
+    &[data-frame="return-1"], &[data-frame="return-2"], &[data-frame="return-3"] {
+      .label-max, .label-line {
+        display: none;
+      }
     }
 
     .axis path {
@@ -47,7 +64,7 @@
 
     .grid .tick, .axis line {
       stroke: #fff;
-      color: #fff;
+      color: #454545;
     }
 
     .y.grid .tick {
@@ -67,6 +84,7 @@
       fill-opacity: 0.3;
       stroke: #333;
       stroke-width:2px;
+      animation: dash 1s linear forwards;
     }
 
     .bucket-outline {
@@ -75,8 +93,13 @@
       stroke-width: 5px;
     }
 
+    .bucket-outline.previous {
+      stroke: #dedede;
+      stroke-width: 3px;
+    }
+
     .bucket-outline, .bucket, .dot.temperature, .avg-line, text.text.zone {
-      transition: opacity 1s ease;
+      transition: all 1s ease;
       opacity: 0;  
 
       &.active {
@@ -145,7 +168,7 @@
   }
   #dot-chart[data-frame="chart-3"] {
     .dot.temperature, .avg-line,
-    .bucket-outline, .bucket,
+    .bucket-outline.current, .bucket,
     .text.text.zone {  
       opacity: 1;
     }   
@@ -154,12 +177,43 @@
     }
   }
   #dot-chart[data-frame="return-1"] {
-
+    .dot.temperature, .avg-line,
+    .bucket-outline.current, .bucket,
+    .text.text.zone {  
+      opacity: 1;
+    }   
+    // .bucket-outline.previous {
+      // opacity: 1;
+    // }
   }
   #dot-chart[data-frame="return-2"] {
+    .dot.temperature, .avg-line,
+    .bucket-outline.current, .bucket,
+    .text.text.zone {  
+      opacity: 1;
+    }   
+    .dot.temperature {
+      opacity: 0.2;      
 
+      &.below {
+        opacity: 1;
+        fill-opacity: 1;
+      }
+    }
   }
   #dot-chart[data-frame="return-3"] {
+    .dot.temperature, .avg-line,
+    .bucket-outline.current, .bucket,
+    .text.text.zone {  
+      opacity: 1;
+    }
+    .dot.temperature {
+      opacity: 0.2;      
 
+      &.superLow.i-23 {
+        opacity: 1;
+        fill-opacity: 1;
+      }
+    }
   }
 }
