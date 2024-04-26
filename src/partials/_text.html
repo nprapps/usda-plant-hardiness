@@ -4,8 +4,6 @@ var modifyText = function(s) {
   // if it is a modified slide, compile the text options into spans
   let defaultText = "";
   let customText = "";
-  let isSameText = "";
-  let isWrongText = "";
 
   if (s.modText.default) {
     defaultText = `<div class="default">${s.modText.default.text}</div>

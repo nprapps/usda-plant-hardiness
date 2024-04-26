@@ -186,10 +186,6 @@ var renderMap = async function() {
         attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
       })
 
-      map.addSource('temp_diff', {
-        type: 'vector',
-        url: `pmtiles://${tempDiffURL}`
-      })
 
       map.addLayer({
         'id': 'userPoint',
@@ -202,23 +198,6 @@ var renderMap = async function() {
             'circle-stroke-width':3
         }
       },"Place labels"); 
-
-      map.addLayer({
-        'id': 'temp_diff_layer',
-        'source': 'temp_diff',
-        'source-layer': 'temp_diffgeojsonl',
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "temp_diff"], null],
-          "#aaffff",compileTempDiffStyle()         
-          ],
-          "fill-opacity": 0
-        }      
-      },
-      // This line is the id of the layer this layer should be immediately below
-      "Water")
 
       map.addLayer({
         'id': '2012_zones',
@@ -277,6 +256,27 @@ var renderMap = async function() {
           "fill-opacity": 0
         }      
       },"Water")
+
+      map.addSource('temp_diff', {
+        type: 'vector',
+        url: `pmtiles://${tempDiffURL}`
+      })
+      map.addLayer({
+        'id': 'temp_diff_layer',
+        'source': 'temp_diff',
+        'source-layer': 'temp_diffgeojsonl',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "temp_diff"], null],
+          "#aaffff",compileTempDiffStyle()         
+          ],
+          "fill-opacity": 0
+        }      
+      },
+      // This line is the id of the layer this layer should be immediately below
+      "Water")
 
       // console.log(map.getStyle().layers)
     })

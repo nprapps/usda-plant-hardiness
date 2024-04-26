@@ -220,25 +220,31 @@ var renderDotChart = function(config) {
         .tickSize(-chartWidth, 0, 0)
         .tickFormat("")
     );
-
-chartElement
-  .append("rect")
-  .attr("class","bucket-outline previous")  
-    .attr("x",xScale(1990))
-    .attr("y",d => yScale(selectedLocation.zoneInfo.t2012) - bandHeight)
-    .attr("width",chartWidth)
-    .attr("height",bandHeight)
-    .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2012)[0].color)
+console.log(selectedLocation)
+// chartElement
+//   .append("rect")
+//   .attr("class","bucket-outline previous")  
+//     .attr("x",xScale(1990))
+//     .attr("y",d => yScale(selectedLocation.zoneInfo.t2012) - bandHeight)
+//     .attr("width",chartWidth)
+//     .attr("height",bandHeight)
+//     .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2012)[0].color)
     // .attr("filter","url(#f3)");
 
+// if its an alt, do alt things
+if (selectedLocation.alt) {
+  var bucketObj = selectedLocation.alt.zoneInfo;
+} else {
+  var bucketObj = selectedLocation.zoneInfo;
+}
 chartElement
   .append("rect")
   .attr("class","bucket-outline current")  
     .attr("x",xScale(1990))
-    .attr("y",d => yScale(selectedLocation.zoneInfo.t2023) - bandHeight)
+    .attr("y",d => yScale(bucketObj.t2023) - bandHeight)
     .attr("width",chartWidth)
     .attr("height",bandHeight)
-    .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2023)[0].color)
+    .attr("fill",legendConfig.filter(q=>q.zoneName == bucketObj.z2023)[0].color)
     .attr("filter","url(#f3)");
 
 

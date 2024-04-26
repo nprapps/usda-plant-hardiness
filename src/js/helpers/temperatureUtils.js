@@ -75,7 +75,6 @@ var getTemps = async function(lngLat) {
     var avgfloor = Math.floor(avg/5)*5;
     var countBelow = data.filter(e => e < avgfloor);
     var countAbove = data.filter(e => e > avgfloor+5);
-
     var thisCellData = {
           "data":data,
           "avg": avg,
