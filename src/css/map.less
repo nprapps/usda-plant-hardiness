@@ -152,14 +152,6 @@
   .warmer, .cooler {
     border-radius: 5px;
   }
-
-  .warmer {
-    background-color: @warmer;
-  }
-
-  .cooler {
-    background-color: @cooler;
-  }
 } 
 
 .mod .isDiff, .mod .notDiff, .mod .isSame, .mod .notSame {
@@ -226,6 +218,7 @@
 }
 
 #explore-button {
+  .sans();
   z-index: 102;
   position: fixed;
   background: white;
@@ -254,6 +247,7 @@
   text-align: center;
 }
 #geo-container .button, #info .button {
+  .sans();
   display: inline-block;
   pointer-events: all;
   cursor: pointer;
@@ -373,7 +367,7 @@
   }
 }
 
-#geo-container {  
+#geo-container { 
   .search-wrapper {
     width: 100%;
     align-content: center;
@@ -390,6 +384,10 @@
       width: 250px;
       display: block;
       margin: 10px auto 20px auto;
+    }
+
+    .search {
+      .sans();
     }
 
     input[type="text"] {

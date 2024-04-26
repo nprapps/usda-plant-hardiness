@@ -50,7 +50,7 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 var completion = 0;
 var map;
 let locations;
-let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/GAZEETER.csv";
+let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZEETER.csv";
 
 
 // global variable for active map layer
@@ -131,8 +131,8 @@ var renderMap = async function() {
       });
   });
   
-  const PMTILES_URL = 'http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/usda_zones.pmtiles'
-  const tempDiffURL =  'http://stage-apps.npr.org/enlivened-latitude/assets/synced/pmtiles/temp_diff.pmtiles'  
+  const PMTILES_URL = 'https://apps.npr.org/plant-hardiness-garden-map/assets/synced/pmtiles/usda_zones.pmtiles'
+  const tempDiffURL =  'https://apps.npr.org/plant-hardiness-garden-map/assets/synced/pmtiles/temp_diff.pmtiles'  
 
   const p = new pmtiles.PMTiles(PMTILES_URL);
 
