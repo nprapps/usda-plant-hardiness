@@ -1,6 +1,19 @@
 <div id="geo-container">
-  <div class="geo-buttons disabled">
-    <div class="locateMe button">
+  <div class="geo-dropdown-container">
+
+    <!-- Search box -->
+      <div class="search-wrapper">
+        <div id="search" class="search">
+          <!-- <div id="search-hed" class="search-header">Or enter your city and state</div> -->
+          <autocomplete-input id="search-input" list="lookupLocations" name="lookupLocations" type="text"></autocomplete-input>
+          <datalist id="lookupLocations"></datalist>
+          <div class="no-data-msg is-hidden">No data found.</div>
+        </div>
+      </div>
+
+  </div>
+    <div class="geo-buttons disabled">
+    <div class="locateMe button" style="display: none;">
       <div class="locator-text active">Locate me!</div>
       <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
     </div>
@@ -8,18 +21,5 @@
       <div class="surprise-text active">Surprise me!</div>
       <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
     </div>
-  </div>
-  <div class="geo-dropdown-container">
-
-    <!-- Search box -->
-      <div class="search-wrapper">
-        <div id="search" class="search">
-          <div id="search-hed" class="search-header">Or enter your city and state</div>
-          <autocomplete-input id="search-input" list="lookupLocations" name="lookupLocations" type="text"></autocomplete-input>
-          <datalist id="lookupLocations"></datalist>
-          <div class="no-data-msg is-hidden">No data found.</div>
-        </div>
-      </div>
-
   </div>
 </div>

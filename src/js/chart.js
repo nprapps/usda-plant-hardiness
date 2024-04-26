@@ -220,7 +220,6 @@ var renderDotChart = function(config) {
         .tickSize(-chartWidth, 0, 0)
         .tickFormat("")
     );
-
 chartElement
   .append("rect")
   .attr("class","bucket-outline previous")  
@@ -229,16 +228,22 @@ chartElement
     .attr("width",chartWidth)
     .attr("height",bandHeight)
     .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2012)[0].color)
-    // .attr("filter","url(#f3)");
+    .attr("filter","url(#f3)");
 
+// if its an alt, do alt things
+if (selectedLocation.alt) {
+  var bucketObj = selectedLocation.alt.zoneInfo;
+} else {
+  var bucketObj = selectedLocation.zoneInfo;
+}
 chartElement
   .append("rect")
   .attr("class","bucket-outline current")  
     .attr("x",xScale(1990))
-    .attr("y",d => yScale(selectedLocation.zoneInfo.t2023) - bandHeight)
+    .attr("y",d => yScale(bucketObj.t2023) - bandHeight)
     .attr("width",chartWidth)
     .attr("height",bandHeight)
-    .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2023)[0].color)
+    .attr("fill",legendConfig.filter(q=>q.zoneName == bucketObj.z2023)[0].color)
     .attr("filter","url(#f3)");
 
 
@@ -267,12 +272,12 @@ chartElement
     .attr("r",10)
 
 
-  var maxItem = config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] > current[valueColumn]) ? prev : current)
+  var minItem = config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] < current[valueColumn]) ? prev : current)
   var maxLabelConfig = labelConfig(
     chartWidth,
     chartHeight,
-    xScale(maxItem[dateColumn]),
-    yScale(maxItem[valueColumn])
+    xScale(minItem[dateColumn]),
+    yScale(minItem[valueColumn])
   )
 
   chartElement
@@ -290,7 +295,17 @@ chartElement
     .attr("y",maxLabelConfig.textOffset.y)
     .attr("dx",maxLabelConfig.xSide * 3)
     .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
-    .text(() => `Coldest night, ${maxItem[dateColumn]}`)
+    .text(() => `Coldest night in ${minItem[dateColumn]}`)
+
+  // chartElement
+  //   .append("text")
+  //   .attr("class","chart-title")
+  //   .attr("x",maxLabelConfig.textOffset.x)
+  //   .attr("y",maxLabelConfig.textOffset.y)
+  //   .attr("dx",maxLabelConfig.xSide * 3)
+  //   .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
+  //   .text(() => `30 years of minimum temperatures for ${selectedLocation.temperatures.placeName}`)
+
 
   chartElement
     .append("line")
@@ -318,6 +333,8 @@ chartElement
     .text(d => {
       return legendConfig.filter(q=>q.zoneMin == d)[0].zoneName
     })
+
+  console.log(selectedLocation)
 
 }
 
