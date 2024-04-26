@@ -273,12 +273,12 @@ chartElement
     .attr("r",10)
 
 
-  var maxItem = config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] > current[valueColumn]) ? prev : current)
+  var minItem = config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] < current[valueColumn]) ? prev : current)
   var maxLabelConfig = labelConfig(
     chartWidth,
     chartHeight,
-    xScale(maxItem[dateColumn]),
-    yScale(maxItem[valueColumn])
+    xScale(minItem[dateColumn]),
+    yScale(minItem[valueColumn])
   )
 
   chartElement
@@ -296,7 +296,7 @@ chartElement
     .attr("y",maxLabelConfig.textOffset.y)
     .attr("dx",maxLabelConfig.xSide * 3)
     .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
-    .text(() => `Coldest night in ${maxItem[dateColumn]}`)
+    .text(() => `Coldest night in ${minItem[dateColumn]}`)
 
   chartElement
     .append("line")
