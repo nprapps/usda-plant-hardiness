@@ -98,14 +98,18 @@ function getTooltip(selectedLocation) {
 
 function tempDiff(selectedLocation) {
 	var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;
-	
+	console.log(diffAmount)
+	console.log(Math.round(diffAmount))
+
 	if (diffAmount === 0) {
 		console.log("EXACTLY 0!")
-		return "stayed the same"
+		return "0ºF warmer"
 	} else {
 		var upDown = diffAmount > 0 ? "warmer" : "cooler";	
-		
-		return `<span class="${upDown}">${Math.abs(diffAmount)}ºF ${upDown}</span>`
+
+		var tDiff = `tDiff${Math.round(diffAmount)}`;	
+
+		return `<span class="zoneText ${upDown} ${tDiff}">${Math.abs(diffAmount)}ºF ${upDown}</span>`
 	}	
 }
 
