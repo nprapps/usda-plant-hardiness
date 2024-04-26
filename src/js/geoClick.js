@@ -165,7 +165,8 @@ async function updateDom(selectedLocation,map) {
       "avg": -12.26,
       "zone": "5b",
       "countBelow": "TK",
-      "countAbove": "TK"
+      "countAbove": "TK",
+      "placeName":"Anchorage, Alaska"
     }
 
     atlLocation.temperatures = selectedLocation.temperatures;
@@ -193,7 +194,8 @@ async function updateDom(selectedLocation,map) {
       "avg": 58.7,
       "zone": "12b",
       "countBelow": "TK",
-      "countAbove": "TK"
+      "countAbove": "TK",
+      "placeName":"Honolulu, Hawaii"
     }
 
     atlLocation.temperatures = selectedLocation.temperatures;
@@ -240,6 +242,11 @@ async function updateDom(selectedLocation,map) {
       'id':'yourPlace',
       'formula':(selectedLocation.placeName ? getName(selectedLocation) : "your area"),
       'classes': 'placeText'
+    },
+    {
+      'id':'yourPlaceShort',
+      'formula':(selectedLocation.placeName ? selectedLocation.placeName : "your area"),
+      'classes': ''
     },
     {
       'id':'chartPlace',
