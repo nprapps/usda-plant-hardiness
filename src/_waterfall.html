@@ -1,0 +1,40 @@
+<%
+
+  var data = grunt.data.json.edited;
+
+%>
+
+<section class="waterfall slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="waterfall">
+  <!-- <img
+    class="backdrop"
+    data-src="./assets/synced/images/<%= slide.image %>"
+    alt=""
+    style="<%= t.style({
+      "object-position": slide.anchor
+    }) %>"
+  > -->
+
+  <% if (slide.text) { %>
+  <div class="text">
+    <%= t.renderMarkdown(slide.text) %>
+  </div>
+  <% } %>
+
+<div class="graphic <%= slide.chart %>">
+  <% data.forEach(function(row) { %>
+    <div class="headline-item">
+      <div class="headline"><%= row.excerpt %></div>
+      <div class="publication"><%= row.attribution %> — <%= row.location %></div>
+    </div>
+  <% }) %>
+</div>
+
+  <!-- <% if (slide.inset) { %>
+  <img class="inset" src="./assets/synced/<%= slide.inset%>" alt="">
+  <% } %>
+  <% if (slide.credit) { %>
+  <span class="watermark" alt=""><%=slide.credit%></span>
+  <% } %>
+  <%= t.include("partials/_text.html", { slide }) %> -->
+
+</section>

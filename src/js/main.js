@@ -45,6 +45,9 @@ var {
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
+var waterfallSlide = $.one(".waterfall.slide");
+var waterfallItems = $(".waterfall.slide .headline-item");
+
 var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 var completion = 0;
@@ -504,6 +507,27 @@ var onScroll = function() {
           else {
               frame.classList.remove("active");
           }
+          });
+        }
+
+        // trigger waterfall blocks
+        if (slide == waterfallSlide && waterfallItems.length && !reducedMotion.matches) {
+          waterfallItems = waterfallItems.filter(function(item, n) {
+            var bounds = item.getBoundingClientRect();
+            if (bounds.top < window.innerHeight  * .8) {
+              setTimeout(function(){ 
+                item.classList.add('pubbed'); 
+                item.classList.add(`headline-${ n }`); 
+              }, n == 0 ? 100 : n * 600);
+              // item.classList.add("pubbed");
+              return false;
+            }
+            return true;
+          });
+        } else if (slide == waterfallSlide && waterfallItems.length && reducedMotion.matches) {
+            waterfallItems = waterfallItems.filter(function(item, n) {
+            item.classList.add('pubbed'); 
+            return true;
           });
         }
 
