@@ -1138,7 +1138,18 @@
           16,
           21
         ],
-        "text-field": "{name:en}",
+        "text-field": ["format",
+      ["get", "name"],
+      {
+        "font-scale": [
+          "interpolate",
+          ["linear", 1],
+          ["get", "pmap:population_rank"],
+          5,1,
+          10,1.5
+        ]
+      }
+    ],
         "visibility": "visible",
         "text-max-width": 10
       },
