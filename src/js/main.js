@@ -94,7 +94,7 @@ var onWindowLoaded = async function() {
   zoomSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
-  zoomSlide.dataset.zoom = 8.5;  
+  zoomSlide.dataset.zoom = 10.5;  
 
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
@@ -213,7 +213,7 @@ var renderMap = async function() {
       //       'circle-stroke-width':3
       //   }
       // },"Place labels"); 
-      
+
       map.addLayer({
         'id': 'hillshade_',
         'source': 'hillshade',        
