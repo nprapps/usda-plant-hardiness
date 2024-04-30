@@ -204,17 +204,18 @@
   z-index: -2;
   position: fixed;
   background-color: white;
-  color: black;
-  // margin:10px;
+  color: #333;  
   padding:10px;
   right: 0;
-  bottom: 0;
+  bottom: -300px;
   width: 100%;
-  // width: 300px;
-  // display:none;
+  transition: all 1s ease;
+  opacity: 0;
 
   &.explore-mode {
     z-index: 101;
+    bottom: 0px;
+    opacity: 1;
   }
 }
 
@@ -222,9 +223,7 @@
   .sans();
   z-index: 102;
   position: fixed;
-  
   top: 0;
-
   margin: 5px;
   cursor: pointer;
   user-select: none;
