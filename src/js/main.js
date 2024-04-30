@@ -189,6 +189,12 @@ var renderMap = async function() {
         attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
       })
 
+      // map.addSource('hillshade', {
+      //   type: 'raster-dem',
+      //   url: `pmtiles://https://r2-public.protomaps.com/protomaps-sample-datasets/terrarium_z9.pmtiles`,
+      //   attribution: 'TKTK',
+      //   encoding: 'terrarium'
+      // })
 
       map.addLayer({
         'id': 'userPoint',
@@ -201,6 +207,16 @@ var renderMap = async function() {
             'circle-stroke-width':3
         }
       },"Place labels"); 
+      
+      // map.addLayer({
+      //   'id': 'hillshade_',
+      //   'source': 'hillshade',        
+      //   'type': 'hillshade',
+      //   'minzoom':0,
+      //   'maxzoom':22
+      // },
+      // // This line is the id of the layer this layer should be immediately below
+      // "Water")
 
       map.addLayer({
         'id': '2012_zones',
@@ -213,7 +229,7 @@ var renderMap = async function() {
           ["==", ["get", "2012_zone"], null],
           "#aaffff",compileLegendStyle("2012_zone")          
           ],
-          "fill-opacity": 1
+          "fill-opacity": 0.8
         }      
       },
       // This line is the id of the layer this layer should be immediately below
@@ -280,6 +296,8 @@ var renderMap = async function() {
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
+
+
 
       // console.log(map.getStyle().layers)
     })
