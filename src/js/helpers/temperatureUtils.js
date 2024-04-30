@@ -13,7 +13,6 @@ const average = array => array.reduce((a, b) => a + b) / array.length;
 var {uly, ulx, yres, xres, c} = rasterFacts;
 
 var getData = async function(url) {
-  console.log(url)
   var response = await fetch(url, { cache: "force-cache" });
   var json = await response.json();  
   return json;
