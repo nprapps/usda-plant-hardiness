@@ -35,15 +35,18 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
       >     
         <div id="dot-chart" class="graphic" role="img"></div> 
       </div>      
-      <div id="explore-button" class="button">
-        <div class="active">Explore map</div>
-        <div class="">Back to story</div>
+      <div id="sticky-nav" class="button">
+        <div class="inner-nav whereTo">
+          <div class="active">Explore map</div>
+          <div class="">Back to the story</div>  
+        </div>
+        <div class="inner-nav dropdown">
+          Switch location: Raleigh, NC
+        </div>
+        
       </div>
       <div id="info">
         <div class="info-inner"></div>
-        <div class="rotateLocation button">
-          Spin the globe
-        </div>
       </div>
 
       <%

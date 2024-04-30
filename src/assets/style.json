@@ -1279,10 +1279,6 @@
   "glyphs": "http://stage-apps.npr.org/enlivened-latitude/assets/synced/map-fonts/{fontstack}/{range}.pbf",
   "sprite": [
 		{
-			"id":"default",
-			"url":"https://api.maptiler.com/maps/basic-v2/sprite"
-		},
-		{
 			"id":"zones",
 			"url":"http://stage-apps.npr.org/enlivened-latitude/assets/zone_sprite"
 		}

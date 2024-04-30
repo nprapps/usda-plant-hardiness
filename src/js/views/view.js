@@ -7,9 +7,9 @@ module.exports = class View {
 
     console.log(slide.id)
     if (slide.id == "intro-1" || slide.id == "titlecard") {
-      $.one("#explore-button").classList.add("disabled");
+      $.one("#sticky-nav").classList.add("disabled");
     } else {
-      $.one("#explore-button").classList.remove("disabled");
+      $.one("#sticky-nav").classList.remove("disabled");
     }
 
     slide.classList.add("active");

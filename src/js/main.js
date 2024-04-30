@@ -23,7 +23,8 @@ var {
       compileZoneLabelStyle,
       compileTempDiffStyle,
       makePoint,
-      checkTilesLoaded
+      checkTilesLoaded,
+      getZone
     } = require("./helpers/mapHelpers");
 
 var {
@@ -35,6 +36,8 @@ var {
 var {
   fetchCSV
 } = require("./helpers/csvUtils");
+
+var { getTooltip } = require('./helpers/textUtils')
 
 var {
   updateLocation,
@@ -151,7 +154,9 @@ var renderMap = async function() {
       container: container,
       style: './assets/style.json',
       center: [-98.04, 39.507],
-      zoom: 3.8
+      zoom: 3.8,
+      minZoom:0,
+      maxZoom:12.5
     });
     
     // maybe include some conditional about sprite urls, if one fails, try another
@@ -213,7 +218,7 @@ var renderMap = async function() {
         'source': 'hillshade',        
         'type': 'hillshade',
         'minzoom':0,
-        'maxzoom':22
+        'maxzoom':12
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
@@ -329,17 +334,13 @@ var renderMap = async function() {
     var locatorButton = $.one(".locateMe");
     var surpriseMeButton = $.one(".surpriseMe");
 
-    $.one("#explore-button").addEventListener('click',() => {
+    $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
-      $("#explore-button div").forEach(d => d.classList.toggle("active"))
-    })    
+      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
+    });
 
-    $.one(".rotateLocation").addEventListener('click',(evt) => {  
-      rotateClick(evt,selectedLocation,map)
-    })    
-
-    locatorButton.addEventListener('click',(evt) => {      
+    locatorButton.addEventListener('click',(evt) => {
 
       // get the parent container of this
       var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
@@ -362,7 +363,6 @@ var renderMap = async function() {
 
       // // get the parent container of this
       // var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-      // console.log("CLOSEST -> ", evt.target.closest("section"), "CHAIN OF PARENTNODES -> ", evt.target.parentNode.parentNode.parentNode.parentNode.parentNode);
       var target = evt.target.closest("section.map");
 
       // get random place
@@ -402,27 +402,21 @@ var renderMap = async function() {
 
     map.on('mousemove', async function(e) {
       // get features under point
-      const features = map.queryRenderedFeatures(e.point);
+      var features = map.queryRenderedFeatures(e.point);
+      
+      var zonesData = features.filter(d => {
+        return d.source == "usda_zones";
+      });
+      var zoneInfo = getZone(zonesData);
 
       var temperatures = await getTemps(e.lngLat);
 
       try {
-        document.getElementById('info').innerHTML =
-        // e.point is the x, y coordinates of the mousemove event relative
-        // to the top-left corner of the map
-        `${
-          // e.lngLat is the longitude, latitude geographical position of the event
-          JSON.stringify(e.lngLat.wrap())}<br>
-          Temps: ${formatTemperatures(JSON.stringify(temperatures.data))}<br>
-            <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
-            <b>zone</b>: ${temperatures.zone} | 
-            <b>countBelow</b>: ${temperatures.countBelow} | 
-            <b>countAbove</b>: ${temperatures.countAbove} | 
-          `;
+        $.one(".info-inner").innerHTML = getTooltip({zoneInfo,temperatures})
+        
         } catch(err) {
-          // console.log(err)
+          console.log(err)
         }
-      
     });
   })
 }

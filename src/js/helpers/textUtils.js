@@ -76,8 +76,7 @@ function tempRange(min) {
 function getTooltip(selectedLocation) {
 	var {
 		zoneInfo,
-		temperatures,
-		coords
+		temperatures
 	}	= selectedLocation;
 
 	if (!temperatures) {
@@ -85,14 +84,12 @@ function getTooltip(selectedLocation) {
 	}
 
 	return `
-  <b>Lng,Lat:</b> ${coords}<br>
   <b>2012 zone:</b> ${zoneInfo.z2012}<br>
   <b>2023 zone:</b> ${zoneInfo.z2023}<br>
-  <b>zone Diff:</b> ${zoneInfo.zDiff}<br>  
-  <b>Temps:</b> ${JSON.stringify(temperatures.data)}<br>
-    <b>avg</b>: ${Math.round(temperatures.avg*10)/10}ºF | 
-    <b>countBelow</b>: ${temperatures.countBelow} | 
-    <b>countAbove</b>: ${temperatures.countAbove}
+  <b>Half zones changed</b> ${zoneInfo.zDiff}<br>
+    <b>Average low temperature (1991-2020)</b>: ${Math.round(temperatures.avg*10)/10}ºF <br>
+    <b>Years with lows below zone</b>: ${temperatures.countBelow} <br>
+    <b>Years with lows above zone</b>: ${temperatures.countAbove}
   `;  
 }
 
