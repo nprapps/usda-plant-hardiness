@@ -23,8 +23,9 @@
 <div class="graphic <%= slide.chart %>">
   <% data.forEach(function(row) { %>
     <div class="headline-item">
+      <div class="location"><%= row.location %></div>
       <div class="headline"><%= row.excerpt %></div>
-      <div class="publication"><%= row.attribution %> — <%= row.location %></div>
+      <div class="publication">– <%= row.attribution %></div>
     </div>
   <% }) %>
 </div>
