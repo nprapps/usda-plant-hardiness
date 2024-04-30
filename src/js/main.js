@@ -184,10 +184,10 @@ var renderMap = async function() {
     // });    
 
     map.on('load', () => {
-      map.addSource('userPoint', {
-          'type': 'geojson',
-          'data': makePoint([0,0])
-      });
+      // map.addSource('userPoint', {
+      //     'type': 'geojson',
+      //     'data': makePoint([0,0])
+      // });
 
       map.addSource('usda_zones', {
         type: 'vector',
@@ -202,17 +202,18 @@ var renderMap = async function() {
         encoding: 'terrarium'
       })
 
-      map.addLayer({
-        'id': 'userPoint',
-        'type': 'circle',
-        'source': 'userPoint',
-        'paint': {
-            'circle-radius': 8,
-            'circle-color': 'transparent',
-            'circle-stroke-color':'#fff',
-            'circle-stroke-width':3
-        }
-      },"Place labels"); 
+      // map.addLayer({
+      //   'id': 'userPoint',
+      //   'type': 'circle',
+      //   'source': 'userPoint',
+      //   'paint': {
+      //       'circle-radius': 8,
+      //       'circle-color': 'transparent',
+      //       'circle-stroke-color':'#fff',
+      //       'circle-stroke-width':3
+      //   }
+      // },"Place labels"); 
+      
       map.addLayer({
         'id': 'hillshade_',
         'source': 'hillshade',        

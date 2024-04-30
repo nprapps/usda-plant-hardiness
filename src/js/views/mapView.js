@@ -1,13 +1,12 @@
 var $ = require("../lib/qsa");
 var View = require("./view"); //from Ruth
 var debounce = require("../lib/debounce"); //from Ruth
-// var { isMobile } = require("../lib/breakpoints");
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
-var {
-  makePoint
-} = require("../helpers/mapHelpers");
+// var {
+//   makePoint
+// } = require("../helpers/mapHelpers");
 
 var mapElement = $.one("#base-map");
 // var mapAssets = {};
@@ -53,9 +52,9 @@ module.exports = class MapView extends View {
       if (oldZoom != newZoom || oldCenter != newCenter) {
 
       // move pointer
-        map.getSource('userPoint').setData(makePoint(newCenter));
+        // map.getSource('userPoint').setData(makePoint(newCenter));
         
-        map.setLayerZoomRange('userPoint',7,20)
+        // map.setLayerZoomRange('userPoint',7,20)
 
         map.flyTo({
           center: newCenter,
