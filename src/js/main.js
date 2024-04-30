@@ -292,6 +292,7 @@ var renderMap = async function() {
         'id': 'temp_diff_layer',
         'source': 'temp_diff',
         'source-layer': 'temp_diffgeojsonl',
+        'minZoom':8,
         'type': 'fill',
         'paint': {
           "fill-color": [
