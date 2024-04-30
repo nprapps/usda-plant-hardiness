@@ -39,21 +39,52 @@
   #dot-chart {
 
     text.text.zone {
-      font-style: italic;
-      color: #fff;
+      font-style: italic;      
       fill: #fff;
       text-anchor: end;
-      filter: drop-shadow(0px 0px 1px rgb(0 0 0 / 1));
+      font-size: 16px;
+      stroke: rgb(0,0,0,0.8);
+      stroke-width: 3px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      paint-order: stroke fill;
     }
 
-    .label-max {
+    .new-old-zone-label {
+      opacity: 0;
+      fill: #fff;
+      paint-order: stroke fill;
+      stroke: rgb(100,100,100,0.8);
+      stroke-width: 3px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      
+
+      &.new {
+        stroke: rgb(0,0,0,0.8);
+        font-weight: 800;
+      }
+    }
+
+    .label-line {
+      opacity: 0;
+    }
+
+    .label-min {
       font-style: italic;
       color: #fff;
       fill: #fff;
+      opacity: 0;
+    }
+
+    .chart-title {
+      font-weight: bold;
+      fill: #fff;
+      opacity: 0;
     }
 
     &[data-frame="return-1"], &[data-frame="return-2"], &[data-frame="return-3"] {
-      .label-max, .label-line {
+      .label-min.all, .label-line.all {
         display: none;
       }
     }
@@ -95,10 +126,10 @@
 
     .bucket-outline.previous {
       stroke: #dedede;
-      stroke-width: 3px;
+      stroke-width: 1.5px;
     }
 
-    .bucket-outline, .bucket, .dot.temperature, .avg-line, text.text.zone {
+    .bucket-outline, .bucket, .dot.temperature, .avg-line, text.text.zone, .label-min, .label-line, .new-old-zone-label {
       transition: all 1s ease;
       opacity: 0;  
 
@@ -151,16 +182,19 @@
       opacity: 1;
       fill-opacity: 1; 
     }   
+    .label-min.all, .label-line.all, .chart-title {
+      opacity: 1;
+    }
   }
   #dot-chart[data-frame="chart-1-1"] {
-    .dot.temperature {  
+    .dot.temperature, .chart-title {  
       opacity: 1;
       fill-opacity: 1;
       animation: dash 1s linear forwards;
     }   
   }
   #dot-chart[data-frame="chart-2"] {
-    .dot.temperature, .avg-line {  
+    .dot.temperature, .avg-line, .chart-title {  
       opacity: 1;
       fill-opacity: 1; 
       animation: dash 1s linear forwards;
@@ -168,30 +202,35 @@
   }
   #dot-chart[data-frame="chart-3"] {
     .dot.temperature, .avg-line,
-    .bucket-outline.current, .bucket,
-    .text.text.zone {  
+    .bucket-outline.current, .bucket-outline.previous, .bucket,
+    .text.text.zone, .chart-title, .new-old-zone-label {  
       opacity: 1;
     }   
     .bucket-outline, .bucket, .text.text.zone {
       animation: dash 1s linear forwards;
     }
   }
-  #dot-chart[data-frame="return-1"] {
-    .dot.temperature, .avg-line,
+  #dot-chart[data-frame="return-1"] {    .avg-line,
     .bucket-outline.current, .bucket,
-    .text.text.zone {  
+    .text.text.zone, .chart-title, .new-old-zone-label {  
       opacity: 1;
-    }   
-    // .bucket-outline.previous {
-      // opacity: 1;
-    // }
+    }       
+    .bucket-outline.previous {
+      opacity: 1;
+    }
+
+    .dot.temperature {
+      opacity: 0.4;
+    }
+
   }
   #dot-chart[data-frame="return-2"] {
     .dot.temperature, .avg-line,
     .bucket-outline.current, .bucket,
-    .text.text.zone {  
+    .text.text.zone, .chart-title,
+    .bucket-outline.previous, .new-old-zone-label {
       opacity: 1;
-    }   
+    }    
     .dot.temperature {
       opacity: 0.2;      
 
@@ -202,9 +241,13 @@
     }
   }
   #dot-chart[data-frame="return-3"] {
+    .label-min.st-louis, .label-line.st-louis {
+      opacity: 1;
+    }
+
     .dot.temperature, .avg-line,
     .bucket-outline.current, .bucket,
-    .text.text.zone {  
+    .text.text.zone, .chart-title {  
       opacity: 1;
     }
     .dot.temperature {

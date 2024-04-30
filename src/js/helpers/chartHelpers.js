@@ -1,6 +1,8 @@
+var { isMobile, isDesktop } = require("../lib/breakpoints");
+
 export function labelConfig(chartWidth,chartHeight,x,y) {
-  var length = 40;
-  var offset = 10;
+  var length = isMobile.matches ? 24 : 40;
+  var offset = isMobile.matches ? 8 : 10;
   var xSide;
   var ySide;
 
@@ -11,7 +13,7 @@ export function labelConfig(chartWidth,chartHeight,x,y) {
   }
 
   if (y > chartHeight/2) {
-    ySide = 1;
+    ySide = -1;
   } else {
     ySide = -1;
   }
