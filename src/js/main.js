@@ -12,6 +12,8 @@ var imageView = require("./views/imageView");
 var textView = require("./views/textView");
 var chartView = require("./views/chartView");
 
+// var {logDataTransfer} = require("./stats") // Call the function to start logging data transfer
+
 require("./video");
 require("./analytics");
 
@@ -82,7 +84,6 @@ if (isOne) {
 
 // Initialize map here
 var onWindowLoaded = async function() {
-
   // Preset the second slides' data to default place
 
   // Set the next slide's dataset to the new place
@@ -331,10 +332,10 @@ var renderMap = async function() {
     $.one("#explore-button").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
-
+      $("#explore-button div").forEach(d => d.classList.toggle("active"))
     })    
 
-    $.one(".rotateLocation").addEventListener('click',(evt) => {      
+    $.one(".rotateLocation").addEventListener('click',(evt) => {  
       rotateClick(evt,selectedLocation,map)
     })    
 

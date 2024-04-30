@@ -229,7 +229,14 @@
   margin: 5px;
   cursor: pointer;
   user-select: none;
-  // display: none;
+  pointer-events: all;
+  transition: all 1s ease;
+
+  &.disabled {
+    opacity: 0;
+    pointer-events: none;
+    top: -20px;
+  }
 
   &:hover {
     background-color: #eee;

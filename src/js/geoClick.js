@@ -115,7 +115,7 @@ var geoClick = function(selectedLocation,target,map) {
         $("div.mod div").forEach(d=>d.classList.remove("active"))  
       }
     }  
-    
+
     var rotatorFlying = true;
 
     map.on('moveend', function(e){
