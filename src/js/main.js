@@ -58,7 +58,7 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 var completion = 0;
 var map;
 let locations;
-let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZEETER.csv";
+let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
 
 
 // global variable for active map layer
@@ -218,7 +218,7 @@ var renderMap = async function() {
         'id': 'hillshade_',
         'source': 'hillshade',        
         'type': 'hillshade',
-        'minzoom':0,
+        'minzoom':8,
         'maxzoom':12
       },
       // This line is the id of the layer this layer should be immediately below
