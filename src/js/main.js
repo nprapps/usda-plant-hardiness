@@ -189,12 +189,12 @@ var renderMap = async function() {
         attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
       })
 
-      // map.addSource('hillshade', {
-      //   type: 'raster-dem',
-      //   url: `pmtiles://https://r2-public.protomaps.com/protomaps-sample-datasets/terrarium_z9.pmtiles`,
-      //   attribution: 'TKTK',
-      //   encoding: 'terrarium'
-      // })
+      map.addSource('hillshade', {
+        type: 'raster-dem',
+        url: `pmtiles://https://r2-public.protomaps.com/protomaps-sample-datasets/terrarium_z9.pmtiles`,
+        attribution: 'United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey.',
+        encoding: 'terrarium'
+      })
 
       map.addLayer({
         'id': 'userPoint',
@@ -207,16 +207,15 @@ var renderMap = async function() {
             'circle-stroke-width':3
         }
       },"Place labels"); 
-      
-      // map.addLayer({
-      //   'id': 'hillshade_',
-      //   'source': 'hillshade',        
-      //   'type': 'hillshade',
-      //   'minzoom':0,
-      //   'maxzoom':22
-      // },
-      // // This line is the id of the layer this layer should be immediately below
-      // "Water")
+      map.addLayer({
+        'id': 'hillshade_',
+        'source': 'hillshade',        
+        'type': 'hillshade',
+        'minzoom':0,
+        'maxzoom':22
+      },
+      // This line is the id of the layer this layer should be immediately below
+      "Water")
 
       map.addLayer({
         'id': '2012_zones',
@@ -229,7 +228,8 @@ var renderMap = async function() {
           ["==", ["get", "2012_zone"], null],
           "#aaffff",compileLegendStyle("2012_zone")          
           ],
-          "fill-opacity": 0.8
+          "fill-opacity": 0.78,
+          "fill-outline-color":"rgba(255,255,255,0)"
         }      
       },
       // This line is the id of the layer this layer should be immediately below
@@ -244,7 +244,8 @@ var renderMap = async function() {
         'paint': {
           "fill-color": "rgba(255, 255, 0, 1)",
           "fill-pattern": compileZoneLabelStyle("2012_zone"),
-          "fill-opacity": 0.4
+          "fill-opacity": 0.5,
+          
         }      
       },"Water") 
 
@@ -291,7 +292,8 @@ var renderMap = async function() {
           ["==", ["get", "temp_diff"], null],
           "#aaffff",compileTempDiffStyle()         
           ],
-          "fill-opacity": 0
+          "fill-opacity": 0,
+          "fill-outline-color":"rgba(255,255,255,0)"
         }      
       },
       // This line is the id of the layer this layer should be immediately below
@@ -299,7 +301,7 @@ var renderMap = async function() {
 
 
 
-      // console.log(map.getStyle().layers)
+      console.log(map.getStyle().layers)
     })
 
     // Lots of listeners

@@ -71,9 +71,9 @@ module.exports = class MapView extends View {
         layers.forEach(d=> {
           map.setPaintProperty(d.id,'fill-opacity',0)
         })
-        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',1);
+        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.78);
         if (slide.dataset.maplayer != "temp_diff_layer") {
-          map.setPaintProperty(`${slide.dataset.maplayer}_labels`, 'fill-opacity',0.4);
+          map.setPaintProperty(`${slide.dataset.maplayer}_labels`, 'fill-opacity',0.5);
         }        
       } catch(err) {
         console.log(err)
