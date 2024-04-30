@@ -91,13 +91,6 @@ var geoClick = function(selectedLocation,target,map) {
   // Change the zoom level
   nextSlide.dataset.zoom = 8.5; 
 
-  // deactivate the buttons?
-  // var qBtns = target.querySelectorAll("button");
-  // qBtns.forEach(function(btn) {
-  //   btn.removeEventListener("click", onQuizButtonClicked);
-  //   btn.disabled = true;
-  // });
-
   // track click to GA????
   // track("quiz", target.id, this.dataset.status == "true" ? 1 : 0);
 
