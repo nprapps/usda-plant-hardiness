@@ -202,16 +202,6 @@ var renderDotChart = function(config) {
     .attr("width",chartWidth)
     .attr("height",bandHeight);
 
-  // chartElement
-  //   .append("g")
-  //   .attr("class", "x grid")
-  //   .attr("transform", makeTranslate(0, chartHeight))
-  //   .call(
-  //     xAxisGrid()
-  //       .tickSize(-chartHeight, 0, 0)
-  //       .tickFormat("")
-  //   );
-
   chartElement
     .append("g")
     .attr("class", "y grid")
@@ -220,92 +210,115 @@ var renderDotChart = function(config) {
         .tickSize(-chartWidth, 0, 0)
         .tickFormat("")
     );
-chartElement
-  .append("rect")
-  .attr("class","bucket-outline previous")  
-    .attr("x",xScale(1990))
-    .attr("y",d => yScale(selectedLocation.zoneInfo.t2012) - bandHeight)
-    .attr("width",chartWidth)
-    .attr("height",bandHeight)
-    .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2012)[0].color)
-    .attr("filter","url(#f3)");
 
-// if its an alt, do alt things
-if (selectedLocation.alt) {
-  var bucketObj = selectedLocation.alt.zoneInfo;
-} else {
-  var bucketObj = selectedLocation.zoneInfo;
-}
-chartElement
-  .append("rect")
-  .attr("class","bucket-outline current")  
-    .attr("x",xScale(1990))
-    .attr("y",d => yScale(bucketObj.t2023) - bandHeight)
-    .attr("width",chartWidth)
-    .attr("height",bandHeight)
-    .attr("fill",legendConfig.filter(q=>q.zoneName == bucketObj.z2023)[0].color)
-    .attr("filter","url(#f3)");
+  chartElement
+    .append("rect")
+    .attr("class","bucket-outline previous")  
+      .attr("x",xScale(1990))
+      .attr("y",d => yScale(selectedLocation.zoneInfo.t2012) - bandHeight)
+      .attr("width",chartWidth)
+      .attr("height",bandHeight)
+      .attr("fill",legendConfig.filter(q=>q.zoneName == selectedLocation.zoneInfo.z2012)[0].color)
+      .attr("filter","url(#f3)");
 
+  // if its an alt, do alt things
+  if (selectedLocation.alt) {
+    var bucketObj = selectedLocation.alt.zoneInfo;
+  } else {
+    var bucketObj = selectedLocation.zoneInfo;
+  }
+  chartElement
+    .append("rect")
+    .attr("class","bucket-outline current")  
+      .attr("x",xScale(1990))
+      .attr("y",d => yScale(bucketObj.t2023) - bandHeight)
+      .attr("width",chartWidth)
+      .attr("height",bandHeight)
+      .attr("fill",legendConfig.filter(q=>q.zoneName == bucketObj.z2023)[0].color)
+      .attr("filter","url(#f3)");
 
-chartElement
-  .append("g")
-  .attr("class","dots")
-  .selectAll("circle")
-  .data(config.data[0].values)
-  .enter()
-    .append("circle")
-    .attr("class",(d,i) => {      
-      var below = "";
-      var superLow = "";
-      if (d[valueColumn] < selectedLocation.zoneInfo.t2023) {
-        below = 'below';
-      }
-      if (d[valueColumn]< -10) {
-        superLow = 'superLow';
-      }
-      return `dot temperature ${below} ${superLow} i-${i}`
-    })
-    .attr("cx",d => {
-      return xScale(d[dateColumn])
-    })
-    .attr("cy",d => yScale(d[valueColumn]))
-    .attr("r",10)
+  chartElement
+    .append("g")
+    .attr("class","dots")
+    .selectAll("circle")
+    .data(config.data[0].values)
+    .enter()
+      .append("circle")
+      .attr("class",(d,i) => {      
+        var below = "";
+        var superLow = "";
+        if (d[valueColumn] < selectedLocation.zoneInfo.t2023) {
+          below = 'below';
+        }
+        if (d[valueColumn]< -10) {
+          superLow = 'superLow';
+        }
+        return `dot temperature ${below} ${superLow} i-${i}`
+      })
+      .attr("cx",d => {
+        return xScale(d[dateColumn])
+      })
+      .attr("cy",d => yScale(d[valueColumn]))
+      .attr("r",10)
 
+  // Set up special labels
+  var minItem =    config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] < current[valueColumn]) ? prev : current)
+  var stLouisMin = config.data[0].values.filter(d => d[dateColumn] == 2014)[0];
 
-  var minItem = config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] < current[valueColumn]) ? prev : current)
-  var maxLabelConfig = labelConfig(
+  var minLabelConfig = labelConfig(
     chartWidth,
     chartHeight,
     xScale(minItem[dateColumn]),
     yScale(minItem[valueColumn])
   )
+  var stLouisLabelConfig = labelConfig(
+    chartWidth,
+    chartHeight,
+    xScale(stLouisMin[dateColumn]),
+    yScale(stLouisMin[valueColumn])
+  )
 
   chartElement
     .append("path")
-    .attr("class",`label-line`)
+    .attr("class",`label-line all`)
     .attr("stroke", "#fff")
     .attr("fill", "transparent")
     .attr("marker-end", "url(#my-arrow)")
-    .attr("d",line(maxLabelConfig.arr))
+    .attr("d",line(minLabelConfig.arr))
+
+  chartElement
+    .append("path")
+    .attr("class",`label-line st-louis`)
+    .attr("stroke", "#fff")
+    .attr("fill", "transparent")
+    .attr("marker-end", "url(#my-arrow)")
+    .attr("d",line(stLouisLabelConfig.arr))    
 
   chartElement
     .append("text")
-    .attr("class","label-max")
-    .attr("x",maxLabelConfig.textOffset.x)
-    .attr("y",maxLabelConfig.textOffset.y)
-    .attr("dx",maxLabelConfig.xSide * 3)
-    .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
-    .text(() => `Coldest night in ${minItem[dateColumn]}`)
+    .attr("class","label-min all")
+    .attr("x",minLabelConfig.textOffset.x)
+    .attr("y",minLabelConfig.textOffset.y)
+    .attr("dx",minLabelConfig.xSide * 3)
+    .attr("text-anchor",minLabelConfig.xSide == 1 ? "start" : "end")
+    .text(() => `Coldest night in ${minItem[dateColumn]}`)    
 
-  // chartElement
-  //   .append("text")
-  //   .attr("class","chart-title")
-  //   .attr("x",maxLabelConfig.textOffset.x)
-  //   .attr("y",maxLabelConfig.textOffset.y)
-  //   .attr("dx",maxLabelConfig.xSide * 3)
-  //   .attr("text-anchor",maxLabelConfig.xSide == 1 ? "start" : "end")
-  //   .text(() => `30 years of minimum temperatures for ${selectedLocation.temperatures.placeName}`)
+  chartElement
+    .append("text")
+    .attr("class","label-min st-louis")
+    .attr("x",stLouisLabelConfig.textOffset.x)
+    .attr("y",stLouisLabelConfig.textOffset.y)
+    .attr("dx",stLouisLabelConfig.xSide * 3)
+    .attr("text-anchor",stLouisLabelConfig.xSide == 1 ? "start" : "end")
+    .text(() => "Coldest night in 2014, -10ºF")
 
+  chartElement
+    .append("text")
+    .attr("class","chart-title")
+    .attr("x",chartWidth/2)
+    .attr("y",chartHeight+40)
+    .attr("text-anchor","middle")
+    .text(`30 years of minimum temperatures for ${selectedLocation.placeName}`)
 
   chartElement
     .append("line")
@@ -317,24 +330,67 @@ chartElement
 
   // render zone labels
   chartElement
-  .append("g")
-  .attr("class","zone-labels")
-  .selectAll("text")
-  .data(bucketArray)
-  .enter()
-    .append("text")
-    .attr("class","text zone ")
-    .attr("x",isMobile.matches ? (chartWidth + 5) : xScale(2021))
-    .attr("y",d => {
-      return yScale(d) - bandHeight/2
-    })
-    .attr("dy",5)
-    .attr("dx",isMobile.matches ? 20 : 5)
-    .text(d => {
-      return legendConfig.filter(q=>q.zoneMin == d)[0].zoneName
-    })
+    .append("g")
+    .attr("class","zone-labels")
+    .selectAll("text")
+    .data(bucketArray)
+    .enter()
+      .append("text")
+      .attr("class","text zone ")
+      .attr("x",isMobile.matches ? (chartWidth + 5) : xScale(2021))
+      .attr("y",d => {
+        return yScale(d) - bandHeight/2
+      })
+      .attr("dy",5)
+      .attr("dx",isMobile.matches ? 20 : 5)
+      .text(d => {
+        return legendConfig.filter(q=>q.zoneMin == d)[0].zoneName
+      })
 
-  console.log(selectedLocation)
+  // new/old zone labels
+  console.log(bucketObj)
+  var bucketLabelsNewOld = bucketArray.map(d => {
+      if (d == bucketObj.t2023) {
+        if (bucketObj.t2023 == bucketObj.t2012) {          
+          return {
+            label: "New and previous zone",
+            classList: "new",
+            temp: d
+          };
+        } else {
+          return { 
+            label: "New zone",
+            classList: "new",
+            temp: d
+          }          
+        }
+      } else if (d == bucketObj.t2012) {
+        return {
+          label: "Previous zone",
+          classList: "old",
+          temp: d
+        }        
+      } else {
+        return null
+      } 
+    }).filter(d => d != null)
+
+  console.log(bucketLabelsNewOld)
+
+  chartElement
+    .append("g")
+    .attr("class","more-titles")
+    .selectAll("text")
+    .data(bucketLabelsNewOld)
+    .enter()
+      .append("text")
+      .attr("class",d => `text new-old-zone-label ${d.classList}`)
+      .attr("x",xScale(1990))
+      .attr("y",d => {
+        return yScale(d.temp) - 5
+      })
+      .attr("dx",5)
+      .text(d => d.label)
 
 }
 

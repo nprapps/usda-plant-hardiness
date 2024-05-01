@@ -70,7 +70,16 @@ module.exports = class MapView extends View {
         layers.forEach(d=> {
           map.setPaintProperty(d.id,'fill-opacity',0)
         })
-        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',0.78);
+        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',[
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
+              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
+          ]
+          );
         if (slide.dataset.maplayer != "temp_diff_layer") {
           map.setPaintProperty(`${slide.dataset.maplayer}_labels`, 'fill-opacity',0.5);
         }        

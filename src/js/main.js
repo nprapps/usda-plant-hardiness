@@ -58,7 +58,7 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 var completion = 0;
 var map;
 let locations;
-let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZEETER.csv";
+let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
 
 
 // global variable for active map layer
@@ -94,7 +94,7 @@ var onWindowLoaded = async function() {
   zoomSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
-  zoomSlide.dataset.zoom = 10.5;  
+  zoomSlide.dataset.zoom = 8.5;  
 
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
@@ -218,8 +218,8 @@ var renderMap = async function() {
         'id': 'hillshade_',
         'source': 'hillshade',        
         'type': 'hillshade',
-        'minzoom':0,
-        'maxzoom':12
+        'minzoom':8,
+        'maxzoom':15
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
@@ -235,8 +235,15 @@ var renderMap = async function() {
           ["==", ["get", "2012_zone"], null],
           "#aaffff",compileLegendStyle("2012_zone")          
           ],
-          "fill-opacity": 0.78,
-          "fill-outline-color":"rgba(255,255,255,0)"
+          "fill-opacity":[
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
+              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
+          ]
         }      
       },
       // This line is the id of the layer this layer should be immediately below
@@ -247,7 +254,7 @@ var renderMap = async function() {
         'source': 'usda_zones',
         'source-layer': '2012_zones',
         'type': 'fill',
-        "minzoom": 7,
+        "minzoom": 8,
         'paint': {
           "fill-color": "rgba(255, 255, 0, 1)",
           "fill-pattern": compileZoneLabelStyle("2012_zone"),
@@ -276,7 +283,7 @@ var renderMap = async function() {
         'source': 'usda_zones',
         'source-layer': '2023_zones',
         'type': 'fill',
-        "minzoom": 7,
+        "minzoom": 8,
         'paint': {
           "fill-color": "rgba(255, 255, 0, 1)",
           "fill-pattern": compileZoneLabelStyle("2023_zone"),
@@ -292,6 +299,7 @@ var renderMap = async function() {
         'id': 'temp_diff_layer',
         'source': 'temp_diff',
         'source-layer': 'temp_diffgeojsonl',
+        'minZoom':8,
         'type': 'fill',
         'paint': {
           "fill-color": [

@@ -94,9 +94,7 @@ function getTooltip(selectedLocation) {
 }
 
 function tempDiff(selectedLocation) {
-	var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;
-	console.log(diffAmount)
-	console.log(Math.round(diffAmount))
+	var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;	
 
 	if (diffAmount === 0) {
 		console.log("EXACTLY 0!")

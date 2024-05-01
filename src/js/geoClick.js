@@ -89,22 +89,13 @@ var geoClick = function(selectedLocation,target,map) {
   nextSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
-  nextSlide.dataset.zoom = 10.5; 
-
-  // deactivate the buttons?
-  // var qBtns = target.querySelectorAll("button");
-  // qBtns.forEach(function(btn) {
-  //   btn.removeEventListener("click", onQuizButtonClicked);
-  //   btn.disabled = true;
-  // });
+  nextSlide.dataset.zoom = 8.5; 
 
   // track click to GA????
   // track("quiz", target.id, this.dataset.status == "true" ? 1 : 0);
 
   // smoothscroll to the next slide AND flyto (this happens in the mapView)
   var nextSlide = document.getElementById(target.nextElementSibling.id);
-  console.log("----------------")
-  console.log(nextSlide)
   setTimeout(() => {
     nextSlide.scrollIntoView({ block:"center",behavior: "smooth" })
     // update the DOM

@@ -48,6 +48,8 @@ module.exports = class ChartView extends View {
         "z2023":temp2zone(temp2023),
         "zDiff":((temp2023 - temp2012)/5)
       }
+
+      exampleLocation.placeName = "St. Louis";
       // update d3
       setupChart(exampleLocation);
 
