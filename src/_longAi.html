@@ -4,11 +4,15 @@
       <div class="content">
         <%= t.renderMarkdown(slide.text) %>
 
-        <%= t.include(`./ai2html/_perennials.html`) %>
+        <div class="full-width">
+          <%= t.include(`./ai2html/_perennials.html`) %>
+        </div>
 
         <%= t.renderMarkdown(slide.text2) %>
 
-        <%= t.include(`./ai2html/_three-places.html`) %>
+        <div class="full-width">
+          <%= t.include(`./ai2html/_three-places.html`) %>
+        </div>
 
         <%= t.renderMarkdown(slide.text4) %>
       </div>
