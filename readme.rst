@@ -17,6 +17,7 @@ With those installed, you can then set the project up using your terminal:
 #. Pull the code - ``git clone git@github.com:nprapps/usda-plant-hardiness``
 #. Enter the project folder - ``cd usda-plant-hardiness``
 #. Install dependencies from NPM - ``npm install``
+#. Pull the latest content — ``grunt docs sheets sync``
 #. Start the server - ``grunt``
 
 Running tasks
