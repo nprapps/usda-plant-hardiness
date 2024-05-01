@@ -348,7 +348,6 @@ var renderDotChart = function(config) {
       })
 
   // new/old zone labels
-  console.log(bucketObj)
   var bucketLabelsNewOld = bucketArray.map(d => {
       if (d == bucketObj.t2023) {
         if (bucketObj.t2023 == bucketObj.t2012) {          
@@ -418,6 +417,7 @@ var renderTemperatureChart = function(data,selectedLocation) {
   // var element = chartSlide.querySelector(container);
   var width = window.innerWidth;
   var height = window.innerHeight;
+  var height = isMobile.matches ? screen.height : window.innerHeight;
 
   renderDotChart({
     container,
