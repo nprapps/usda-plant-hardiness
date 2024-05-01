@@ -1,0 +1,27 @@
+// ai2html artboard sizes
+.g-artboard {
+
+  @media screen and (min-width: 730px) {
+    &[id$="-small"],
+    &[id$="-medium"],
+    &[id$="-full_bleed"] {
+      display: none !important;
+    }
+  }
+
+  @media screen and (max-width: 729px) and (min-width: 400px) {
+    &[id$="-small"],
+    &[id$="-wide"],
+    &[id$="-full_bleed"] {
+      display: none !important;
+    }
+  }
+
+  @media screen and (max-width: 399px) {
+    &[id$="-medium"],
+    &[id$="-wide"],
+    &[id$="-full_bleed"] {
+      display: none !important;
+    }
+  }
+}

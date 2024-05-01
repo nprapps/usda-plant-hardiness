@@ -1,0 +1,17 @@
+<section class="slide text longAi" id="<%= slide.id %>" data-type="text">
+  <% if (slide.text) { %>
+    <div class="text">
+      <div class="content">
+        <%= t.renderMarkdown(slide.text) %>
+
+        <%= t.include(`./ai2html/_perennials.html`) %>
+
+        <%= t.renderMarkdown(slide.text2) %>
+
+        <%= t.include(`./ai2html/_three-places.html`) %>
+
+        <%= t.renderMarkdown(slide.text4) %>
+      </div>
+    </div>
+  <%}%>
+</section>
