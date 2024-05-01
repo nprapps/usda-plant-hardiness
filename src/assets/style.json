@@ -1019,74 +1019,67 @@
       "id": "Place labels",
       "type": "symbol",
       "source": "npr_osm",
-      "source-layer": "place",
+      "source-layer": "places",
       "minzoom": 0,
       "maxzoom": 16,
       "layout": {
         "text-font": [
-          "NPR Serif Bold"
+          "NPR Sans Regular"
         ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear",
-            1
-          ],
-          [
-            "zoom"
-          ],
-          3,
-          11,
-          8,
-          [
-            "match",
-            [
-              "get",
-              "class"
-            ],
-            "city",
-            15,
-            13
-          ],
-          11,
-          [
-            "match",
-            [
-              "get",
-              "class"
-            ],
-            "city",
-            16,
-            [
-              "suburb",
-              "neighbourhood",
-              "quarter",
-              "hamlet",
-              "isolated_dwelling"
-            ],
-            10,
-            13
-          ],
-          16,
-          [
-            "match",
-            [
-              "get",
-              "class"
-            ],
-            "city",
-            21,
-            [
-              "suburb",
-              "neighbourhood",
-              "quarter",
-              "hamlet",
-              "isolated_dwelling"
-            ],
-            14,
-            16
-          ]
-        ],
+       "text-size": [  
+  "interpolate",  
+  ["linear", 1],  
+  ["zoom"],       
+
+  
+  3, 11,          
+  8,              
+
+  
+  
+  [
+    "match",
+    ["get", "pmap:kind_detail"],    
+    "city",              
+    15,                  
+    13                   
+  ],
+  11,                   
+
+  
+  [
+    "match",
+    ["get", "pmap:kind_detail"],
+    "city",
+    16,                  
+    [
+      "suburb",
+      "neighbourhood",
+      "quarter",
+      "hamlet",
+      "isolated_dwelling"
+    ],
+    10,                  
+    13                   
+  ],
+  16,                   
+  [
+    "match",
+    ["get", "pmap:kind_detail"],
+    "city",
+    21,                  
+    [
+      "suburb",
+      "neighbourhood",
+      "quarter",
+      "hamlet",
+      "isolated_dwelling"
+    ],
+    14,                  
+    16                   
+  ]
+],
+
         "text-field": "{name}",
         "visibility": "visible",
         "text-max-width": 10
@@ -1095,11 +1088,11 @@
         "text-color": "hsl(0, 0%, 0%)",
         "text-halo-blur": 0,
         "text-halo-color": "hsla(0, 0%, 100%, 0.75)",
-        "text-halo-width": 2
+        "text-halo-width": 0.5
       },
       "filter": [
         "in",
-        "class",
+        "pmap:kind_detail",
         "hamlet",
         "isolated_dwelling",
         "neighbourhood",
@@ -1109,16 +1102,17 @@
         "town",
         "village"
       ]
-    },
+    },  
     {
-      "id": "City labels",
+      "id": "City labels zoomed in",
       "type": "symbol",
       "source": "npr_osm",
       "source-layer": "places",
       "maxzoom": 16,
+      "minzoom":7,
       "layout": {
         "text-font": [
-          "NPR Serif Bold"
+          "NPR Sans Regular"
         ],
         "text-size": [
           "interpolate",
@@ -1129,35 +1123,84 @@
           [
             "zoom"
           ],
-          3,
-          11,
-          8,
-          15,
-          11,
-          16,
-          16,
-          21
+          3,11,
+          8,14,
+          11,16,
+          16,19
         ],
         "text-field": ["format",
-      ["get", "name"],
-      {
-        "font-scale": [
-          "interpolate",
-          ["linear", 1],
-          ["get", "pmap:population_rank"],
-          5,1,
-          10,1.5
-        ]
-      }
-    ],
+          ["get", "name"],
+          {
+            "font-scale": [
+              "interpolate",
+              ["linear", 1],
+              ["get", "pmap:population_rank"],
+              5,0.7,
+              10,1.2,
+              13,1.6
+            ]
+          }
+        ],
         "visibility": "visible",
         "text-max-width": 10
       },
       "paint": {
-        "text-color": "hsl(0, 0%, 0%)",
+        "text-color": "#111",
         "text-halo-blur": 0,
         "text-halo-color": "hsla(0, 0%, 100%, 0.75)",
-        "text-halo-width": 2
+        "text-halo-width": 0.5
+      },
+      "filter": [
+        "==",
+        "pmap:kind_detail",
+        "city"
+      ]
+    },
+    {
+      "id": "City labels zoomed out",
+      "type": "symbol",
+      "source": "npr_osm",
+      "source-layer": "places",
+      "maxzoom": 8,
+      "layout": {
+        "text-font": [
+          "NPR Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear",
+            1
+          ],
+          [
+            "zoom"
+          ],
+          3,10,
+          8,13,
+          11,14,
+          16,19
+        ],
+        "text-field": ["format",
+          ["get", "name"],
+          {
+            "font-scale": [
+              "interpolate",
+              ["linear", 1],
+              ["get", "pmap:population_rank"],
+              5,0.7,
+              10,1,
+              13,1.6
+            ]
+          }
+        ],
+        "visibility": "visible",
+        "text-max-width": 10
+      },
+      "paint": {
+        "text-color": "#111",
+        "text-halo-blur": 0,
+        "text-halo-color": "hsla(0, 0%, 100%, 0.75)",
+        "text-halo-width": 0.5
       },
       "filter": [
         "==",

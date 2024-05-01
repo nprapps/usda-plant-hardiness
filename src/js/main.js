@@ -349,6 +349,13 @@ var renderMap = async function() {
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
     });
 
+
+    $.one("#end-explore").addEventListener('click',() => {
+      $.one("#base-map").classList.toggle('explore-mode');
+      $.one("#info").classList.toggle('explore-mode');
+      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
+    })
+
     locatorButton.addEventListener('click',(evt) => {
 
       // get the parent container of this

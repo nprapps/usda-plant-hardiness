@@ -263,7 +263,7 @@
 #geo-container {
   text-align: center;
 }
-#geo-container .button, #info .button {
+#geo-container .button, #info .button, .end-option-container .button {
   .sans();
   display: inline-block;
   pointer-events: all;
@@ -292,7 +292,28 @@
   }
 }
 
+.end-option-container {
+  display: flex;
+}
+
+.end-option-container .button {
+  text-align: center;
+  display: flex;
+  align-items: center; /* Vertically align text */
+  margin: 10px; /* Optional: Add margin between inner divs */
+  justify-content: center;
+  background-color: lightseagreen;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
 .geo-buttons {
+  &:hover {
+    opacity: 0.5;
+  }
+
   &.disabled {
     .button {
       opacity: 0.5;
