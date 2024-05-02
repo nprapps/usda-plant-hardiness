@@ -2,7 +2,7 @@ var $ = require("./lib/qsa")
 var debounce = require("./lib/debounce"); //ruth had in sea level rise...not sure if we need
 var track = require("./lib/tracking");
 require("@nprapps/autocomplete-input");
-// var { isMobile } = require("./lib/breakpoints");
+var { isMobile } = require("./lib/breakpoints");
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 var pmtiles = require("pmtiles/dist");
@@ -24,7 +24,8 @@ var {
       compileTempDiffStyle,
       makePoint,
       checkTilesLoaded,
-      getZone
+      getZone,
+      getStartingCoords
     } = require("./helpers/mapHelpers");
 
 var {
@@ -154,12 +155,23 @@ var renderMap = async function() {
 
   p.getHeader().then(h => {
     
-    // optionally, get timezone if mobile, to pick which 3rd of country to show
+    
+    let startingCoords = [-98.04, 39.507];
+    
+    // optionally, get timezone if mobile, to pick which quarter of country to show
+    if (isMobile.matches) {
+      console.log('is mobile')
+      console.log($.one("#intro-1"))
+      console.log($.one("#intro-1").dataset)
+      
+      startingCoords = getStartingCoords();
+      $.one("#intro-1").dataset.center = JSON.stringify(startingCoords);
+    };
 
     map = new maplibregl.Map({
       container: container,
       style: './assets/style.json',
-      center: [-98.04, 39.507],
+      center: startingCoords,
       zoom: 3.8,
       minZoom:2.5,
       maxZoom:12.5
