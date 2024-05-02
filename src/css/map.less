@@ -135,8 +135,6 @@
 // }
 
 .mod {
-
-
   .placeText {
     text-decoration: underline;
   }
@@ -246,8 +244,8 @@
     border-radius: 5px;
     margin-left: 5px;
 
-    &.whereTo:hover {
-    background-color: #eee;  
+    &:hover {
+      background-color: #eee;  
     }
 
     &.whereTo div {
@@ -257,13 +255,20 @@
         display: inline-block;
       }
     }
-}
+  }
+
+  svg {
+    width: auto;
+    height: 20px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: -3px;
+  }
 }
 
-#geo-container {
-  text-align: center;
-}
-#geo-container .button, #info .button, .end-option-container .button {
+#geo-container .button,
+#info .button,
+.end-option-container .button {
   .sans();
   display: inline-block;
   pointer-events: all;
@@ -294,18 +299,18 @@
 
 .end-option-container {
   display: flex;
-}
 
-.end-option-container .button {
-  text-align: center;
-  display: flex;
-  align-items: center; /* Vertically align text */
-  margin: 10px; /* Optional: Add margin between inner divs */
-  justify-content: center;
-  background-color: lightseagreen;
-
-  &:hover {
-    opacity: 0.5;
+  .button {
+    text-align: center;
+    display: flex;
+    align-items: center; /* Vertically align text */
+    margin: 10px; /* Optional: Add margin between inner divs */
+    justify-content: center;
+    background-color: lightseagreen;
+  
+    &:hover {
+      opacity: 0.5;
+    }
   }
 }
 
@@ -394,31 +399,22 @@
 
 
 // geolocation + lookup slide
-#intro-1 {
+#intro-1 {  
   .text .content {
     text-align: center;
+    .sans();
   }
-
-  autocomplete-input {
-    color: #333;
-    font-size: 1rem;
-
-
-  }
-
-  input {
-    background-color: #555;
-    border: none !important;
-  }
-
 }
 
 #geo-container { 
+  .sans();
+  margin-top: -.75rem;
+  text-align: center;
+
   .search-wrapper {
     width: 100%;
     align-content: center;
     text-align: center;
-    margin-top: .5rem;
 
     .search-header {
       margin: 0 0 .5rem 0;
@@ -427,20 +423,24 @@
     }
 
     .search {
-      width: 250px;
+      max-width: 300px;
       display: block;
-      margin: 10px auto 20px auto;
+      margin: 10px auto 10px auto;
     }
 
     .search {
       .sans();
     }
 
-    input[type="text"] {
-      height: 30px;
-      width: 200px;
+    autocomplete-input {
+      color: #333;
+      font-size: 1rem;
+  
+      input {
+        height: 50px;
+      }
     }
-
+  
     .no-data-msg {
       .sans();
       text-align: center;

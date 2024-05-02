@@ -116,6 +116,12 @@ var initializeLookup = function() {
     opt.append(optLabel);
     searchDatalist.append(opt);
   });
+
+  // override default styles
+  // https://stackoverflow.com/questions/47625017/override-styles-in-a-shadow-root-element/56706888#56706888
+  var searchInput = document.querySelector("autocomplete-input");
+  var searchStyle = searchInput.shadowRoot.styleSheets[0];
+  searchStyle.insertRule("input { font-family: 'NPRSans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; border: none; border-shadow: none; font-size: 16px; padding: 12px; }", 0);
 }
 
 var renderMap = async function() {
@@ -355,6 +361,13 @@ var renderMap = async function() {
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
     })
+
+    $.one("#sticky-nav .dropdown").addEventListener('click',() => {
+      // scroll back up to geolocation box
+      // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+      const geoSlide = $.one("#intro-1");
+      geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
 
     locatorButton.addEventListener('click',(evt) => {
 
