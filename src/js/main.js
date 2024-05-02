@@ -116,6 +116,11 @@ var initializeLookup = function() {
     opt.append(optLabel);
     searchDatalist.append(opt);
   });
+
+  // override default styles
+  var searchInput = document.querySelector("autocomplete-input");
+  var searchStyle = searchInput.shadowRoot.styleSheets[0];
+  searchStyle.insertRule("input { font-family: 'NPRSans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; border: none; border-shadow: none; font-size: 16px; padding: 12px; }", 0);
 }
 
 var renderMap = async function() {

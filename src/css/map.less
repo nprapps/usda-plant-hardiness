@@ -394,31 +394,21 @@
 
 
 // geolocation + lookup slide
-#intro-1 {
+#intro-1 {  
   .text .content {
     text-align: center;
+    .sans();
   }
-
-  autocomplete-input {
-    color: #333;
-    font-size: 1rem;
-
-
-  }
-
-  input {
-    background-color: #555;
-    border: none !important;
-  }
-
 }
 
 #geo-container { 
+  .sans();
+  margin-top: -.75rem;
+
   .search-wrapper {
     width: 100%;
     align-content: center;
     text-align: center;
-    margin-top: .5rem;
 
     .search-header {
       margin: 0 0 .5rem 0;
@@ -427,20 +417,24 @@
     }
 
     .search {
-      width: 250px;
+      max-width: 300px;
       display: block;
-      margin: 10px auto 20px auto;
+      margin: 10px auto 10px auto;
     }
 
     .search {
       .sans();
     }
 
-    input[type="text"] {
-      height: 30px;
-      width: 200px;
+    autocomplete-input {
+      color: #333;
+      font-size: 1rem;
+  
+      input {
+        height: 50px;
+      }
     }
-
+  
     .no-data-msg {
       .sans();
       text-align: center;
