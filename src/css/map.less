@@ -320,6 +320,10 @@
   }
 
   &.disabled {
+    &:hover {
+      opacity: 1;
+    }
+
     .button {
       opacity: 0.5;
       pointer-events: none !important;
@@ -451,4 +455,16 @@
       }
     }
   }
+}
+
+.maplibregl-ctrl-top-right {
+  right: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 1s ease;
+}
+
+.explore-mode .maplibregl-ctrl-top-right {
+  opacity: 1;
+  pointer-events: all;
 }

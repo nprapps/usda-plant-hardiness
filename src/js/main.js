@@ -161,33 +161,16 @@ var renderMap = async function() {
       style: './assets/style.json',
       center: [-98.04, 39.507],
       zoom: 3.8,
-      minZoom:0,
+      minZoom:2.5,
       maxZoom:12.5
     });
-    
-    // maybe include some conditional about sprite urls, if one fails, try another
 
-    // map.scrollZoom.disable();
-    // disable map rotation using right click + drag
-    // map.dragRotate.disable();
-    // disable map rotation using touch rotation gesture
-    // map.touchZoomRotate.disableRotation();
 
-    // Add geolocate control to the map.
-    // map.addControl(
-    //   new maplibregl.GeolocateControl({
-    //       positionOptions: {
-    //           enableHighAccuracy: true
-    //       },
-    //       // trackUserLocation: true,
-    //       showUserLocation:false
-    //   })
-    // )
-
-    // let bbox = [[-127.958450,24.367739], [-65.545807,49.979709]];
-    // map.fitBounds(bbox, {
-    //   padding: {top: 10, bottom:10, left: 10, right: 10}
-    // });    
+    map.addControl(new maplibregl.NavigationControl({
+      visualizePitch:false,
+      showCompass:false
+    }));
+  
 
     map.on('load', () => {
       // map.addSource('userPoint', {
