@@ -118,6 +118,7 @@ var initializeLookup = function() {
   });
 
   // override default styles
+  // https://stackoverflow.com/questions/47625017/override-styles-in-a-shadow-root-element/56706888#56706888
   var searchInput = document.querySelector("autocomplete-input");
   var searchStyle = searchInput.shadowRoot.styleSheets[0];
   searchStyle.insertRule("input { font-family: 'NPRSans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; border: none; border-shadow: none; font-size: 16px; padding: 12px; }", 0);

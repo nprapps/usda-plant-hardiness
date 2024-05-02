@@ -37,11 +37,18 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
       </div>      
       <div id="sticky-nav" class="button">
         <div class="inner-nav whereTo">
-          <div class="active">Explore map</div>
-          <div class="">Back to the story</div>  
+          <div class="active">
+            <%= t.include("./assets/icons/map_24dp_FILL0_wght400_GRAD0_opsz24.svg") %>
+            Explore map
+          </div>
+          <div class="">
+            <%= t.include("./assets/icons/arrow_circle_left_24dp_FILL0_wght400_GRAD0_opsz24.svg") %>
+            Back to the story
+          </div>  
         </div>
         <div class="inner-nav dropdown">
-          Switch location: Raleigh, NC
+          <%= t.include("./assets/icons/move_24dp_FILL0_wght400_GRAD0_opsz24.svg") %>
+          Switch location
         </div>
         
       </div>
