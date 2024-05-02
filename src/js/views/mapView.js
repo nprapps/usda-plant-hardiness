@@ -31,7 +31,6 @@ module.exports = class MapView extends View {
       // pan and zoom
 
       var {oldLng, oldLat} = map.getCenter();
-      console.log(map.getCenter());
       var oldCenter = [oldLng,oldLat];   
 
       if (slide.dataset.center) {
