@@ -374,8 +374,6 @@ var renderDotChart = function(config) {
       } 
     }).filter(d => d != null)
 
-  console.log(bucketLabelsNewOld)
-
   chartElement
     .append("g")
     .attr("class","more-titles")
@@ -434,7 +432,7 @@ var renderTemperatureChart = function(data,selectedLocation) {
 
 // init
 var setupChart = function(selectedLocation) {
-  console.log('chart set up')
+  // console.log('chart set up')
 
   // get data
   var series = formatData(selectedLocation.temperatures.data);

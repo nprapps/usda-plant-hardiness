@@ -302,10 +302,6 @@ var renderMap = async function() {
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
-
-
-
-      console.log(map.getStyle().layers)
     })
 
     // Lots of listeners
@@ -564,7 +560,7 @@ var onScroll = function() {
           track("completion", completion + "%");
         }
         var slideNumber = slides.length - 1 - i;
-        console.log(`slide ${slideNumber}, id: ${slide.id}`);
+        // console.log(`slide ${slideNumber}, id: ${slide.id}`);
         return activateSlide(slide, slideNumber);
     }
   }

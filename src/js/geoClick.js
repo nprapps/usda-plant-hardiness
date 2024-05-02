@@ -1,5 +1,5 @@
 var $ = require("./lib/qsa")
-
+iii = 0;
 var {
   getName,
   tempRange,
@@ -123,6 +123,12 @@ var geoClick = function(selectedLocation,target,map) {
 }
 
 async function updateDom(selectedLocation,map) {
+  iii++;
+  console.log("-------------------")
+  console.log('update dom function ' + iii)
+  console.log("-------------------")
+
+
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
   // get marker and use to get data
@@ -132,9 +138,13 @@ async function updateDom(selectedLocation,map) {
     return d.source == "usda_zones";
   });
 
+  console.log(features)
+
   selectedLocation.tempDiffData = features.filter(d => {
     return d.source == "temp_diff";
   });
+
+  console.log(selectedLocation.tempDiffData)
 
   try {
     selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  
@@ -216,18 +226,18 @@ async function updateDom(selectedLocation,map) {
   } = selectedLocation;
 
   var chartPlace = function(selectedLocation) {
-        if (selectedLocation.placeName) {
-          if (selectedLocation.placeState == "AK") {
-            return "Anchorage, Alaska"
-          } else if (selectedLocation.placeState == "HI") {
-            return "Honolulu, Hawaii"
-          } else {
-            return getName(selectedLocation);          
-          }          
-        } else {
-          return "your area"
-        }
-      }
+    if (selectedLocation.placeName) {
+      if (selectedLocation.placeState == "AK") {
+        return "Anchorage, Alaska"
+      } else if (selectedLocation.placeState == "HI") {
+        return "Honolulu, Hawaii"
+      } else {
+        return getName(selectedLocation);          
+      }          
+    } else {
+      return "your area"
+    }
+  };
 
   // change all data items, if possible
   var changeItems = [
@@ -286,7 +296,7 @@ async function updateDom(selectedLocation,map) {
       'formula':temp2zone(Math.floor(temperatures.avg/5)*5),
       'classes':''
     }
-  ]
+  ];
 
   changeItems.forEach(d=> {
     var items = $(`[data-item='${d.id}']`);        
