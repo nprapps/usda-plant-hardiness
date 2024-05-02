@@ -361,6 +361,13 @@ var renderMap = async function() {
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
     })
 
+    $.one("#sticky-nav .dropdown").addEventListener('click',() => {
+      // scroll back up to geolocation box
+      // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+      const geoSlide = $.one("#intro-1");
+      geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
     locatorButton.addEventListener('click',(evt) => {
 
       // get the parent container of this
