@@ -131,7 +131,7 @@ var navigate = function(d) {
   current = items[counter]; 
   current.classList.add("current"); 
   changeDots(counter); 
-  }; 
+  } 
 
   next.addEventListener("click", function(ev) {
     navigate(1);
@@ -141,7 +141,7 @@ var navigate = function(d) {
     navigate(-1); 
   }); 
 
-navigate(0); 
+  navigate(0); 
 
 // Initialize map here
 var onWindowLoaded = async function() {
@@ -416,13 +416,6 @@ var renderMap = async function() {
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
     });
-    
-    $.one("#sticky-nav .dropdown").addEventListener('click',() => {
-      // scroll back up to geolocation box
-      // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-      const geoSlide = $.one("#intro-1");
-      geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
 
     $.one("#end-explore").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
@@ -430,14 +423,12 @@ var renderMap = async function() {
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
     })
 
-    $.one("#restart.button").addEventListener('click',() => {
+    $.one("#sticky-nav .dropdown").addEventListener('click',() => {
       // scroll back up to geolocation box
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
       const geoSlide = $.one("#intro-1");
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
-
-    
 
     $.one(".surpriseMe").addEventListener('click',(evt) => { 
       // Check if locations is defined and not empty
@@ -555,6 +546,8 @@ var activateSlide = function(slide, slideNumber) {
     if (!neighbor) return;
     var nextType = neighbor.dataset.type || "image";
     var neighborHandler = handlers[nextType];
+    console.log(neighbor)
+    console.log(neighborHandler)
     neighborHandler.preload(
       neighbor,
       handler != neighborHandler && offset == 1,
@@ -612,6 +605,7 @@ var onScroll = function() {
           }
           });
         }
+
     }
   }
 }
