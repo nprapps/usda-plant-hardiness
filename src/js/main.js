@@ -448,6 +448,7 @@ var handlers = {
   image: new imageView(),
   video: new imageView(),
   text: new textView(),
+  waterfall: new textView(),
   multiple: new imageView(),
 };
 
@@ -486,6 +487,8 @@ var activateSlide = function(slide, slideNumber) {
     if (!neighbor) return;
     var nextType = neighbor.dataset.type || "image";
     var neighborHandler = handlers[nextType];
+    console.log(neighbor)
+    console.log(neighborHandler)
     neighborHandler.preload(
       neighbor,
       handler != neighborHandler && offset == 1,
