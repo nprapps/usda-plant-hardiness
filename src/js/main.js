@@ -49,6 +49,18 @@ var {
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
+var waterfallSlide = $.one(".waterfall.slide"); 
+var waterfallItems = $(".waterfall.slide .headline-item");
+
+var box = $.one(".waterfall.slide .slides-container"); 
+var next = $.one(".waterfall.slide .next"); 
+var prev = $.one(".waterfall.slide .prev"); 
+var items = $(".waterfall.slide .headline-item"); 
+var dots = $(".waterfall.slide .dot"); 
+var counter = 0; 
+var amount = items.length; 
+var current = items[0]; 
+
 var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 var completion = 0;
@@ -81,67 +93,6 @@ if (isOne) {
   document.body.classList.add("nprone");
 }
 
-// carousel code 
-var waterfallSlide = $.one(".waterfall.slide");
-var waterfallItems = $(".waterfall.slide .headline-item");
-var box = $.one(".waterfall.slide .slides-container"); 
-var next = $.one(".waterfall.slide .next"); 
-var prev = $.one(".waterfall.slide .prev"); 
-var items = $(".waterfall.slide .headline-item"); 
-var dots = $(".waterfall.slide .dot"); 
-var counter = 0; 
-var amount = items.length; 
-var current = items[0]; 
-
-box.classList.add("active");
-// shuffleData(items); 
-
-// var shuffleData = function(array) {
-//   // shuffle data (from: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
-//   for (var i = array.length - 1; i > 0; i--) {
-//     var j = Math.floor(Math.random() * (i + 1));
-//     [array[i], array[j]] = [array[j], array[i]];
-//   }
-// }
-
-//  highlight dots as you go through
-var changeDots = function(n) {
-    for (var d = 0; d < dots.length; d++) {
-    dots[d].classList.remove("active"); 
-
-    if (d == n) {
-      dots[d].classList.add("active"); 
-    }
-  }
-}
-
-// prev + next btns
-var navigate = function(d) {
-  current.classList.remove("current"); 
-  counter = counter + d; 
-
-  if (d === -1 && counter < 0) {
-    counter = amount - 1; 
-  }
-
-  if (d === 1 && !items[counter]) {
-    counter = 0; 
-  }
-
-  current = items[counter]; 
-  current.classList.add("current"); 
-  changeDots(counter); 
-  }; 
-
-  next.addEventListener("click", function(ev) {
-    navigate(1);
-  }); 
-
-  prev.addEventListener("click", function(ev) {
-    navigate(-1); 
-  }); 
-
-navigate(0); 
 
 // Initialize map here
 var onWindowLoaded = async function() {
@@ -180,6 +131,16 @@ var onWindowLoaded = async function() {
 
   // load the map
   renderMap();
+
+  next.addEventListener("click", function(ev) {
+    navigate(1);
+  }); 
+
+  prev.addEventListener("click", function(ev) {
+    navigate(-1); 
+  }); 
+
+  navigate(0); 
 }
 
 var initializeLookup = function() {
@@ -411,6 +372,7 @@ var renderMap = async function() {
       $.one(".geo-buttons").classList.remove("disabled")
     });
 
+
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
@@ -424,11 +386,13 @@ var renderMap = async function() {
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    $.one("#end-explore").addEventListener('click',() => {
-      $.one("#base-map").classList.toggle('explore-mode');
-      $.one("#info").classList.toggle('explore-mode');
-      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
-    })
+
+    // $.one("#end-explore").addEventListener('click',() => {
+    //   $.one("#base-map").classList.toggle('explore-mode');
+    //   $.one("#info").classList.toggle('explore-mode');
+    //   $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
+    // })
+
 
     $.one("#restart.button").addEventListener('click',() => {
       // scroll back up to geolocation box
@@ -436,6 +400,7 @@ var renderMap = async function() {
       const geoSlide = $.one("#intro-1");
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
+
 
     
 
@@ -612,6 +577,35 @@ var onScroll = function() {
           }
           });
         }
+              // trigger waterfall blocks 
+        if (slide == waterfallSlide && waterfallItems.length && !reducedMotion.matches) { 
+          waterfallItems = waterfallItems.filter(function(item, n) {  
+            var bounds = item.getBoundingClientRect();  
+            if (bounds.top < window.innerHeight  * .8) {  
+              setTimeout(function(){  
+                item.classList.add('pubbed');   
+                item.classList.add(`headline-${ n }`);  
+              }, n == 0 ? 100 : n * 600); 
+              // item.classList.add("pubbed");  
+              return false; 
+            } 
+            return true;  
+          }); 
+        } else if (slide == waterfallSlide && waterfallItems.length && reducedMotion.matches) { 
+            waterfallItems = waterfallItems.filter(function(item, n) {  
+            item.classList.add('pubbed');   
+            return true;  
+          }); 
+        } 
+
+        var complete = ((slides.length - i) / slides.length * 100) | 0; 
+        if (complete > completion) {  
+          completion = complete;  
+          track("completion", completion + "%");  
+        } 
+        var slideNumber = slides.length - 1 - i;  
+        console.log(`slide ${slideNumber}, id: ${slide.id}`); 
+        return activateSlide(slide, slideNumber);
     }
   }
 }
@@ -620,6 +614,37 @@ document.body.classList.add("boot-complete");
 window.addEventListener("scroll", debounce(onScroll, 50)); //ruth
 onScroll();
 window.addEventListener("load", onWindowLoaded);
+
+//  highlight dots as you go through
+var changeDots = function(n) {
+    for (var d = 0; d < dots.length; d++) {
+    dots[d].classList.remove("active"); 
+
+    if (d == n) {
+      dots[d].classList.add("active"); 
+    }
+  }
+}
+
+// prev + next btns
+var navigate = function(d) {
+  current.classList.remove("current"); 
+  counter = counter + d; 
+
+  if (d === -1 && counter < 0) {
+    counter = amount - 1; 
+  }
+
+  if (d === 1 && !items[counter]) {
+    counter = 0; 
+  }
+
+  current = items[counter]; 
+  current.classList.add("current"); 
+  changeDots(counter); 
+} 
+
+
 
 
 // link tracking

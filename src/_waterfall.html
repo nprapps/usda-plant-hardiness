@@ -1,4 +1,8 @@
-<% var data = grunt.data.json.edited; %>
+<% 
+  var data = grunt.data.json.edited; 
+  console.log(data)
+
+%>
 
 <section class="waterfall slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="waterfall">
   <!-- <img
