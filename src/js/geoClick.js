@@ -1,5 +1,5 @@
 var $ = require("./lib/qsa")
-
+iii = 0;
 var {
   getName,
   tempRange,
@@ -21,54 +21,6 @@ var {
 var {setupChart} = require("./chart");
 
 // Start functions to export
-
-function locateMeClick(target,selectedLocation,map) {
-
-  // get lat long
-  getUserLocation().then(userLocation => {
-    // Do something with userLocation   
-    selectedLocation.coords = [userLocation.longitude,userLocation.latitude];
-    selectedLocation.type = "findMe"
-    selectedLocation.placeName = null;
-    selectedLocation.placeState = null;
-      
-    // restore "locate me text"
-    setTimeout(() => $.one(".locator-text").classList.add("active"), 2000);
-    setTimeout(() => $.one(".locateMe .lds-ellipsis").classList.remove("active"), 2000);
-    return geoClick(selectedLocation,target,map);    
-  });
-
-}
-
-async function rotateClick(evt,selectedLocation,map) {
-  // get random place
-  var randomLngLat = [
-    -85.04 + (Math.random() - 0.5) * 10,
-    39 + (Math.random() - 0.4) * 10
-  ]
-
-  // Get place name from coords?
-
-  // update master data
-  selectedLocation.coords = randomLngLat;
-  
-  var rotatorFlying = true;
-  map.flyTo({
-    center: randomLngLat,
-    speed:0.7,
-    essential: true 
-  })
-
-
-
-  map.on('moveend', function(e){
-    if (rotatorFlying) {
-      updateDom(selectedLocation,map)    
-      rotatorFlying = false  
-    }    
-  }); 
-}
-
 function updateLocation(place,target,selectedLocation,map) {
 
   // update master data
@@ -76,6 +28,19 @@ function updateLocation(place,target,selectedLocation,map) {
   selectedLocation.placeName = place.name;
   selectedLocation.placeState = place.state;
   selectedLocation.type = 'custom'
+
+  // update url params
+  const urlParams = new URLSearchParams(window.location.search);
+
+  urlParams.set('name', place.name);
+  urlParams.set('state', place.state);
+  urlParams.set('lng', place.lng);
+  urlParams.set('lat', place.lat);
+  
+
+  // Update URL without refreshing
+  const newUrl = window.location.pathname + '?' + urlParams.toString();
+  window.history.pushState({ path: newUrl }, '', newUrl);
 
   return geoClick(selectedLocation,target,map);
 }
@@ -123,6 +88,12 @@ var geoClick = function(selectedLocation,target,map) {
 }
 
 async function updateDom(selectedLocation,map) {
+  iii++;
+  console.log("-------------------")
+  console.log('update dom function ' + iii)
+  console.log("-------------------")
+
+
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
   // get marker and use to get data
@@ -132,9 +103,13 @@ async function updateDom(selectedLocation,map) {
     return d.source == "usda_zones";
   });
 
+  console.log(features)
+
   selectedLocation.tempDiffData = features.filter(d => {
     return d.source == "temp_diff";
   });
+
+  console.log(selectedLocation.tempDiffData)
 
   try {
     selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  
@@ -216,18 +191,18 @@ async function updateDom(selectedLocation,map) {
   } = selectedLocation;
 
   var chartPlace = function(selectedLocation) {
-        if (selectedLocation.placeName) {
-          if (selectedLocation.placeState == "AK") {
-            return "Anchorage, Alaska"
-          } else if (selectedLocation.placeState == "HI") {
-            return "Honolulu, Hawaii"
-          } else {
-            return getName(selectedLocation);          
-          }          
-        } else {
-          return "your area"
-        }
-      }
+    if (selectedLocation.placeName) {
+      if (selectedLocation.placeState == "AK") {
+        return "Anchorage, Alaska"
+      } else if (selectedLocation.placeState == "HI") {
+        return "Honolulu, Hawaii"
+      } else {
+        return getName(selectedLocation);          
+      }          
+    } else {
+      return "your area"
+    }
+  };
 
   // change all data items, if possible
   var changeItems = [
@@ -286,7 +261,7 @@ async function updateDom(selectedLocation,map) {
       'formula':temp2zone(Math.floor(temperatures.avg/5)*5),
       'classes':''
     }
-  ]
+  ];
 
   changeItems.forEach(d=> {
     var items = $(`[data-item='${d.id}']`);        
@@ -347,7 +322,6 @@ async function updateDom(selectedLocation,map) {
   
 }
 
-
 function clickButton(csvData) {
   // Check if csvData is defined and not empty
   if (csvData && csvData.length > 0) {
@@ -357,11 +331,8 @@ function clickButton(csvData) {
   }
 }
 
-
 module.exports = {
-  updateLocation,
-  locateMeClick,
-  rotateClick,
+  updateLocation,  
   clickButton,
   updateDom
 }

@@ -2,7 +2,7 @@ var $ = require("./lib/qsa")
 var debounce = require("./lib/debounce"); //ruth had in sea level rise...not sure if we need
 var track = require("./lib/tracking");
 require("@nprapps/autocomplete-input");
-// var { isMobile } = require("./lib/breakpoints");
+var { isMobile } = require("./lib/breakpoints");
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 var pmtiles = require("pmtiles/dist");
@@ -24,7 +24,8 @@ var {
       compileTempDiffStyle,
       makePoint,
       checkTilesLoaded,
-      getZone
+      getZone,
+      getStartingCoords
     } = require("./helpers/mapHelpers");
 
 var {
@@ -41,8 +42,6 @@ var { getTooltip } = require('./helpers/textUtils')
 
 var {
   updateLocation,
-  locateMeClick,
-  rotateClick,
   clickButton,
   updateDom
 } = require("./geoClick");
@@ -150,6 +149,24 @@ var onWindowLoaded = async function() {
 
   // Set the next slide's dataset to the new place
   var zoomSlide = $.one("#zoomIn");
+
+  // if url params, set default selectedLocation to that place
+
+  // Get current URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('lat') && urlParams.has('lng')) {
+    const params = {};
+
+    for (const [key, value] of urlParams.entries()) {
+        params[key] = value;
+    }  
+
+    selectedLocation.coords = [params.lng,params.lat];
+    selectedLocation.placeName = params.name;
+    selectedLocation.placeState = params.state;
+  
+  }
+
   zoomSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
@@ -213,40 +230,34 @@ var renderMap = async function() {
 
   p.getHeader().then(h => {
     
-    // optionally, get timezone if mobile, to pick which 3rd of country to show
+    
+    let startingCoords = [-98.04, 39.507];
+    
+    // optionally, get timezone if mobile, to pick which quarter of country to show
+    if (isMobile.matches) {
+      console.log('is mobile')
+      console.log($.one("#intro-1"))
+      console.log($.one("#intro-1").dataset)
+      
+      startingCoords = getStartingCoords();
+      $.one("#intro-1").dataset.center = JSON.stringify(startingCoords);
+    };
 
     map = new maplibregl.Map({
       container: container,
       style: './assets/style.json',
-      center: [-98.04, 39.507],
+      center: startingCoords,
       zoom: 3.8,
-      minZoom:0,
+      minZoom:2.5,
       maxZoom:12.5
     });
-    
-    // maybe include some conditional about sprite urls, if one fails, try another
 
-    // map.scrollZoom.disable();
-    // disable map rotation using right click + drag
-    // map.dragRotate.disable();
-    // disable map rotation using touch rotation gesture
-    // map.touchZoomRotate.disableRotation();
 
-    // Add geolocate control to the map.
-    // map.addControl(
-    //   new maplibregl.GeolocateControl({
-    //       positionOptions: {
-    //           enableHighAccuracy: true
-    //       },
-    //       // trackUserLocation: true,
-    //       showUserLocation:false
-    //   })
-    // )
-
-    // let bbox = [[-127.958450,24.367739], [-65.545807,49.979709]];
-    // map.fitBounds(bbox, {
-    //   padding: {top: 10, bottom:10, left: 10, right: 10}
-    // });    
+    map.addControl(new maplibregl.NavigationControl({
+      visualizePitch:false,
+      showCompass:false
+    }));
+  
 
     map.on('load', () => {
       // map.addSource('userPoint', {
@@ -378,10 +389,6 @@ var renderMap = async function() {
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
-
-
-
-      console.log(map.getStyle().layers)
     })
 
     // Lots of listeners
@@ -404,16 +411,11 @@ var renderMap = async function() {
       $.one(".geo-buttons").classList.remove("disabled")
     });
 
-    // what to do when you click LocateClick  
-    var locatorButton = $.one(".locateMe");
-    var surpriseMeButton = $.one(".surpriseMe");
-
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
     });
-
 
     $.one("#end-explore").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
@@ -428,19 +430,7 @@ var renderMap = async function() {
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    locatorButton.addEventListener('click',(evt) => {
-
-      // get the parent container of this
-      var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-
-        // activate spinner
-      $.one(".locator-text").classList.remove("active")
-      $.one(".locateMe .lds-ellipsis").classList.add("active")
-
-      locateMeClick(target,selectedLocation,map)    
-    })    
-
-    surpriseMeButton.addEventListener('click',(evt) => {  
+    $.one(".surpriseMe").addEventListener('click',(evt) => { 
       // Check if locations is defined and not empty
       if (locations && locations.length > 0) {
         // Display or process the CSV data
@@ -517,6 +507,7 @@ var handlers = {
   image: new imageView(),
   video: new imageView(),
   text: new textView(),
+  waterfall: new textView(),
   multiple: new imageView(),
 };
 
@@ -555,6 +546,8 @@ var activateSlide = function(slide, slideNumber) {
     if (!neighbor) return;
     var nextType = neighbor.dataset.type || "image";
     var neighborHandler = handlers[nextType];
+    console.log(neighbor)
+    console.log(neighborHandler)
     neighborHandler.preload(
       neighbor,
       handler != neighborHandler && offset == 1,

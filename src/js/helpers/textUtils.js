@@ -94,9 +94,23 @@ function getTooltip(selectedLocation) {
 }
 
 function tempDiff(selectedLocation) {
-	var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;	
-
-	if (diffAmount === 0) {
+	console.log(selectedLocation)
+	try	{
+		var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;		
+	} catch(err) {
+		console.log(err)
+		var diffAmount = "ERROR";	
+	}
+	
+	if (diffAmount === "ERROR") {
+		if (selectedLocation.zoneInfo.t2012 > selectedLocation.zoneInfo.t2023) {
+			return `<span class="zoneText cooler tDiff-4">cooler</span>`	
+		} else {
+			return `<span class="zoneText warmer tDiff4">warmer</span>`
+		}
+		
+	}
+	else if (diffAmount === 0) {
 		console.log("EXACTLY 0!")
 		return "0ºF warmer"
 	} else {

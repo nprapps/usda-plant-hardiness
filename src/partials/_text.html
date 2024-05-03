@@ -57,9 +57,6 @@ if (slide.isMod && !slide.textSections) {
   %>
   <div class="text" id="<%= d.id %>">
     <div class="content">
-      <% if (slide.locator) { %>
-        <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
-      <% } %>
 
       <%= t.renderMarkdown(d.text) %>
     </div>
@@ -87,9 +84,7 @@ if (slide.isMod && !slide.textSections) {
     <% } %>
 
     <div class="content">
-      <% if (slide.locator) { %>
-        <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
-      <% } %>
+      
       <%= t.renderMarkdown(slide.text) %>
     </div>
 

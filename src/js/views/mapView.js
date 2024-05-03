@@ -30,7 +30,7 @@ module.exports = class MapView extends View {
     if (map) {
       // pan and zoom
 
-      var {oldLng, oldLat} = map.getCenter();      
+      var {oldLng, oldLat} = map.getCenter();
       var oldCenter = [oldLng,oldLat];   
 
       if (slide.dataset.center) {

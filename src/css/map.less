@@ -101,6 +101,7 @@
   padding-left:5px;
   padding-right: 5px;
   white-space:nowrap;
+  border-radius: 5px;
 }
 
 // .titlecard div.darken {
@@ -285,15 +286,8 @@
   margin-bottom: 10px;
   user-select: none;
 
-  &.locateMe {
-    background-color: lightgreen;
-  }
   &.surpriseMe {
     background-color: lightseagreen;
-  }
-  &.rotateLocation {
-    background-color: lightgoldenrodyellow;
-    color:#333;
   }
 }
 
@@ -320,6 +314,10 @@
   }
 
   &.disabled {
+    &:hover {
+      opacity: 1;
+    }
+
     .button {
       opacity: 0.5;
       pointer-events: none !important;
@@ -389,7 +387,7 @@
   }
 }
 
-.locator-text, .surprise-text, .lds-ellipsis {
+.surprise-text, .lds-ellipsis {
   display: none;
 
   &.active {
@@ -451,4 +449,16 @@
       }
     }
   }
+}
+
+.maplibregl-ctrl-top-right {
+  right: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 1s ease;
+}
+
+.explore-mode .maplibregl-ctrl-top-right {
+  opacity: 1;
+  pointer-events: all;
 }
