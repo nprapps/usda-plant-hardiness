@@ -50,6 +50,8 @@ module.exports = class ChartView extends View {
       }
 
       exampleLocation.placeName = "St. Louis";
+      exampleLocation.placeState = "MO";
+
       // update d3
       setupChart(exampleLocation);
 

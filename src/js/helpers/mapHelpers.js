@@ -235,6 +235,35 @@ function checkTilesLoaded(map,selectedLocation) {
     }
 }
 
+function getStartingCoords() {
+  // Get the timezone offset in minutes
+  const offset = new Date().getTimezoneOffset();  
+  // Convert offset to hours
+  const offsetHours = offset / 60;
+  console.log(offsetHours)
+  var latLng;
+
+  switch(true) {
+    case offsetHours <= 4:
+      // east coast and europe
+      latLng = [-79.195,37.01]
+      break;
+    case offsetHours == 5:
+      // central
+      latLng = [-94.474,38.90]
+      break;
+    case offsetHours == 6:
+      // mountain
+      latLng = [-110.646,40.99]
+      break;
+    case offsetHours >= 7:
+      // west coast and pacific
+      latLng = [-120.92,38.603]
+      break;
+  }
+
+  return latLng;
+}
 
 module.exports = {
   getUserLocation,
@@ -245,7 +274,8 @@ module.exports = {
   makePoint,
   getZone,
   checkTilesLoaded,
-  legendColors
+  legendColors,
+  getStartingCoords
 }
 
 

@@ -1161,7 +1161,7 @@
       "type": "symbol",
       "source": "npr_osm",
       "source-layer": "places",
-      "maxzoom": 8,
+      "maxzoom": 10,
       "layout": {
         "text-font": [
           "NPR Sans Regular"

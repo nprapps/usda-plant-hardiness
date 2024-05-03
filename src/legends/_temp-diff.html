@@ -2,9 +2,6 @@
   <% if (slide.legendTitle) { %>
     <h3><%= slide.legendTitle %></h3>
   <% } %>
-  <% if (slide.legendDesc) { %>
-    <%= t.renderMarkdown(slide.legendDesc) %>
-  <% } %>
   <ul>
     <li data-range="-8" class="custom--8"></li>
     <li data-range="-7" class="custom--7"></li>
@@ -44,4 +41,12 @@
     <p>+8&deg;&nbsp;F</p>
     <!-- <p class="max">+9&deg;&nbsp;C</p> -->
   </div>
+
+  <% if (slide.legendDesc) { %>
+    <details>
+      <summary>About this data</summary>
+      <%= t.renderMarkdown(slide.legendDesc) %>
+    </details>
+  <% } %>
+  
 </div>
