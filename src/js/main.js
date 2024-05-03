@@ -42,7 +42,6 @@ var { getTooltip } = require('./helpers/textUtils')
 
 var {
   updateLocation,
-  locateMeClick,
   rotateClick,
   clickButton,
   updateDom
@@ -335,9 +334,7 @@ var renderMap = async function() {
     map.on('moveend', () => {
       $.one(".geo-buttons").classList.remove("disabled")
     });
-
-    // what to do when you click LocateClick  
-    var locatorButton = $.one(".locateMe");
+    
     var surpriseMeButton = $.one(".surpriseMe");
 
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
@@ -359,18 +356,6 @@ var renderMap = async function() {
       const geoSlide = $.one("#intro-1");
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
-
-    locatorButton.addEventListener('click',(evt) => {
-
-      // get the parent container of this
-      var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-
-        // activate spinner
-      $.one(".locator-text").classList.remove("active")
-      $.one(".locateMe .lds-ellipsis").classList.add("active")
-
-      locateMeClick(target,selectedLocation,map)    
-    })    
 
     surpriseMeButton.addEventListener('click',(evt) => {  
       // Check if locations is defined and not empty

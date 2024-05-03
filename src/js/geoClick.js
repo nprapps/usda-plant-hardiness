@@ -22,23 +22,6 @@ var {setupChart} = require("./chart");
 
 // Start functions to export
 
-function locateMeClick(target,selectedLocation,map) {
-
-  // get lat long
-  getUserLocation().then(userLocation => {
-    // Do something with userLocation   
-    selectedLocation.coords = [userLocation.longitude,userLocation.latitude];
-    selectedLocation.type = "findMe"
-    selectedLocation.placeName = null;
-    selectedLocation.placeState = null;
-      
-    // restore "locate me text"
-    setTimeout(() => $.one(".locator-text").classList.add("active"), 2000);
-    setTimeout(() => $.one(".locateMe .lds-ellipsis").classList.remove("active"), 2000);
-    return geoClick(selectedLocation,target,map);    
-  });
-
-}
 
 async function rotateClick(evt,selectedLocation,map) {
   // get random place
@@ -369,8 +352,7 @@ function clickButton(csvData) {
 
 
 module.exports = {
-  updateLocation,
-  locateMeClick,
+  updateLocation,  
   rotateClick,
   clickButton,
   updateDom
