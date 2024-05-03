@@ -32,10 +32,11 @@ function updateLocation(place,target,selectedLocation,map) {
   // update url params
   const urlParams = new URLSearchParams(window.location.search);
 
-  urlParams.set('lng', place.lng);
-  urlParams.set('lat', place.lat);
   urlParams.set('name', place.name);
   urlParams.set('state', place.state);
+  urlParams.set('lng', place.lng);
+  urlParams.set('lat', place.lat);
+  
 
   // Update URL without refreshing
   const newUrl = window.location.pathname + '?' + urlParams.toString();

@@ -90,6 +90,24 @@ var onWindowLoaded = async function() {
 
   // Set the next slide's dataset to the new place
   var zoomSlide = $.one("#zoomIn");
+
+  // if url params, set default selectedLocation to that place
+
+  // Get current URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('lat') && urlParams.has('lng')) {
+    const params = {};
+
+    for (const [key, value] of urlParams.entries()) {
+        params[key] = value;
+    }  
+
+    selectedLocation.coords = [params.lng,params.lat];
+    selectedLocation.placeName = params.name;
+    selectedLocation.placeState = params.state;
+  
+  }
+
   zoomSlide.dataset.center = JSON.stringify(selectedLocation.coords);
 
   // Change the zoom level
