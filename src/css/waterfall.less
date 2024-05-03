@@ -32,27 +32,36 @@
     padding-right: 5px; 
   }
 
-  .graphic {
-    max-width: 1500px;
+  .graphic, .slides-container {
+    max-width: 800px;
     margin-right: auto;
     margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
+    position: relative; 
+    overflow: hidden; 
+
+    &.active {
+      height: 500px; 
+
+      .headline-item {
+        position: absolute; 
+        top: 2000px; 
+
+        &.current {
+          top: 20px; 
+        }
+      }
+    }
   }
 
   .headline-item {
     padding: 10px 10px 15px 10px;
     width: fit-content;
     width: -moz-fit-content;
-    max-width: calc((100% / 2) - 15px);
+    margin-left: auto; 
+    margin-right: auto; 
     text-align: center;
     background: white;
     font-size: 17px;
-    opacity: 0;
-    // border-top: 1px solid #bbb; 
     border: 2px solid black; 
 
     @media @mobile {
@@ -65,11 +74,6 @@
 
     &:nth-of-type(odd) {
       margin-right: 10px; 
-    }
-
-    &.pubbed {
-      opacity: 1;
-      animation: post-appear .5s linear;
     }
 
     .location {
@@ -116,5 +120,68 @@
 
   .headline-item:not(:first-child) {
     filter: drop-shadow(0 -2px 1px #ddd); 
+  }
+
+  .controls {
+    text-align: center; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+  }
+
+  .prev, .next {
+    cursor: pointer; 
+    width: auto; 
+    padding: 5px 10px 5px 10px; 
+    color: black; 
+    font-weight: bold;
+    font-size: 18px; 
+    transition: 0.6s ease; 
+    border-radius: 5px; 
+    user-select: none; 
+    background-color: #E4C471; 
+    border: 2px solid #E4C471; 
+  }
+
+  .next {
+    right: 0; 
+  }
+
+  .prev:hover, .next:hover {
+    opacity: 70%; 
+  }
+
+  .dots {
+    margin-right: 5px; 
+    margin-left: 5px; 
+  }
+
+  .dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+
+    &.active {
+      background-color: #444; 
+    }
+  }
+
+  .dot:hover {
+    background-color: #717171;
+  }
+
+  .fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+
+  @keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
   }
 }

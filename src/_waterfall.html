@@ -1,8 +1,4 @@
-<%
-
-  var data = grunt.data.json.edited;
-
-%>
+<% var data = grunt.data.json.edited; %>
 
 <section class="waterfall slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="waterfall">
   <!-- <img
@@ -21,21 +17,81 @@
   <% } %>
 
 <div class="graphic <%= slide.chart %>">
-  <% data.forEach(function(row) { %>
-    <div class="headline-item">
-      <div class="location"><%= row.location %></div>
-      <div class="headline"><%= row.excerpt %></div>
-      <div class="publication">– <%= row.attribution %></div>
+  <!-- The dots/circles -->
+  <div class="controls">
+    <button class="prev">
+      &#10094;
+      <span class="sr-only">Previous</span>
+    </button>
+
+    <div class="dots">
+      <span class="dot dot-0"></span>
+      <span class="dot dot-1"></span>
+      <span class="dot dot-2"></span>
+      <span class="dot dot-3"></span>
+      <span class="dot dot-4"></span>
+      <span class="dot dot-5"></span>
+      <span class="dot dot-6"></span>
+      <span class="dot dot-7"></span>
+      <span class="dot dot-8"></span>
     </div>
-  <% }) %>
+
+    <button class="next">
+      &#10095;
+      <span class="sr-only">Next</span>
+    </button>
+  </div>
+
+  <div class="slides-container active">
+    <% data.forEach(function(row) { %>
+      <div class="headline-item">
+        <div class="location"><%= row.location %></div>
+        <div class="headline"><%= row.excerpt %></div>
+        <div class="publication">– <%= row.attribution %></div>
+      </div>
+    <% }) %>
+  </div>
 </div>
 
-  <!-- <% if (slide.inset) { %>
-  <img class="inset" src="./assets/synced/<%= slide.inset%>" alt="">
-  <% } %>
-  <% if (slide.credit) { %>
-  <span class="watermark" alt=""><%=slide.credit%></span>
-  <% } %>
-  <%= t.include("partials/_text.html", { slide }) %> -->
+<script>
+          var slideIndex = 1;
+          showSlides(slideIndex);
+
+  // Next/previous controls
+        var plusSlides = function(n) {
+           showSlides(slideIndex += n);
+         }
+
+        // Thumbnail image controls
+        var currentSlide = function(n) {
+          showSlides(slideIndex = n);
+        }
+
+        var showSlides = function(n) {
+          var i;
+          var slides = document.getElementsByClassName("headline-item");
+          var dots = document.getElementsByClassName("dot");
+          if (n > slides.length) {slideIndex = 1}
+          if (n < 1) {slideIndex = slides.length}
+          for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+          }
+          for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+          }
+          slides[slideIndex-1].style.display = "block";
+          dots[slideIndex-1].className += " active";
+        } 
+
+        var complete = ((slides.length - i) / slides.length * 100) | 0;
+        if (complete > completion) {
+          completion = complete;
+          track("completion", completion + "%");
+        }
+        var slideNumber = slides.length - 1 - i;
+        console.log(`slide ${slideNumber}, id: ${slide.id}`);
+        return activateSlide(slide, slideNumber);
+
+</script>
 
 </section>
