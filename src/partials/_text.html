@@ -105,6 +105,22 @@ if (slide.isMod && !slide.textSections) {
     <%if (slide.locate) { %>
       <%= t.include(`partials/_geoButtons.html`) %>
     <% } %>
+    <%if (slide.id == "explore") { %>
+      <div class="photo-wrapper"> 
+        <img data-src='./assets/synced/illo/planted-final.png' width="1200" height="674" alt="">
+      </div>
+
+      <div class=end-option-container>
+        <div class='button' id='end-explore'>
+          Explore the map
+      </div>
+      <div class='button' id='restart'>
+        Start over with a new location
+      </div>
+
+      </div>
+
+    <% } %>
   </div>
     <% if (slide.includeLegend) print(t.include(`ai2html/_${slide.includeLegend}.html`, { slide })) %>
 
