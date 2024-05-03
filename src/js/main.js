@@ -386,13 +386,11 @@ var renderMap = async function() {
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-
-    // $.one("#end-explore").addEventListener('click',() => {
-    //   $.one("#base-map").classList.toggle('explore-mode');
-    //   $.one("#info").classList.toggle('explore-mode');
-    //   $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
-    // })
-
+    $.one("#end-explore").addEventListener('click',() => {
+      $.one("#base-map").classList.toggle('explore-mode');
+      $.one("#info").classList.toggle('explore-mode');
+      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
+    })
 
     $.one("#restart.button").addEventListener('click',() => {
       // scroll back up to geolocation box
@@ -577,26 +575,7 @@ var onScroll = function() {
           }
           });
         }
-              // trigger waterfall blocks 
-        if (slide == waterfallSlide && waterfallItems.length && !reducedMotion.matches) { 
-          waterfallItems = waterfallItems.filter(function(item, n) {  
-            var bounds = item.getBoundingClientRect();  
-            if (bounds.top < window.innerHeight  * .8) {  
-              setTimeout(function(){  
-                item.classList.add('pubbed');   
-                item.classList.add(`headline-${ n }`);  
-              }, n == 0 ? 100 : n * 600); 
-              // item.classList.add("pubbed");  
-              return false; 
-            } 
-            return true;  
-          }); 
-        } else if (slide == waterfallSlide && waterfallItems.length && reducedMotion.matches) { 
-            waterfallItems = waterfallItems.filter(function(item, n) {  
-            item.classList.add('pubbed');   
-            return true;  
-          }); 
-        } 
+        
 
         var complete = ((slides.length - i) / slides.length * 100) | 0; 
         if (complete > completion) {  
