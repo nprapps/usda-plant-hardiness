@@ -66,6 +66,7 @@ var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 var completion = 0;
 var map;
 let locations;
+var startingSlide;
 let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
 
 
@@ -193,22 +194,26 @@ var renderMap = async function() {
     
     
     let startingCoords = [-98.04, 39.507];
+    let startingZoom = 3.8;
+
     
     // optionally, get timezone if mobile, to pick which quarter of country to show
     if (isMobile.matches) {
-      console.log('is mobile')
-      console.log($.one("#intro-1"))
-      console.log($.one("#intro-1").dataset)
-      
       startingCoords = getStartingCoords();
       $.one("#intro-1").dataset.center = JSON.stringify(startingCoords);
     };
+    
+    // if reload or midjourney, starting coordinates and zoom set to mid journey
+    if (startingSlide != 'titlecard' && startingSlide != 'intro-1' && startingSlide != 'explore') {
+      startingCoords = selectedLocation.coords;
+      startingZoom = 8.5      
+    }
 
     map = new maplibregl.Map({
       container: container,
       style: './assets/style.json',
       center: startingCoords,
-      zoom: 3.8,
+      zoom: startingZoom,
       minZoom:2.5,
       maxZoom:12.5
     });
@@ -583,6 +588,7 @@ var onScroll = function() {
           track("completion", completion + "%");  
         } 
         var slideNumber = slides.length - 1 - i;  
+        startingSlide = slide.id;
         console.log(`slide ${slideNumber}, id: ${slide.id}`); 
         return activateSlide(slide, slideNumber);
     }
