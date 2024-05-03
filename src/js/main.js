@@ -42,7 +42,6 @@ var { getTooltip } = require('./helpers/textUtils')
 
 var {
   updateLocation,
-  rotateClick,
   clickButton,
   updateDom
 } = require("./geoClick");
@@ -334,15 +333,12 @@ var renderMap = async function() {
     map.on('moveend', () => {
       $.one(".geo-buttons").classList.remove("disabled")
     });
-    
-    var surpriseMeButton = $.one(".surpriseMe");
 
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
     });
-
 
     $.one("#end-explore").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
@@ -357,7 +353,7 @@ var renderMap = async function() {
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    surpriseMeButton.addEventListener('click',(evt) => {  
+    $.one(".surpriseMe").addEventListener('click',(evt) => { 
       // Check if locations is defined and not empty
       if (locations && locations.length > 0) {
         // Display or process the CSV data

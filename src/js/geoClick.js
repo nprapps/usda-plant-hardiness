@@ -21,37 +21,6 @@ var {
 var {setupChart} = require("./chart");
 
 // Start functions to export
-
-
-async function rotateClick(evt,selectedLocation,map) {
-  // get random place
-  var randomLngLat = [
-    -85.04 + (Math.random() - 0.5) * 10,
-    39 + (Math.random() - 0.4) * 10
-  ]
-
-  // Get place name from coords?
-
-  // update master data
-  selectedLocation.coords = randomLngLat;
-  
-  var rotatorFlying = true;
-  map.flyTo({
-    center: randomLngLat,
-    speed:0.7,
-    essential: true 
-  })
-
-
-
-  map.on('moveend', function(e){
-    if (rotatorFlying) {
-      updateDom(selectedLocation,map)    
-      rotatorFlying = false  
-    }    
-  }); 
-}
-
 function updateLocation(place,target,selectedLocation,map) {
 
   // update master data
@@ -340,7 +309,6 @@ async function updateDom(selectedLocation,map) {
   
 }
 
-
 function clickButton(csvData) {
   // Check if csvData is defined and not empty
   if (csvData && csvData.length > 0) {
@@ -350,10 +318,8 @@ function clickButton(csvData) {
   }
 }
 
-
 module.exports = {
   updateLocation,  
-  rotateClick,
   clickButton,
   updateDom
 }
