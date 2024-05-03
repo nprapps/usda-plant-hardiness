@@ -32,9 +32,11 @@ var renderDotChart = function(config) {
   var margins = {
     top: 75,
     right: 100,
-    bottom: 110,
+    bottom: 120,
     left: 100
   };
+  var dotRadius = 10;
+
   if (isMobile.matches) {
     margins = {
       top: 100,
@@ -42,6 +44,8 @@ var renderDotChart = function(config) {
       bottom: 170,
       left: 50
     }
+
+    dotRadius = 5;
   }
 
   var chartWidth = config.width - margins.left - margins.right;
@@ -160,7 +164,7 @@ var renderDotChart = function(config) {
     .axisLeft()
     .scale(yScale)
     .ticks(ticksY)
-    .tickFormat( d =>  d + " ºF");
+    .tickFormat( d =>  d + "ºF");
 
   // Render axes to chart.
 
@@ -259,7 +263,7 @@ var renderDotChart = function(config) {
         return xScale(d[dateColumn])
       })
       .attr("cy",d => yScale(d[valueColumn]))
-      .attr("r",10)
+      .attr("r", dotRadius)
 
   // Set up special labels
   var minItem =    config.data[0].values.reduce((prev, current) => (prev && prev[valueColumn] < current[valueColumn]) ? prev : current)
@@ -270,55 +274,56 @@ var renderDotChart = function(config) {
     chartHeight,
     xScale(minItem[dateColumn]),
     yScale(minItem[valueColumn])
-  )
+  );
   var stLouisLabelConfig = labelConfig(
     chartWidth,
     chartHeight,
     xScale(stLouisMin[dateColumn]),
     yScale(stLouisMin[valueColumn])
-  )
+  );
 
-  chartElement
-    .append("path")
-    .attr("class",`label-line all`)
-    .attr("stroke", "#fff")
-    .attr("fill", "transparent")
-    .attr("marker-end", "url(#my-arrow)")
-    .attr("d",line(minLabelConfig.arr))
+  // draw pointer arrows
+  [ "all", "st-louis" ].forEach(function(d) {
+    let lblConfig = (d == "st-louis") ? stLouisLabelConfig : minLabelConfig;
 
-  chartElement
-    .append("path")
-    .attr("class",`label-line st-louis`)
-    .attr("stroke", "#fff")
-    .attr("fill", "transparent")
-    .attr("marker-end", "url(#my-arrow)")
-    .attr("d",line(stLouisLabelConfig.arr))    
+    chartElement
+      .append("path")
+      .attr("class",`label-line ${ d }`)
+      .attr("stroke", "#fff")
+      .attr("fill", "transparent")
+      .attr("marker-end", "url(#my-arrow)")
+      .attr("d",line(lblConfig.arr))
+  });
 
-  chartElement
-    .append("text")
-    .attr("class","label-min all")
-    .attr("x",minLabelConfig.textOffset.x)
-    .attr("y",minLabelConfig.textOffset.y)
-    .attr("dx",minLabelConfig.xSide * 3)
-    .attr("text-anchor",minLabelConfig.xSide == 1 ? "start" : "end")
-    .text(() => `Coldest night in ${minItem[dateColumn]}`)    
+  // draw coldest night labels
+  [ "all", "st-louis" ].forEach(function(d) {
+    let lblConfig = minLabelConfig;
+    let lblTitle = `Coldest night in ${minItem[dateColumn]}`;
 
-  chartElement
-    .append("text")
-    .attr("class","label-min st-louis")
-    .attr("x",stLouisLabelConfig.textOffset.x)
-    .attr("y",stLouisLabelConfig.textOffset.y)
-    .attr("dx",stLouisLabelConfig.xSide * 3)
-    .attr("text-anchor",stLouisLabelConfig.xSide == 1 ? "start" : "end")
-    .text(() => "Coldest night in 2014, -10ºF")
+    if (d.includes("st-louis")) {
+      lblConfig = stLouisLabelConfig;
+      lblTitle = "Coldest night in 2014, -10ºF";
+    }
 
-  chartElement
+    chartElement
+      .append("text")
+      .attr("class",`label-min ${ d }`)
+      .attr("x",lblConfig.textOffset.x)
+      .attr("y",lblConfig.textOffset.y)
+      .attr("dx",lblConfig.xSide * 3)
+      .attr("text-anchor",lblConfig.xSide == 1 ? "start" : "end")
+      .text(lblTitle);
+
+  });
+
+  var chartTitle = chartElement
     .append("text")
     .attr("class","chart-title")
-    .attr("x",chartWidth/2)
-    .attr("y",chartHeight+40)
+    .attr("x", chartWidth / 2)
+    .attr("y", chartHeight + 50)
     .attr("text-anchor","middle")
-    .text(`30 years of minimum temperatures for ${selectedLocation.placeName}`)
+    .text(`The lowest temperature each winter in ${selectedLocation.placeName}, ${selectedLocation.placeState}`)
+  chartTitle.call(wrapText, chartWidth, 18);
 
   chartElement
     .append("line")
