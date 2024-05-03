@@ -131,7 +131,7 @@ var navigate = function(d) {
   current = items[counter]; 
   current.classList.add("current"); 
   changeDots(counter); 
-  } 
+  }; 
 
   next.addEventListener("click", function(ev) {
     navigate(1);
@@ -141,7 +141,7 @@ var navigate = function(d) {
     navigate(-1); 
   }); 
 
-  navigate(0); 
+navigate(0); 
 
 // Initialize map here
 var onWindowLoaded = async function() {
