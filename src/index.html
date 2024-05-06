@@ -37,11 +37,11 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
       </div>      
       <div id="sticky-nav" class="button disabled">
         <div class="inner-nav whereTo">
-          <div class="active">
+          <div id="explore-map" class="active">
             <%= t.include("./assets/icons/map_24dp_FILL0_wght400_GRAD0_opsz24.svg") %>
             Explore map
           </div>
-          <div class="">
+          <div id="back-to-story" class="">
             <%= t.include("./assets/icons/arrow_circle_left_24dp_FILL0_wght400_GRAD0_opsz24.svg") %>
             Back to the story
           </div>  
@@ -54,6 +54,9 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
       </div>
       <div id="info">
         <div class="info-inner"></div>
+      </div>
+      <div id="sticky-legend">
+        
       </div>
 
       <%

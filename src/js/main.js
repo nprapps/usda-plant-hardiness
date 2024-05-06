@@ -191,8 +191,7 @@ var renderMap = async function() {
   protocol.add(p);
 
   p.getHeader().then(h => {
-    
-    
+        
     let startingCoords = [-98.04, 39.507];
     let startingZoom = 3.8;
 
@@ -218,13 +217,11 @@ var renderMap = async function() {
       maxZoom:12.5
     });
 
-
     map.addControl(new maplibregl.NavigationControl({
       visualizePitch:false,
       showCompass:false
     }));
   
-
     map.on('load', () => {
       // map.addSource('userPoint', {
       //     'type': 'geojson',
@@ -388,6 +385,11 @@ var renderMap = async function() {
       // scroll back up to geolocation box
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
       const geoSlide = $.one("#intro-1");
+      $.one('#base-map').classList.remove("explore-mode");
+      $.one("#info").classList.remove('explore-mode');
+      $.one("#back-to-story").classList.remove('active');
+      $.one("#explore-map").classList.add('active');
+
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 

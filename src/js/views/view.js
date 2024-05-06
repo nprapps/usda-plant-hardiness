@@ -4,17 +4,18 @@ module.exports = class View {
   constructor() {}
 
   enter(slide) {
-
-    console.log(slide.id)
-    if (slide.id == "intro-1" || slide.id == "titlecard") {
-      $.one("#sticky-nav").classList.add("disabled");
-    } else {
+    if (slide.id == "zoomIn" || 
+     slide.id == "intro-3" || 
+     slide.id == "intro-4" || 
+     slide.id == "intro-5" || 
+     slide.id == "explore")   {
       $.one("#sticky-nav").classList.remove("disabled");
+    } else {
+      $.one("#sticky-nav").classList.add("disabled");
     }
 
     slide.classList.add("active");
     slide.classList.remove("exiting");
-
 
   }
 

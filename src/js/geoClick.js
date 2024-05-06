@@ -1,5 +1,5 @@
 var $ = require("./lib/qsa")
-iii = 0;
+
 var {
   getName,
   tempRange,
@@ -88,11 +88,6 @@ var geoClick = function(selectedLocation,target,map) {
 }
 
 async function updateDom(selectedLocation,map) {
-  iii++;
-  console.log("-------------------")
-  console.log('update dom function ' + iii)
-  console.log("-------------------")
-
 
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
