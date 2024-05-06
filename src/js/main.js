@@ -232,15 +232,15 @@ var renderMap = async function() {
   
     map.on('load', () => {
 
-      // map.addSource('userPoint', {
-      //     'type': 'geojson',
-      //     'data': makePoint([0,0])
-      // });
-
       map.addSource('usda_zones', {
         type: 'vector',
         url: `pmtiles://${PMTILES_URL}`,
         attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
+      })
+      
+      map.addSource('temp_diff', {
+        type: 'vector',
+        url: `pmtiles://${tempDiffURL}`
       })
 
       map.addSource('hillshade', {
@@ -249,18 +249,6 @@ var renderMap = async function() {
         attribution: 'United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey.',
         encoding: 'terrarium'
       })
-
-      // map.addLayer({
-      //   'id': 'userPoint',
-      //   'type': 'circle',
-      //   'source': 'userPoint',
-      //   'paint': {
-      //       'circle-radius': 8,
-      //       'circle-color': 'transparent',
-      //       'circle-stroke-color':'#fff',
-      //       'circle-stroke-width':3
-      //   }
-      // },"Place labels"); 
 
       map.addLayer({
         'id': 'hillshade_',
@@ -339,10 +327,7 @@ var renderMap = async function() {
         }      
       },"Water")
 
-      map.addSource('temp_diff', {
-        type: 'vector',
-        url: `pmtiles://${tempDiffURL}`
-      })
+
       map.addLayer({
         'id': 'temp_diff_layer',
         'source': 'temp_diff',
