@@ -259,7 +259,7 @@ var renderMap = async function() {
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
-
+      
       map.addLayer({
         'id': '2012_zones',
         'source': 'usda_zones',
@@ -285,6 +285,7 @@ var renderMap = async function() {
       // This line is the id of the layer this layer should be immediately below
       "Water")
 
+
       map.addLayer({
         'id': '2012_zones_labels',
         'source': 'usda_zones',
@@ -297,57 +298,11 @@ var renderMap = async function() {
           "fill-opacity": 0.5,
           
         }      
-      },"Water") 
-
-      map.addLayer({
-        'id': '2023_zones',
-        'source': 'usda_zones',
-        'source-layer': '2023_zones',
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "2023_zone"], null],
-          "#aaffff",compileLegendStyle("2023_zone")
-          ],
-          "fill-opacity": 0
-        }      
       },"Water")       
 
-      map.addLayer({
-        'id': '2023_zones_labels',
-        'source': 'usda_zones',
-        'source-layer': '2023_zones',
-        'type': 'fill',
-        "minzoom": 8,
-        'paint': {
-          "fill-color": "rgba(255, 255, 0, 1)",
-          "fill-pattern": compileZoneLabelStyle("2023_zone"),
-          "fill-opacity": 0
-        }      
-      },"Water")
-
-
-      map.addLayer({
-        'id': 'temp_diff_layer',
-        'source': 'temp_diff',
-        'source-layer': 'temp_diffgeojsonl',
-        'minZoom':8,
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "temp_diff"], null],
-          "#aaffff",compileTempDiffStyle()         
-          ],
-          "fill-opacity": 0,
-          "fill-outline-color":"rgba(255,255,255,0)"
-        }      
-      },
-      // This line is the id of the layer this layer should be immediately below
-      "Water")
     })    
 
+    // used for speed analytics
     $.one("#hidden-button").addEventListener('click',() => {
       $.one("#speed-shit").classList.toggle('active')
       if (map.showTileBoundaries) {
@@ -358,16 +313,14 @@ var renderMap = async function() {
       
     })
 
+    // used for speed analytics
     map.on('style.load', () => {
       if (selectedLocation.loadIterations == 0) {
         now = new Date();
         $.one("#Speedfortransfer").innerHTML = (new Date() - startTime)/1000;
       }
     });
-
-    // map.on('render',() => {
-    //   console.log(map)
-    // })
+    // used for speed analytics
     map.on('data',event => {    
       if (event.tile) {
         tileCount++;
@@ -375,9 +328,7 @@ var renderMap = async function() {
     })
 
     // Listen for end of paint
-    map.on('idle', () => {      
-      console.log('is idle')
-    
+    map.on('idle', () => {    
       // optimization analytics
       if (selectedLocation.loadIterations == 0) {
         $.one("#initTiles").innerHTML = tileCount;  
@@ -392,7 +343,6 @@ var renderMap = async function() {
       selectedLocation.loadIterations+=1;
     })
     
-
     // disable ability to interact with buttons
     map.on('movestart', () =>{
       $.one(".geo-buttons").classList.add("disabled")

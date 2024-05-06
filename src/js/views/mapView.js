@@ -4,13 +4,13 @@ var debounce = require("../lib/debounce"); //from Ruth
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
-// var {
-//   makePoint
-// } = require("../helpers/mapHelpers");
+var {      
+      compileLegendStyle,
+      compileZoneLabelStyle,
+      compileTempDiffStyle,     
+    } = require("../helpers/mapHelpers");
 
 var mapElement = $.one("#base-map");
-// var mapAssets = {};
-// var classes;
 
 
 module.exports = class MapView extends View {
@@ -37,8 +37,7 @@ module.exports = class MapView extends View {
         var newCenter = JSON.parse(slide.dataset.center);            
       } else {
         var newCenter = oldCenter;
-      }
-      
+      }      
       
       var oldZoom = map.getZoom();
 
@@ -87,22 +86,79 @@ module.exports = class MapView extends View {
         console.log(err)
       }
     }
-    // window.addEventListener("scroll", this.onMapScroll);
   }
 
   exit(slide) {
-
-    // window.removeEventListener("scroll", this.onMapScroll);
-
     super.exit(slide);
     mapElement.classList.add("exiting");
     mapElement.classList.remove("active");
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
   }
 
-  // preload = async function(slide) {
+  preload = async function(slide,active,i) {
+    console.log(slide.id)
+    console.log(slide.dataset.maplayer)
+    console.log(i)
+    console.log('preload for map')
+    var map = this.map;
+    console.log(map)
 
-  // }
+    // if only 1 ahead (or behind?????/)
+    if (i == 1) {
+      // add layer to map, opacity or visibility 0
+      if (slide.dataset.maplayer == "2012_zones") {
+
+      }
+
+      if (slide.dataset.maplayer == "2023_zones") {
+        map.addLayer({
+          'id': '2023_zones',      
+          'source': 'usda_zones',
+          'source-layer': '2023_zones',
+          'type': 'fill',
+          'paint': {
+            "fill-color": [
+            "case",
+            ["==", ["get", "2023_zone"], null],
+            "#aaffff",compileLegendStyle("2023_zone")
+            ],
+            "fill-opacity": 0
+          }      
+        },"Water")       
+        map.addLayer({
+          'id': '2023_zones_labels',
+          'source': 'usda_zones',
+          'source-layer': '2023_zones',
+          'type': 'fill',
+          "minzoom": 8,
+          'paint': {
+            "fill-color": "rgba(255, 255, 0, 1)",
+            "fill-pattern": compileZoneLabelStyle("2023_zone"),
+            "fill-opacity": 0
+          }      
+        },"Water")        
+      }
+
+      if (slide.dataset.maplayer == "temp_diff_layer") {
+        map.addLayer({
+          'id': 'temp_diff_layer',
+          'source': 'temp_diff',
+          'source-layer': 'temp_diffgeojsonl',
+          'minZoom':8,
+          'type': 'fill',
+          'paint': {
+            "fill-color": [
+            "case",
+            ["==", ["get", "temp_diff"], null],
+            "#aaffff",compileTempDiffStyle()         
+            ],
+            "fill-opacity": 0,
+            "fill-outline-color":"rgba(255,255,255,0)"
+          }      
+        },"Water")
+      }
+    }  
+  } 
 };
 
 // var onMapScroll = function () {
