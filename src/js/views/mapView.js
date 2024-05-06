@@ -11,9 +11,10 @@ var mapElement = $.one("#base-map");
 
 
 module.exports = class MapView extends View {
-  constructor(map) {
+  constructor(map,selectedLocation) {
     super();
     this.map = map;
+    this.selectedLocation = selectedLocation
     // this.onMapScroll = debounce(onMapScroll, 50);
   }
 
@@ -61,7 +62,6 @@ module.exports = class MapView extends View {
 
       // filter pmtiles data layer to what the slide says
       try {
-        console.log(map.getStyle().layers)
         var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
         layers.forEach(d=> {
           map.setPaintProperty(d.id,'fill-opacity',0)
@@ -91,24 +91,27 @@ module.exports = class MapView extends View {
     mapElement.classList.remove("active");
       
     // if not 2023, remove layer from map
-    if (slide.dataset.maplayer != "2023_zones") {
+    // if (slide.dataset.maplayer != "2023_zones") {
 
 
-    }
+    // }
 
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
   }
 
-  preload = async function(slide,active,i,selectedLocation) {
-    console.log('in preload map -----------------')
-    var map = this.map; 
+  preload = async function(slide,active,i,isBackwards,map) {
+    // console.log('in preload map -----------------')
+    // var map = this.map; 
+    console.log(map)
+
+    var selectedLocation = this.selectedLocation;
     if (map) {
       // if only 1 ahead (or behind?????/)
       if (i != 2) {
         // add layer to map, opacity or visibility 0
         
         addLayerFunction(map,slide.dataset.maplayer)
-        console.log(selectedLocation)
+        // console.log(selectedLocation)
         updateDom(selectedLocation,map,slide)
       }
     }    

@@ -94,7 +94,6 @@ function getTooltip(selectedLocation) {
 }
 
 function tempDiff(selectedLocation) {
-	console.log(selectedLocation)
 	try	{
 		var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;		
 	} catch(err) {

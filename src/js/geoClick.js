@@ -89,7 +89,7 @@ var geoClick = function(selectedLocation,target,map,slide) {
 
 async function updateDom(selectedLocation,map,slide) {
 
-  console.log("__________"+slide.id+"_________")
+  // console.log("__________"+slide.id+"_________")
 
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
@@ -255,7 +255,6 @@ async function updateDom(selectedLocation,map,slide) {
     $('.notSame').forEach(d=>d.classList.remove('show'))
     $('.isSame').forEach(d=>d.classList.add('show'))
   }
-
 
   if (temperatures) {
     // if avg is NOT wrong OR if it is within 1/2 degree

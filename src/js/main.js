@@ -292,7 +292,6 @@ var renderMap = async function() {
 
     // Listen for end of paint
     map.on('idle', () => {    
-      console.log('idle')
       // optimization analytics
       if (selectedLocation.loadIterations == 0) {
         $.one("#initTiles").innerHTML = tileCount;  
@@ -424,7 +423,7 @@ var handler;
 
 var handlers = {
   map: new mapView(map),
-  chart: new chartView(selectedLocation),
+  chart: new chartView(map, selectedLocation),
   image: new imageView(),
   video: new imageView(),
   text: new textView(),
@@ -433,11 +432,14 @@ var handlers = {
 };
 
 var active = null;
+var previous = null;
 
 var activateSlide = function(slide, slideNumber) {  
   handlers.map.map = map;
+  handlers.map.selectedLocation = selectedLocation;
 
   handlers.chart.selectedLocation = selectedLocation;
+  handlers.chart.map = map;
 
   // skip if already in the slide
   if (active == slide ) return;
@@ -451,23 +453,44 @@ var activateSlide = function(slide, slideNumber) {
   handler = handlers[currType];
   handler.enter(slide);
 
+  previous = active;
+  console.log("----------------------")
+
   active = slide;
 
   // lazy-load neighboring slides
   var neighbors = [-1, 0, 1, 2];
   var all = $(".sequence .slide");
   var index = all.indexOf(slide);
+
+  var isBackwards = index < all.indexOf(previous) ? true : false;
+
   neighbors.forEach(function(offset,i) {
     var neighbor = all[index + offset];
     if (!neighbor) return;
     var nextType = neighbor.dataset.type || "image";
     var neighborHandler = handlers[nextType];
-    neighborHandler.preload(
-      neighbor,
-      handler != neighborHandler && offset == 1,
-      offset,
-      selectedLocation
-    );
+    
+    console.log('hello')
+
+    waitForMap(function() {
+      console.log(map)
+      const waiting = () => {
+        if (!map.isStyleLoaded()) {
+          setTimeout(waiting, 200);
+        } else {
+          neighborHandler.preload(
+            neighbor,
+            handler != neighborHandler && offset == 1,
+            offset,        
+            isBackwards,
+            map
+          );
+        }
+      };
+      waiting();
+    });
+
   });
 }
 
@@ -552,6 +575,22 @@ var navigate = function(d) {
   current.classList.add("current"); 
   changeDots(counter); 
 } 
+
+function waitForMap(callback) {
+  // Check if the variable is defined immediately
+  if (map !== undefined) {
+    callback();
+  } else {
+    // If not defined, set up a timeout to periodically check
+    var interval = setInterval(function() {
+
+      if (map !== undefined) {
+        clearInterval(interval);
+        callback();
+      }
+    }, 100); // Adjust the interval as needed
+  }
+}
 
 // link tracking
 var trackLink = function() {
