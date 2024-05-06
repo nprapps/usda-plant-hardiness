@@ -88,9 +88,13 @@ var getTemps = async function(lngLat) {
 }    
 
 function temp2zone(temperature) {
-  var num = (temperature / 5) + 12;
-  var letter = num % 2 == 0 ? "a" : "b"
-  return `${Math.floor(num/2)+1}${letter}`;
+  if (temperature == "Loading") {
+    return "Loading"
+  } else {
+    var num = (temperature / 5) + 12;
+    var letter = num % 2 == 0 ? "a" : "b"
+    return `${Math.floor(num/2)+1}${letter}`;  
+  }
 }
 
 module.exports = {

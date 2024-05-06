@@ -4,9 +4,8 @@ var debounce = require("../lib/debounce"); //from Ruth
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
-var {      
-      addLayerFunction
-    } = require("../helpers/mapHelpers");
+var { addLayerFunction } = require("../helpers/mapHelpers");
+var { updateDom } = require("../geoClick.js")
 
 var mapElement = $.one("#base-map");
 
@@ -62,6 +61,7 @@ module.exports = class MapView extends View {
 
       // filter pmtiles data layer to what the slide says
       try {
+        console.log(map.getStyle().layers)
         var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
         layers.forEach(d=> {
           map.setPaintProperty(d.id,'fill-opacity',0)
@@ -99,16 +99,17 @@ module.exports = class MapView extends View {
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
   }
 
-  preload = async function(slide,active,i) {
-    // console.log('in preload map -----------------')
+  preload = async function(slide,active,i,selectedLocation) {
+    console.log('in preload map -----------------')
     var map = this.map; 
     if (map) {
       // if only 1 ahead (or behind?????/)
       if (i != 2) {
         // add layer to map, opacity or visibility 0
-        console.log(slide)
-        addLayerFunction(map,slide.dataset.maplayer)  
         
+        addLayerFunction(map,slide.dataset.maplayer)
+        console.log(selectedLocation)
+        updateDom(selectedLocation,map,slide)
       }
     }    
   } 

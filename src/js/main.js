@@ -251,18 +251,15 @@ var renderMap = async function() {
         'maxzoom':15
       },
       // This line is the id of the layer this layer should be immediately below
-      "Water")
-      
-      console.log(selectedLocation)
-      console.log(slideActive)
-
+      "Water")    
       
       if (slideActive.dataset.type == "map") {         
         addLayerFunction(map,slideActive.dataset.maplayer,true)
+        updateDom(selectedLocation,map,slideActive)
+
       } else {
         addLayerFunction(map,"2012_zones",true)
-      }
-      console.log(map.getStyle().layers)
+      }      
 
     })    
 
@@ -306,7 +303,11 @@ var renderMap = async function() {
       $.one("#Totaltilesrequested").innerHTML = tileCount;
 
       $.one(".geo-buttons").classList.remove("disabled")
-      updateDom(selectedLocation,map)
+      try {
+        updateDom(selectedLocation,map,slideActive)
+      } catch(err) {
+        console.log(err)
+      }
       selectedLocation.loadIterations+=1;
     })
     
@@ -370,7 +371,7 @@ var renderMap = async function() {
       $.one(".surprise-text").classList.remove("active")
       $.one(".surpriseMe .lds-ellipsis").classList.add("active")
 
-      updateLocation(place,target,selectedLocation,map)
+      updateLocation(place,target,selectedLocation,map,slideActive)
 
       // restore "surprise me!" text
       setTimeout(() => $.one(".surprise-text").classList.add("active"), 1500);
@@ -391,7 +392,7 @@ var renderMap = async function() {
         var target = evt.target.closest("section");
         var place = locations[idx];        
   
-        updateLocation(place,target,selectedLocation,map)
+        updateLocation(place,target,selectedLocation,map,slideActive)
 
       } else {
         searchNone.classList.remove("is-hidden");
@@ -435,6 +436,7 @@ var active = null;
 
 var activateSlide = function(slide, slideNumber) {  
   handlers.map.map = map;
+
   handlers.chart.selectedLocation = selectedLocation;
 
   // skip if already in the slide
@@ -463,7 +465,8 @@ var activateSlide = function(slide, slideNumber) {
     neighborHandler.preload(
       neighbor,
       handler != neighborHandler && offset == 1,
-      offset
+      offset,
+      selectedLocation
     );
   });
 }
@@ -509,7 +512,7 @@ var onScroll = function() {
         } 
         var slideNumber = slides.length - 1 - i;  
         startingSlide = slide.id;
-        console.log(`slide ${slideNumber}, id: ${slide.id}`); 
+        // console.log(`slide ${slideNumber}, id: ${slide.id}`); 
         slideActive = slide;
         return activateSlide(slide, slideNumber);
     }

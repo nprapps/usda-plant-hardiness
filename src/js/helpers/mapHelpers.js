@@ -176,16 +176,25 @@ function makePoint(coords) {
   };
 }
 
-function getZone(zonesData) {
-  var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];
-  var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];
-
+function getZone(zonesData) {  
+  try {
+    var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];  
+  } catch(err) {
+    var temp2012 = "Loading";
+  }
+  
+  try {
+    var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];  
+  } catch(err) {
+    var temp2023 = "Loading";
+  }
+  
   var obj = {
     "t2012":temp2012,
     "t2023":temp2023,
     "z2012":temp2zone(temp2012),
     "z2023":temp2zone(temp2023),
-    "zDiff":((temp2023 - temp2012)/5)
+    "zDiff":(temp2012 == "Loading" || temp2023 == "Loading") ? "Loading" : ((temp2023 - temp2012)/5)
   }
   return obj
 }
@@ -195,7 +204,6 @@ function getStartingCoords() {
   const offset = new Date().getTimezoneOffset();  
   // Convert offset to hours
   const offsetHours = offset / 60;
-  console.log(offsetHours)
   var latLng;
 
   switch(true) {
@@ -230,8 +238,6 @@ function layerExists(map,layerId) {
 }
 
 function addLayerFunction(map,id,style=false){
-  console.log("00000000000000000")
-  console.log(id)
   var zoneOpacity, labelsOpacity, tempDiffOpacity;
   if (style) {
     zoneOpacity = [
