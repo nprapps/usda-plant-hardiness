@@ -1,5 +1,12 @@
 var $ = require("./lib/qsa")
-var debounce = require("./lib/debounce"); //ruth had in sea level rise...not sure if we need
+
+// for optimization purposes;
+var tileCount = 0;
+var tileData = 0;
+var startTime = new Date();
+var now = startTime;
+
+var debounce = require("./lib/debounce"); 
 var track = require("./lib/tracking");
 require("@nprapps/autocomplete-input");
 var { isMobile } = require("./lib/breakpoints");
@@ -225,6 +232,7 @@ var renderMap = async function() {
     map.attributionControl = false;
   
     map.on('load', () => {
+
       // map.addSource('userPoint', {
       //     'type': 'geojson',
       //     'data': makePoint([0,0])
@@ -354,11 +362,41 @@ var renderMap = async function() {
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
+    })    
+
+    $.one("#hidden-button").addEventListener('click',() => {
+      $.one("#speed-shit").classList.toggle('active')
     })
 
-    // Lots of listeners
-    map.on('idle', () => {
+    map.on('style.load', () => {
+      if (selectedLocation.loadIterations == 0) {
+        now = new Date();
+        $.one("#Speedfortransfer").innerHTML = (new Date() - startTime)/1000;
+      }
+    });
+
+    // map.on('render',() => {
+    //   console.log(map)
+    // })
+    map.on('data',event => {    
+      if (event.tile) {
+        tileCount++;
+      } 
+    })
+
+    // Listen for end of paint
+    map.on('idle', () => {      
       console.log('is idle')
+    
+      // optimization analytics
+      if (selectedLocation.loadIterations == 0) {
+        $.one("#initTiles").innerHTML = tileCount;  
+        $.one("#Speedforpaint").innerHTML = (new Date() - now)/1000;
+        $.one("#loadSpeed").innerHTML = (new Date() - startTime)/1000;
+      }
+      
+      $.one("#Totaltilesrequested").innerHTML = tileCount;
+
       $.one(".geo-buttons").classList.remove("disabled")
       updateDom(selectedLocation,map)
       selectedLocation.loadIterations+=1;
@@ -374,6 +412,8 @@ var renderMap = async function() {
     map.on('moveend', () => {
       $.one(".geo-buttons").classList.remove("disabled")
     });
+
+
 
 
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
@@ -414,7 +454,6 @@ var renderMap = async function() {
       // Check if locations is defined and not empty
       if (locations && locations.length > 0) {
         // Display or process the CSV data
-        // console.log(locations);
       } else {
         console.error('CSV data is not available.');
       }

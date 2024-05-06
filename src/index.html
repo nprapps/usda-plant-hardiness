@@ -58,7 +58,47 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
       <div id="sticky-legend">
         
       </div>
+      <style>
+        #speed-shit {
+          display: none;
+          margin: 5px;
+          padding: 5px;
+          font-family: courier;
+          position: fixed; 
+          top:0;
+          z-index: 10000000;
+          background-color: black;
 
+          &.active {
+            display: block;
+          }
+        }
+      </style>
+      <div id='hidden-button'
+        style="
+          position: fixed;
+          top: 0 ;
+          right:0;
+          width: 10px;
+          height: 10px;
+          cursor: pointer;
+          z-index: 1000000000;
+        "
+      ></div>
+      <div class="" id="speed-shit"
+        style="
+                  
+          "
+      >
+        <h3>Initial Load</h3>
+          Speed for transfer:<span id="Speedfortransfer"></span>s<br>
+          Speed for paint:<span id="Speedforpaint"></span>s<br>
+          Total map load:<span id="loadSpeed"></span>s<br>
+          Initial tiles transfered:<span id="initTiles"></span><br>
+        <h3>Cumulative</h3>
+          Total map data requested:<span id="Totalmapdata"></span><br>
+          Total tiles requested:   <span id="Totaltilesrequested"></span><br>
+      </div>
       <%
         doc.sequence.forEach(function(slide, id) {
           if (slide.type == "skip") return;
