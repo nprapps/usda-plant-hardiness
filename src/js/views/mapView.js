@@ -5,9 +5,7 @@ var debounce = require("../lib/debounce"); //from Ruth
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
 var {      
-      compileLegendStyle,
-      compileZoneLabelStyle,
-      compileTempDiffStyle,     
+      addLayerFunction
     } = require("../helpers/mapHelpers");
 
 var mapElement = $.one("#base-map");
@@ -62,16 +60,6 @@ module.exports = class MapView extends View {
         })
       }
 
-      map.on('style.load', () => {
-        if (slide.dataset.maplayer == "2023_zones") {
-          addLayerFunction(map,"z2023")  
-        }
-
-        if (slide.dataset.maplayer == "temp_diff_layer") {
-          addLayerFunction(map,"temp")
-        }
-      });
-
       // filter pmtiles data layer to what the slide says
       try {
         var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
@@ -112,86 +100,16 @@ module.exports = class MapView extends View {
   }
 
   preload = async function(slide,active,i) {
-    console.log('in preload map -----------------')
+    // console.log('in preload map -----------------')
     var map = this.map; 
     if (map) {
       // if only 1 ahead (or behind?????/)
       if (i != 2) {
         // add layer to map, opacity or visibility 0
-        // 2012 added by default
-
-        if (slide.dataset.maplayer == "2023_zones") {
-          addLayerFunction(map,"z2023")  
-        }
-
-        if (slide.dataset.maplayer == "temp_diff_layer") {
-          addLayerFunction(map,"temp")
-        }
+        console.log(slide)
+        addLayerFunction(map,slide.dataset.maplayer)  
+        
       }
     }    
   } 
 };
-
-// Check if a layer exists
-function layerExists(map,layerId) {
-    var style = map.getStyle();
-    if (!style || !style.layers) return false;
-    return style.layers.some(function(layer) {
-        return layer.id === layerId;
-    });
-}
-
-function addLayerFunction(map,id){
-
-  if (id == "z2023") {
-    if (!layerExists(map,'2023_zones')) {
-      map.addLayer({
-        'id': '2023_zones',      
-        'source': 'usda_zones',
-        'source-layer': '2023_zones',
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "2023_zone"], null],
-          "#aaffff",compileLegendStyle("2023_zone")
-          ],
-          "fill-opacity": 0
-        }      
-      },"Water")
-    }
-    if (!layerExists(map,'2023_zones_labels')) {
-      map.addLayer({
-        'id': '2023_zones_labels',
-        'source': 'usda_zones',
-        'source-layer': '2023_zones',
-        'type': 'fill',
-        "minzoom": 8,
-        'paint': {
-          "fill-color": "rgba(255, 255, 0, 1)",
-          "fill-pattern": compileZoneLabelStyle("2023_zone"),
-          "fill-opacity": 0
-        }      
-      },"Water")      
-    }
-  }
-
-  if (id == "temp" && !layerExists(map,"temp_diff_layer")) {
-    map.addLayer({
-      'id': 'temp_diff_layer',
-      'source': 'temp_diff',
-      'source-layer': 'temp_diffgeojsonl',
-      'minZoom':8,
-      'type': 'fill',
-      'paint': {
-        "fill-color": [
-        "case",
-        ["==", ["get", "temp_diff"], null],
-        "#aaffff",compileTempDiffStyle()         
-        ],
-        "fill-opacity": 0,
-        "fill-outline-color":"rgba(255,255,255,0)"
-      }      
-    },"Water")
-  }
-}

@@ -98,13 +98,9 @@ async function updateDom(selectedLocation,map) {
     return d.source == "usda_zones";
   });
 
-  console.log(features)
-
   selectedLocation.tempDiffData = features.filter(d => {
     return d.source == "temp_diff";
   });
-
-  console.log(selectedLocation.tempDiffData)
 
   try {
     selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  

@@ -248,6 +248,123 @@ function getStartingCoords() {
   return latLng;
 }
 
+// Check if a layer exists
+function layerExists(map,layerId) {
+    var style = map.getStyle();
+    if (!style || !style.layers) return false;
+    return style.layers.some(function(layer) {
+        return layer.id === layerId;
+    });
+}
+
+function addLayerFunction(map,id){
+
+  if (id == "2012_zones") {
+    if (!layerExists(map,'2012_zones')) {
+      map.addLayer({
+        'id': '2012_zones',
+        'source': 'usda_zones',
+        'source-layer': '2012_zones',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "2012_zone"], null],
+          "#aaffff",compileLegendStyle("2012_zone")          
+          ],
+          "fill-opacity":[
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
+              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
+          ]
+        }      
+      },
+      // This line is the id of the layer this layer should be immediately below
+      "Water")
+    }
+
+    if (!layerExists(map,'2012_zones_labels')) {
+      map.addLayer({
+        'id': '2012_zones_labels',
+        'source': 'usda_zones',
+        'source-layer': '2012_zones',
+        'type': 'fill',
+        "minzoom": 8,
+        'paint': {
+          "fill-color": "rgba(255, 255, 0, 1)",
+          "fill-pattern": compileZoneLabelStyle("2012_zone"),
+          "fill-opacity": 0.5,
+          
+        }      
+      },"Water")
+    }
+  }
+
+  if (id == "2023_zones") {
+    if (!layerExists(map,'2023_zones')) {
+      map.addLayer({
+        'id': '2023_zones',      
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "2023_zone"], null],
+          "#aaffff",compileLegendStyle("2023_zone")
+          ],
+          "fill-opacity":[
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
+              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
+          ]
+        }      
+      },"Water")
+    }
+    if (!layerExists(map,'2023_zones_labels')) {
+      map.addLayer({
+        'id': '2023_zones_labels',
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        "minzoom": 8,
+        'paint': {
+          "fill-color": "rgba(255, 255, 0, 1)",
+          "fill-pattern": compileZoneLabelStyle("2023_zone"),
+          "fill-opacity": 0.5
+        }      
+      },"Water")      
+    }
+  }
+
+  if (id == "temp_diff_layer" && !layerExists(map,"temp_diff_layer")) {
+    map.addLayer({
+      'id': 'temp_diff_layer',
+      'source': 'temp_diff',
+      'source-layer': 'temp_diffgeojsonl',
+      'minZoom':8,
+      'type': 'fill',
+      'paint': {
+        "fill-color": [
+        "case",
+        ["==", ["get", "temp_diff"], null],
+        "#aaffff",compileTempDiffStyle()         
+        ],
+        "fill-opacity": 0.5,
+        "fill-outline-color":"rgba(255,255,255,0)"
+      }      
+    },"Water")
+  }
+}
+
 module.exports = {
   getUserLocation,
   compileLegendStyle,
@@ -257,7 +374,9 @@ module.exports = {
   makePoint,
   getZone,
   legendColors,
-  getStartingCoords
+  getStartingCoords,
+  layerExists,
+  addLayerFunction
 }
 
 

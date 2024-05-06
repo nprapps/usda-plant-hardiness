@@ -24,15 +24,11 @@ var chartView = require("./views/chartView");
 require("./video");
 require("./analytics");
 
-var {
-      getUserLocation,
-      compileLegendStyle,
-      compileZoneLabelStyle,
-      compileTempDiffStyle,
-      makePoint,
-      getZone,
-      getStartingCoords
-    } = require("./helpers/mapHelpers");
+var {                        
+    getZone,
+    getStartingCoords,
+    addLayerFunction
+  } = require("./helpers/mapHelpers");
 
 var {
   getTemps,
@@ -40,9 +36,7 @@ var {
   formatTemperatures
 } = require("./helpers/temperatureUtils");
 
-var {
-  fetchCSV
-} = require("./helpers/csvUtils");
+var { fetchCSV } = require("./helpers/csvUtils");
 
 var { getTooltip } = require('./helpers/textUtils')
 
@@ -52,6 +46,7 @@ var {
   updateDom
 } = require("./geoClick");
 
+// slides at end
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
@@ -75,10 +70,6 @@ let locations;
 var startingSlide;
 let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
 
-
-// global variable for active map layer
-var activeMap = "2012_zone";
-
 // global place variable...default to Raleigh
 var selectedLocation = {
   coords:[-78.6399539,35.7915083],
@@ -87,6 +78,8 @@ var selectedLocation = {
   type: "default",
   loadIterations: 0
 };
+
+var slideActive;
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
   $("video").forEach(v => v.addEventListener(e, console.log));
@@ -260,45 +253,16 @@ var renderMap = async function() {
       // This line is the id of the layer this layer should be immediately below
       "Water")
       
-      map.addLayer({
-        'id': '2012_zones',
-        'source': 'usda_zones',
-        'source-layer': '2012_zones',
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "2012_zone"], null],
-          "#aaffff",compileLegendStyle("2012_zone")          
-          ],
-          "fill-opacity":[
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
-              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
-          ]
-        }      
-      },
-      // This line is the id of the layer this layer should be immediately below
-      "Water")
+      console.log(selectedLocation)
+      console.log(slideActive)
 
-
-      map.addLayer({
-        'id': '2012_zones_labels',
-        'source': 'usda_zones',
-        'source-layer': '2012_zones',
-        'type': 'fill',
-        "minzoom": 8,
-        'paint': {
-          "fill-color": "rgba(255, 255, 0, 1)",
-          "fill-pattern": compileZoneLabelStyle("2012_zone"),
-          "fill-opacity": 0.5,
-          
-        }      
-      },"Water")       
+      
+      if (slideActive.dataset.type == "map") {         
+        addLayerFunction(map,slideActive.dataset.maplayer)
+      } else {
+        addLayerFunction(map,"2012_zones")
+      }
+      console.log(map.getStyle().layers)
 
     })    
 
@@ -356,9 +320,6 @@ var renderMap = async function() {
       $.one(".geo-buttons").classList.remove("disabled")
     });
 
-
-
-
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
@@ -389,9 +350,6 @@ var renderMap = async function() {
       const geoSlide = $.one("#intro-1");
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
     });
-
-
-    
 
     $.one(".surpriseMe").addEventListener('click',(evt) => { 
       // Check if locations is defined and not empty
@@ -510,8 +468,7 @@ var activateSlide = function(slide, slideNumber) {
   });
 }
 
-var onScroll = function() {
-  console.log('onScroll')
+var onScroll = function() {  
   for (var i = 0; i < slides.length; i++) {
     var slide = slides[i];
     var postTitle = i <= 1 ? null : slides[i + 1];
@@ -553,6 +510,7 @@ var onScroll = function() {
         var slideNumber = slides.length - 1 - i;  
         startingSlide = slide.id;
         console.log(`slide ${slideNumber}, id: ${slide.id}`); 
+        slideActive = slide;
         return activateSlide(slide, slideNumber);
     }
   }
@@ -591,9 +549,6 @@ var navigate = function(d) {
   current.classList.add("current"); 
   changeDots(counter); 
 } 
-
-
-
 
 // link tracking
 var trackLink = function() {
