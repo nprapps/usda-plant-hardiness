@@ -258,9 +258,9 @@ var renderMap = async function() {
 
       
       if (slideActive.dataset.type == "map") {         
-        addLayerFunction(map,slideActive.dataset.maplayer)
+        addLayerFunction(map,slideActive.dataset.maplayer,true)
       } else {
-        addLayerFunction(map,"2012_zones")
+        addLayerFunction(map,"2012_zones",true)
       }
       console.log(map.getStyle().layers)
 

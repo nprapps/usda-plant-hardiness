@@ -257,7 +257,27 @@ function layerExists(map,layerId) {
     });
 }
 
-function addLayerFunction(map,id){
+function addLayerFunction(map,id,style=false){
+  console.log("00000000000000000")
+  console.log(id)
+  var zoneOpacity, labelsOpacity, tempDiffOpacity;
+  if (style) {
+    zoneOpacity = [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
+              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
+          ];
+    labelsOpacity = 0.5;
+    tempDiffOpacity = 0.7;
+  } else {
+    zoneOpacity = 0;
+    labelsOpacity = 0;
+    tempDiffOpacity = 0;
+  }
 
   if (id == "2012_zones") {
     if (!layerExists(map,'2012_zones')) {
@@ -272,15 +292,7 @@ function addLayerFunction(map,id){
           ["==", ["get", "2012_zone"], null],
           "#aaffff",compileLegendStyle("2012_zone")          
           ],
-          "fill-opacity":[
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
-              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
-          ]
+          "fill-opacity": zoneOpacity
         }      
       },
       // This line is the id of the layer this layer should be immediately below
@@ -297,7 +309,7 @@ function addLayerFunction(map,id){
         'paint': {
           "fill-color": "rgba(255, 255, 0, 1)",
           "fill-pattern": compileZoneLabelStyle("2012_zone"),
-          "fill-opacity": 0.5,
+          "fill-opacity": labelsOpacity,
           
         }      
       },"Water")
@@ -317,15 +329,7 @@ function addLayerFunction(map,id){
           ["==", ["get", "2023_zone"], null],
           "#aaffff",compileLegendStyle("2023_zone")
           ],
-          "fill-opacity":[
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
-              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
-          ]
+          "fill-opacity": zoneOpacity
         }      
       },"Water")
     }
@@ -339,7 +343,7 @@ function addLayerFunction(map,id){
         'paint': {
           "fill-color": "rgba(255, 255, 0, 1)",
           "fill-pattern": compileZoneLabelStyle("2023_zone"),
-          "fill-opacity": 0.5
+          "fill-opacity": labelsOpacity
         }      
       },"Water")      
     }
@@ -358,7 +362,7 @@ function addLayerFunction(map,id){
         ["==", ["get", "temp_diff"], null],
         "#aaffff",compileTempDiffStyle()         
         ],
-        "fill-opacity": 0.5,
+        "fill-opacity": tempDiffOpacity,
         "fill-outline-color":"rgba(255,255,255,0)"
       }      
     },"Water")
