@@ -8,7 +8,6 @@ var {
 } = require("./helpers/textUtils")
 
 var {
-  getUserLocation,
   makePoint,
   getZone
 } = require("./helpers/mapHelpers");
