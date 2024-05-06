@@ -227,8 +227,7 @@ var renderMap = async function() {
       visualizePitch:false,
       showCompass:false
     }));
-
-    // map.showTileBoundaries = true;
+    
     map.attributionControl = false;
   
     map.on('load', () => {
@@ -366,6 +365,12 @@ var renderMap = async function() {
 
     $.one("#hidden-button").addEventListener('click',() => {
       $.one("#speed-shit").classList.toggle('active')
+      if (map.showTileBoundaries) {
+        map.showTileBoundaries = false;        
+      } else {
+        map.showTileBoundaries = true;  
+      }
+      
     })
 
     map.on('style.load', () => {
