@@ -316,6 +316,8 @@ var renderMap = async function() {
     // used for speed analytics
     map.on('style.load', () => {
       if (selectedLocation.loadIterations == 0) {
+        console.log('all data transfered')
+
         now = new Date();
         $.one("#Speedfortransfer").innerHTML = (new Date() - startTime)/1000;
       }
@@ -329,6 +331,7 @@ var renderMap = async function() {
 
     // Listen for end of paint
     map.on('idle', () => {    
+      console.log('idle')
       // optimization analytics
       if (selectedLocation.loadIterations == 0) {
         $.one("#initTiles").innerHTML = tileCount;  
@@ -477,7 +480,7 @@ var activateSlide = function(slide, slideNumber) {
   handlers.chart.selectedLocation = selectedLocation;
 
   // skip if already in the slide
-  if (active == slide) return;
+  if (active == slide ) return;
 
   // If we changed block type, let the previous director leave
   if (handler) {
@@ -489,12 +492,6 @@ var activateSlide = function(slide, slideNumber) {
   handler.enter(slide);
 
   active = slide;
-
-  // force video playback
-  if (!isOne) $("video[autoplay]", slide).forEach(v => {
-    v.currentTime = 1;
-    v.play();
-  });
 
   // lazy-load neighboring slides
   var neighbors = [-1, 0, 1, 2];
@@ -510,27 +507,11 @@ var activateSlide = function(slide, slideNumber) {
       handler != neighborHandler && offset == 1,
       offset
     );
-    // var images = $("[data-src]", neighbor);
-    // images.forEach(function(img) {
-    //   img.src = img.dataset.src;
-    //   img.removeAttribute("data-src");
-    //   if (img.dataset.poster) {
-    //     img.poster = img.dataset.poster;
-    //     img.removeAttribute("data-poster");
-    //   }
-    // })
   });
-  
-
-  // Uncomment if the first slide is a video
-  // if (slide.dataset.type === "video") {
-  //   autoplayWrapper.classList.remove("hidden");
-  // } else {
-  //   autoplayWrapper.classList.add("hidden");
-  // }
 }
 
 var onScroll = function() {
+  console.log('onScroll')
   for (var i = 0; i < slides.length; i++) {
     var slide = slides[i];
     var postTitle = i <= 1 ? null : slides[i + 1];

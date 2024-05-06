@@ -45,8 +45,7 @@ module.exports = class MapView extends View {
         var newZoom = slide.dataset.zoom;  
       } else {
         var newZoom = oldZoom;
-      }
-      
+      }      
 
       if (oldZoom != newZoom || oldCenter != newCenter) {
 
@@ -62,6 +61,16 @@ module.exports = class MapView extends View {
           essential: true 
         })
       }
+
+      map.on('style.load', () => {
+        if (slide.dataset.maplayer == "2023_zones") {
+          addLayerFunction(map,"z2023")  
+        }
+
+        if (slide.dataset.maplayer == "temp_diff_layer") {
+          addLayerFunction(map,"temp")
+        }
+      });
 
       // filter pmtiles data layer to what the slide says
       try {
@@ -92,77 +101,97 @@ module.exports = class MapView extends View {
     super.exit(slide);
     mapElement.classList.add("exiting");
     mapElement.classList.remove("active");
+      
+    // if not 2023, remove layer from map
+    if (slide.dataset.maplayer != "2023_zones") {
+
+
+    }
+
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
   }
 
   preload = async function(slide,active,i) {
-    console.log(slide.id)
-    console.log(slide.dataset.maplayer)
-    console.log(i)
-    console.log('preload for map')
-    var map = this.map;
-    console.log(map)
+    console.log('in preload map -----------------')
+    var map = this.map; 
+    if (map) {
+      // if only 1 ahead (or behind?????/)
+      if (i != 2) {
+        // add layer to map, opacity or visibility 0
+        // 2012 added by default
 
-    // if only 1 ahead (or behind?????/)
-    if (i == 1) {
-      // add layer to map, opacity or visibility 0
-      if (slide.dataset.maplayer == "2012_zones") {
+        if (slide.dataset.maplayer == "2023_zones") {
+          addLayerFunction(map,"z2023")  
+        }
 
+        if (slide.dataset.maplayer == "temp_diff_layer") {
+          addLayerFunction(map,"temp")
+        }
       }
-
-      if (slide.dataset.maplayer == "2023_zones") {
-        map.addLayer({
-          'id': '2023_zones',      
-          'source': 'usda_zones',
-          'source-layer': '2023_zones',
-          'type': 'fill',
-          'paint': {
-            "fill-color": [
-            "case",
-            ["==", ["get", "2023_zone"], null],
-            "#aaffff",compileLegendStyle("2023_zone")
-            ],
-            "fill-opacity": 0
-          }      
-        },"Water")       
-        map.addLayer({
-          'id': '2023_zones_labels',
-          'source': 'usda_zones',
-          'source-layer': '2023_zones',
-          'type': 'fill',
-          "minzoom": 8,
-          'paint': {
-            "fill-color": "rgba(255, 255, 0, 1)",
-            "fill-pattern": compileZoneLabelStyle("2023_zone"),
-            "fill-opacity": 0
-          }      
-        },"Water")        
-      }
-
-      if (slide.dataset.maplayer == "temp_diff_layer") {
-        map.addLayer({
-          'id': 'temp_diff_layer',
-          'source': 'temp_diff',
-          'source-layer': 'temp_diffgeojsonl',
-          'minZoom':8,
-          'type': 'fill',
-          'paint': {
-            "fill-color": [
-            "case",
-            ["==", ["get", "temp_diff"], null],
-            "#aaffff",compileTempDiffStyle()         
-            ],
-            "fill-opacity": 0,
-            "fill-outline-color":"rgba(255,255,255,0)"
-          }      
-        },"Water")
-      }
-    }  
+    }    
   } 
 };
 
-// var onMapScroll = function () {
-  // console.log("onMapScroll")
-  
+// Check if a layer exists
+function layerExists(map,layerId) {
+    var style = map.getStyle();
+    if (!style || !style.layers) return false;
+    return style.layers.some(function(layer) {
+        return layer.id === layerId;
+    });
+}
 
-// };
+function addLayerFunction(map,id){
+
+  if (id == "z2023") {
+    if (!layerExists(map,'2023_zones')) {
+      map.addLayer({
+        'id': '2023_zones',      
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "2023_zone"], null],
+          "#aaffff",compileLegendStyle("2023_zone")
+          ],
+          "fill-opacity": 0
+        }      
+      },"Water")
+    }
+    if (!layerExists(map,'2023_zones_labels')) {
+      map.addLayer({
+        'id': '2023_zones_labels',
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        "minzoom": 8,
+        'paint': {
+          "fill-color": "rgba(255, 255, 0, 1)",
+          "fill-pattern": compileZoneLabelStyle("2023_zone"),
+          "fill-opacity": 0
+        }      
+      },"Water")      
+    }
+  }
+
+  if (id == "temp" && !layerExists(map,"temp_diff_layer")) {
+    map.addLayer({
+      'id': 'temp_diff_layer',
+      'source': 'temp_diff',
+      'source-layer': 'temp_diffgeojsonl',
+      'minZoom':8,
+      'type': 'fill',
+      'paint': {
+        "fill-color": [
+        "case",
+        ["==", ["get", "temp_diff"], null],
+        "#aaffff",compileTempDiffStyle()         
+        ],
+        "fill-opacity": 0,
+        "fill-outline-color":"rgba(255,255,255,0)"
+      }      
+    },"Water")
+  }
+}
