@@ -228,7 +228,7 @@ var renderMap = async function() {
       showCompass:false
     }));
 
-    map.showTileBoundaries = true;
+    // map.showTileBoundaries = true;
     map.attributionControl = false;
   
     map.on('load', () => {
