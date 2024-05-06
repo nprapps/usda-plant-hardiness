@@ -218,23 +218,6 @@ function getZone(zonesData) {
   return obj
 }
 
-// check if all tiles are loaded and only allow for clicks after that.
-function checkTilesLoaded(map,selectedLocation) {
-    if (map.areTilesLoaded() && selectedLocation.type == "default") {
-      tileSets +=1
-      if (tileSets > 3) {
-        // All tilesets loaded
-        // console.log(tileSets)
-        // console.log('all tilesets loaded')
-
-        $.one(".geo-buttons").classList.remove("disabled")
-        return true
-      } else {
-        return false;
-      }
-    }
-}
-
 function getStartingCoords() {
   // Get the timezone offset in minutes
   const offset = new Date().getTimezoneOffset();  
@@ -273,7 +256,6 @@ module.exports = {
   compileTempDiffStyle,
   makePoint,
   getZone,
-  checkTilesLoaded,
   legendColors,
   getStartingCoords
 }

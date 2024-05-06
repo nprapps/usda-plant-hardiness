@@ -23,7 +23,6 @@ var {
       compileZoneLabelStyle,
       compileTempDiffStyle,
       makePoint,
-      checkTilesLoaded,
       getZone,
       getStartingCoords
     } = require("./helpers/mapHelpers");
@@ -221,6 +220,9 @@ var renderMap = async function() {
       visualizePitch:false,
       showCompass:false
     }));
+
+    map.showTileBoundaries = true;
+    map.attributionControl = false;
   
     map.on('load', () => {
       // map.addSource('userPoint', {
@@ -355,14 +357,13 @@ var renderMap = async function() {
     })
 
     // Lots of listeners
-    map.on('render', () => {
-      // don't let the buttons be clicked until all things have been clicked
-      var isLoaded = checkTilesLoaded(map,selectedLocation);
-      if (isLoaded && selectedLocation.loadIterations == 0) {
-        updateDom(selectedLocation,map)
-        selectedLocation.loadIterations+=1;
-      }
-    });
+    map.on('idle', () => {
+      console.log('is idle')
+      $.one(".geo-buttons").classList.remove("disabled")
+      updateDom(selectedLocation,map)
+      selectedLocation.loadIterations+=1;
+    })
+    
 
     // disable ability to interact with buttons
     map.on('movestart', () =>{
