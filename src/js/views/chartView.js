@@ -47,12 +47,6 @@ module.exports = class ChartView extends View {
       toContinue = -1
     }
 
-    console.log(i)
-    console.log(toContinue)
-    console.log(slide.id)
-    console.log(map)
-    console.log(selectedLocation)
-
     if (i == toContinue || i == 0) {
       console.log(slide.id)
       if (slide.id == "temperature-chart-return") {
