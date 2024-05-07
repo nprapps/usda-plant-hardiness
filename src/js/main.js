@@ -32,8 +32,8 @@ var {
 
 var {
   getTemps,
-  getData,
-  formatTemperatures
+  formatTemperatures,
+  getAndParseTemps
 } = require("./helpers/temperatureUtils");
 
 var { fetchCSV } = require("./helpers/csvUtils");
@@ -254,14 +254,24 @@ var renderMap = async function() {
       "Water")    
       
       if (slideActive.dataset.type == "map") {         
+        // add layer and style
         addLayerFunction(map,slideActive.dataset.maplayer,true)
         updateDom(selectedLocation,map,slideActive)
+      }
 
-      } else {
-        addLayerFunction(map,"2012_zones",true)
-      }      
+      // If during or right before/after a chart, load 2012 and 2023
+      if (
+        slideActive.dataset.type == "chart" ||
+        slideActive.id == "transition-1" || 
+        slideActive.id == "how-to" || 
+        slideActive.id == "limits-of-hardiness"
+        ) {
+        console.log('loading 2012 and 2023')
+        addLayerFunction(map,"2012_zones",false)
+        addLayerFunction(map,"2023_zones",true)
+      }
 
-    })    
+    })
 
     // used for speed analytics
     $.one("#hidden-button").addEventListener('click',() => {
@@ -291,7 +301,7 @@ var renderMap = async function() {
     })
 
     // Listen for end of paint
-    map.on('idle', () => {    
+    map.on('idle', async () => {    
       // optimization analytics
       if (selectedLocation.loadIterations == 0) {
         $.one("#initTiles").innerHTML = tileCount;  
@@ -303,6 +313,7 @@ var renderMap = async function() {
 
       $.one(".geo-buttons").classList.remove("disabled")
       try {
+        selectedLocation = await getAndParseTemps(selectedLocation);
         updateDom(selectedLocation,map,slideActive)
       } catch(err) {
         console.log(err)
@@ -454,7 +465,6 @@ var activateSlide = function(slide, slideNumber) {
   handler.enter(slide);
 
   previous = active;
-  console.log("----------------------")
 
   active = slide;
 
@@ -464,17 +474,15 @@ var activateSlide = function(slide, slideNumber) {
   var index = all.indexOf(slide);
 
   var isBackwards = index < all.indexOf(previous) ? true : false;
+  console.log(isBackwards)
 
   neighbors.forEach(function(offset,i) {
     var neighbor = all[index + offset];
     if (!neighbor) return;
     var nextType = neighbor.dataset.type || "image";
-    var neighborHandler = handlers[nextType];
-    
-    console.log('hello')
+    var neighborHandler = handlers[nextType];    
 
     waitForMap(function() {
-      console.log(map)
       const waiting = () => {
         if (!map.isStyleLoaded()) {
           setTimeout(waiting, 200);

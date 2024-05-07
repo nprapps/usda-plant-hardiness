@@ -12,12 +12,9 @@ var {
   getZone
 } = require("./helpers/mapHelpers");
 
-var {
-  getTemps,
-  formatTemperatures,
-  temp2zone} = require("./helpers/temperatureUtils");
+var {temp2zone} = require("./helpers/temperatureUtils");
 
-var {setupChart} = require("./chart");
+// var {setupChart} = require("./chart");
 
 // Start functions to export
 function updateLocation(place,target,selectedLocation,map,slide) {
@@ -225,18 +222,6 @@ async function updateDom(selectedLocation,map,slide) {
     zoneInfo,
     temperatures
   } = selectedLocation;
-
-
-  // changeItems.forEach(d=> {
-  //   var items = $(`[data-item='${d.id}']`);        
-  //   items.forEach(item => {
-  //     item.innerHTML = d.formula;
-  //     if (d.classes) {
-  //       item.className = `${d.classes}`
-  //     }
-  //     ;
-  //   })
-  // })
 
   // pick which of the three to show
   if (selectedLocation.type == "default") {

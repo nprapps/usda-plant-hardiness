@@ -25,6 +25,7 @@ var { labelConfig } = require("./helpers/chartHelpers")
 
 // Render a line chart.
 var renderDotChart = function(config) {
+  console.log('here')
   // Setup
   var { dateColumn, valueColumn, selectedLocation } = config;
 

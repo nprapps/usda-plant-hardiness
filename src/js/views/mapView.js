@@ -99,10 +99,9 @@ module.exports = class MapView extends View {
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
   }
 
-  preload = async function(slide,active,i,isBackwards,map) {
-    // console.log('in preload map -----------------')
+  preload = async function(slide,active,i,isBackwards,map) {    
     // var map = this.map; 
-    console.log(map)
+    // console.log(map)
 
     var selectedLocation = this.selectedLocation;
     if (map) {
