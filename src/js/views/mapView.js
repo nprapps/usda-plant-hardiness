@@ -96,12 +96,9 @@ module.exports = class MapView extends View {
   exit(slide) {
     super.exit(slide);
 
-    var map = this.map;
-    console.log("----")
-    console.log(slide.id)
+    var map = this.map;    
     var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
-    console.log(map.getStyle().layers)
-    console.log(layers)
+    // console.log(map.getStyle().layers)
 
     mapElement.classList.add("exiting");
     mapElement.classList.remove("active");
