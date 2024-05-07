@@ -96,34 +96,6 @@ function getLegendConfig(legendColors) {
   return legendConfig;
 }
 
-async function getUserLocation() {
-  if (navigator.geolocation) {
-    try {
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
-
-      console.log(position)
-
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const userLocation = { latitude: latitude, longitude: longitude };
-      console.log("User location:", userLocation);
-      return userLocation;
-    } catch (error) {
-      if (error.code === error.PERMISSION_DENIED) {
-        console.log("User denied the request for Geolocation.");
-      } else {
-        console.log("Geolocation error:", error.message);
-      }
-      return null;
-    }
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-    return null;
-  }
-}
-
 function compileLegendStyle(layer) {
   var legendConfig = getLegendConfig(legendColors)
   var colorCombos = ["step", ["get", layer],legendConfig[0].color];
@@ -204,16 +176,25 @@ function makePoint(coords) {
   };
 }
 
-function getZone(zonesData) {
-  var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];
-  var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];
-
+function getZone(zonesData) {  
+  try {
+    var temp2012 = zonesData.filter(d=>d.sourceLayer=="2012_zones")[0].properties["2012_zone"];  
+  } catch(err) {
+    var temp2012 = "Loading";
+  }
+  
+  try {
+    var temp2023 = zonesData.filter(d=>d.sourceLayer=="2023_zones")[0].properties["2023_zone"];  
+  } catch(err) {
+    var temp2023 = "Loading";
+  }
+  
   var obj = {
     "t2012":temp2012,
     "t2023":temp2023,
     "z2012":temp2zone(temp2012),
     "z2023":temp2zone(temp2023),
-    "zDiff":((temp2023 - temp2012)/5)
+    "zDiff":(temp2012 == "Loading" || temp2023 == "Loading") ? "Loading" : ((temp2023 - temp2012)/5)
   }
   return obj
 }
@@ -223,7 +204,6 @@ function getStartingCoords() {
   const offset = new Date().getTimezoneOffset();  
   // Convert offset to hours
   const offsetHours = offset / 60;
-  console.log(offsetHours)
   var latLng;
 
   switch(true) {
@@ -248,8 +228,126 @@ function getStartingCoords() {
   return latLng;
 }
 
+// Check if a layer exists
+function layerExists(map,layerId) {
+    var style = map.getStyle();
+    if (!style || !style.layers) return false;
+    return style.layers.some(function(layer) {
+        return layer.id === layerId;
+    });
+}
+
+function addLayerFunction(map,id,style=false){
+  var zoneOpacity, labelsOpacity, tempDiffOpacity;
+  if (style) {
+    zoneOpacity = [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
+              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
+              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
+          ];
+    labelsOpacity = 0.5;
+    tempDiffOpacity = 0.7;
+  } else {
+    zoneOpacity = 0;
+    labelsOpacity = 0;
+    tempDiffOpacity = 0;
+  }
+
+  if (id == "2012_zones") {
+    if (!layerExists(map,'2012_zones')) {
+      map.addLayer({
+        'id': '2012_zones',
+        'source': 'usda_zones',
+        'source-layer': '2012_zones',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "2012_zone"], null],
+          "#aaffff",compileLegendStyle("2012_zone")          
+          ],
+          "fill-opacity": zoneOpacity
+        }      
+      },
+      // This line is the id of the layer this layer should be immediately below
+      "Water")
+    }
+
+    if (!layerExists(map,'2012_zones_labels')) {
+      map.addLayer({
+        'id': '2012_zones_labels',
+        'source': 'usda_zones',
+        'source-layer': '2012_zones',
+        'type': 'fill',
+        "minzoom": 8,
+        'paint': {
+          "fill-color": "rgba(255, 255, 0, 1)",
+          "fill-pattern": compileZoneLabelStyle("2012_zone"),
+          "fill-opacity": labelsOpacity,
+          
+        }      
+      },"Water")
+    }
+  }
+
+  if (id == "2023_zones") {
+    if (!layerExists(map,'2023_zones')) {
+      map.addLayer({
+        'id': '2023_zones',      
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        'paint': {
+          "fill-color": [
+          "case",
+          ["==", ["get", "2023_zone"], null],
+          "#aaffff",compileLegendStyle("2023_zone")
+          ],
+          "fill-opacity": zoneOpacity
+        }      
+      },"Water")
+    }
+    if (!layerExists(map,'2023_zones_labels')) {
+      map.addLayer({
+        'id': '2023_zones_labels',
+        'source': 'usda_zones',
+        'source-layer': '2023_zones',
+        'type': 'fill',
+        "minzoom": 8,
+        'paint': {
+          "fill-color": "rgba(255, 255, 0, 1)",
+          "fill-pattern": compileZoneLabelStyle("2023_zone"),
+          "fill-opacity": labelsOpacity
+        }      
+      },"Water")      
+    }
+  }
+
+  if (id == "temp_diff_layer" && !layerExists(map,"temp_diff_layer")) {
+    map.addLayer({
+      'id': 'temp_diff_layer',
+      'source': 'temp_diff',
+      'source-layer': 'temp_diffgeojsonl',
+      'minZoom':8,
+      'type': 'fill',
+      'paint': {
+        "fill-color": [
+        "case",
+        ["==", ["get", "temp_diff"], null],
+        "#aaffff",compileTempDiffStyle()         
+        ],
+        "fill-opacity": tempDiffOpacity,
+        "fill-outline-color":"rgba(255,255,255,0)"
+      }      
+    },"Water")
+  }
+}
+
 module.exports = {
-  getUserLocation,
   compileLegendStyle,
   getLegendConfig,
   compileZoneLabelStyle,
@@ -257,7 +355,9 @@ module.exports = {
   makePoint,
   getZone,
   legendColors,
-  getStartingCoords
+  getStartingCoords,
+  layerExists,
+  addLayerFunction
 }
 
 

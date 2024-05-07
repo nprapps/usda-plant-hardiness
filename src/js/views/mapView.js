@@ -4,19 +4,17 @@ var debounce = require("../lib/debounce"); //from Ruth
 
 var maplibregl = require("maplibre-gl/dist/maplibre-gl.js");
 
-// var {
-//   makePoint
-// } = require("../helpers/mapHelpers");
+var { addLayerFunction } = require("../helpers/mapHelpers");
+var { updateDom } = require("../geoClick.js")
 
 var mapElement = $.one("#base-map");
-// var mapAssets = {};
-// var classes;
 
 
 module.exports = class MapView extends View {
-  constructor(map) {
+  constructor(map,selectedLocation) {
     super();
     this.map = map;
+    this.selectedLocation = selectedLocation
     // this.onMapScroll = debounce(onMapScroll, 50);
   }
 
@@ -30,6 +28,14 @@ module.exports = class MapView extends View {
     if (map) {
       // pan and zoom
 
+      if (slide.id == "explore") {
+        // remove all other layers
+        var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
+        layers.forEach(d=> {
+          map.setLayoutProperty(d.id,'visibility','none')
+        })
+      }
+
       var {oldLng, oldLat} = map.getCenter();
       var oldCenter = [oldLng,oldLat];   
 
@@ -37,8 +43,7 @@ module.exports = class MapView extends View {
         var newCenter = JSON.parse(slide.dataset.center);            
       } else {
         var newCenter = oldCenter;
-      }
-      
+      }      
       
       var oldZoom = map.getZoom();
 
@@ -46,8 +51,7 @@ module.exports = class MapView extends View {
         var newZoom = slide.dataset.zoom;  
       } else {
         var newZoom = oldZoom;
-      }
-      
+      }      
 
       if (oldZoom != newZoom || oldCenter != newCenter) {
 
@@ -87,26 +91,42 @@ module.exports = class MapView extends View {
         console.log(err)
       }
     }
-    // window.addEventListener("scroll", this.onMapScroll);
   }
 
   exit(slide) {
-
-    // window.removeEventListener("scroll", this.onMapScroll);
-
     super.exit(slide);
+
+    var map = this.map;    
+    var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
+    // console.log(map.getStyle().layers)
+
     mapElement.classList.add("exiting");
     mapElement.classList.remove("active");
+      
+    if (slide.id == "explore") {      
+      layers.forEach(d=> {
+        map.setLayoutProperty(d.id,'visibility','visible')
+      })
+    }
+
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
   }
 
-  // preload = async function(slide) {
+  preload = async function(slide,active,i,isBackwards,map) {    
+    // var map = this.map; 
+    // console.log(map)
 
-  // }
+    var selectedLocation = this.selectedLocation;
+
+    if (map) {  
+      
+      // if only 1 ahead (or behind?????/)
+      if (i != 2) {
+        // add layer to map, opacity or visibility 0
+        addLayerFunction(map,slide.dataset.maplayer)
+
+        updateDom(selectedLocation,map,slide)
+      }
+    }    
+  } 
 };
-
-// var onMapScroll = function () {
-  // console.log("onMapScroll")
-  
-
-// };

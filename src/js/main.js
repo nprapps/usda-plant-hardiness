@@ -24,25 +24,19 @@ var chartView = require("./views/chartView");
 require("./video");
 require("./analytics");
 
-var {
-      getUserLocation,
-      compileLegendStyle,
-      compileZoneLabelStyle,
-      compileTempDiffStyle,
-      makePoint,
-      getZone,
-      getStartingCoords
-    } = require("./helpers/mapHelpers");
+var {                        
+    getZone,
+    getStartingCoords,
+    addLayerFunction
+  } = require("./helpers/mapHelpers");
 
 var {
   getTemps,
-  getData,
-  formatTemperatures
+  formatTemperatures,
+  getAndParseTemps
 } = require("./helpers/temperatureUtils");
 
-var {
-  fetchCSV
-} = require("./helpers/csvUtils");
+var { fetchCSV } = require("./helpers/csvUtils");
 
 var { getTooltip } = require('./helpers/textUtils')
 
@@ -52,6 +46,7 @@ var {
   updateDom
 } = require("./geoClick");
 
+// slides at end
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
@@ -75,10 +70,6 @@ let locations;
 var startingSlide;
 let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
 
-
-// global variable for active map layer
-var activeMap = "2012_zone";
-
 // global place variable...default to Raleigh
 var selectedLocation = {
   coords:[-78.6399539,35.7915083],
@@ -87,6 +78,8 @@ var selectedLocation = {
   type: "default",
   loadIterations: 0
 };
+
+var slideActive;
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
   $("video").forEach(v => v.addEventListener(e, console.log));
@@ -232,15 +225,15 @@ var renderMap = async function() {
   
     map.on('load', () => {
 
-      // map.addSource('userPoint', {
-      //     'type': 'geojson',
-      //     'data': makePoint([0,0])
-      // });
-
       map.addSource('usda_zones', {
         type: 'vector',
         url: `pmtiles://${PMTILES_URL}`,
         attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
+      })
+      
+      map.addSource('temp_diff', {
+        type: 'vector',
+        url: `pmtiles://${tempDiffURL}`
       })
 
       map.addSource('hillshade', {
@@ -250,18 +243,6 @@ var renderMap = async function() {
         encoding: 'terrarium'
       })
 
-      // map.addLayer({
-      //   'id': 'userPoint',
-      //   'type': 'circle',
-      //   'source': 'userPoint',
-      //   'paint': {
-      //       'circle-radius': 8,
-      //       'circle-color': 'transparent',
-      //       'circle-stroke-color':'#fff',
-      //       'circle-stroke-width':3
-      //   }
-      // },"Place labels"); 
-
       map.addLayer({
         'id': 'hillshade_',
         'source': 'hillshade',        
@@ -270,99 +251,29 @@ var renderMap = async function() {
         'maxzoom':15
       },
       // This line is the id of the layer this layer should be immediately below
-      "Water")
+      "Water")    
+      
+      if (slideActive.dataset.type == "map") {         
+        // add layer and style
+        addLayerFunction(map,slideActive.dataset.maplayer,true)
+        updateDom(selectedLocation,map,slideActive)
+      }
 
-      map.addLayer({
-        'id': '2012_zones',
-        'source': 'usda_zones',
-        'source-layer': '2012_zones',
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "2012_zone"], null],
-          "#aaffff",compileLegendStyle("2012_zone")          
-          ],
-          "fill-opacity":[
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
-              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
-          ]
-        }      
-      },
-      // This line is the id of the layer this layer should be immediately below
-      "Water")
+      // If during or right before/after a chart, load 2012 and 2023
+      if (
+        slideActive.dataset.type == "chart" ||
+        slideActive.id == "transition-1" || 
+        slideActive.id == "how-to" || 
+        slideActive.id == "limits-of-hardiness"
+        ) {
+        console.log('loading 2012 and 2023')
+        addLayerFunction(map,"2012_zones",false)
+        addLayerFunction(map,"2023_zones",true)
+      }
 
-      map.addLayer({
-        'id': '2012_zones_labels',
-        'source': 'usda_zones',
-        'source-layer': '2012_zones',
-        'type': 'fill',
-        "minzoom": 8,
-        'paint': {
-          "fill-color": "rgba(255, 255, 0, 1)",
-          "fill-pattern": compileZoneLabelStyle("2012_zone"),
-          "fill-opacity": 0.5,
-          
-        }      
-      },"Water") 
+    })
 
-      map.addLayer({
-        'id': '2023_zones',
-        'source': 'usda_zones',
-        'source-layer': '2023_zones',
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "2023_zone"], null],
-          "#aaffff",compileLegendStyle("2023_zone")
-          ],
-          "fill-opacity": 0
-        }      
-      },"Water")       
-
-      map.addLayer({
-        'id': '2023_zones_labels',
-        'source': 'usda_zones',
-        'source-layer': '2023_zones',
-        'type': 'fill',
-        "minzoom": 8,
-        'paint': {
-          "fill-color": "rgba(255, 255, 0, 1)",
-          "fill-pattern": compileZoneLabelStyle("2023_zone"),
-          "fill-opacity": 0
-        }      
-      },"Water")
-
-      map.addSource('temp_diff', {
-        type: 'vector',
-        url: `pmtiles://${tempDiffURL}`
-      })
-      map.addLayer({
-        'id': 'temp_diff_layer',
-        'source': 'temp_diff',
-        'source-layer': 'temp_diffgeojsonl',
-        'minZoom':8,
-        'type': 'fill',
-        'paint': {
-          "fill-color": [
-          "case",
-          ["==", ["get", "temp_diff"], null],
-          "#aaffff",compileTempDiffStyle()         
-          ],
-          "fill-opacity": 0,
-          "fill-outline-color":"rgba(255,255,255,0)"
-        }      
-      },
-      // This line is the id of the layer this layer should be immediately below
-      "Water")
-    })    
-
+    // used for speed analytics
     $.one("#hidden-button").addEventListener('click',() => {
       $.one("#speed-shit").classList.toggle('active')
       if (map.showTileBoundaries) {
@@ -373,16 +284,16 @@ var renderMap = async function() {
       
     })
 
+    // used for speed analytics
     map.on('style.load', () => {
       if (selectedLocation.loadIterations == 0) {
+        console.log('all data transfered')
+
         now = new Date();
         $.one("#Speedfortransfer").innerHTML = (new Date() - startTime)/1000;
       }
     });
-
-    // map.on('render',() => {
-    //   console.log(map)
-    // })
+    // used for speed analytics
     map.on('data',event => {    
       if (event.tile) {
         tileCount++;
@@ -390,9 +301,7 @@ var renderMap = async function() {
     })
 
     // Listen for end of paint
-    map.on('idle', () => {      
-      console.log('is idle')
-    
+    map.on('idle', async () => {    
       // optimization analytics
       if (selectedLocation.loadIterations == 0) {
         $.one("#initTiles").innerHTML = tileCount;  
@@ -403,11 +312,15 @@ var renderMap = async function() {
       $.one("#Totaltilesrequested").innerHTML = tileCount;
 
       $.one(".geo-buttons").classList.remove("disabled")
-      updateDom(selectedLocation,map)
+      try {
+        selectedLocation = await getAndParseTemps(selectedLocation);
+        updateDom(selectedLocation,map,slideActive)
+      } catch(err) {
+        console.log(err)
+      }
       selectedLocation.loadIterations+=1;
     })
     
-
     // disable ability to interact with buttons
     map.on('movestart', () =>{
       $.one(".geo-buttons").classList.add("disabled")
@@ -417,9 +330,6 @@ var renderMap = async function() {
     map.on('moveend', () => {
       $.one(".geo-buttons").classList.remove("disabled")
     });
-
-
-
 
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
@@ -464,9 +374,6 @@ var renderMap = async function() {
       track("switch location button clicked", "final");
     });
 
-
-    
-
     $.one(".surpriseMe").addEventListener('click',(evt) => { 
       // Check if locations is defined and not empty
       if (locations && locations.length > 0) {
@@ -486,7 +393,7 @@ var renderMap = async function() {
       $.one(".surprise-text").classList.remove("active")
       $.one(".surpriseMe .lds-ellipsis").classList.add("active")
 
-      updateLocation(place,target,selectedLocation,map)
+      updateLocation(place,target,selectedLocation,map,slideActive)
 
       // restore "surprise me!" text
       setTimeout(() => $.one(".surprise-text").classList.add("active"), 1500);
@@ -509,7 +416,7 @@ var renderMap = async function() {
         var target = evt.target.closest("section");
         var place = locations[idx];        
   
-        updateLocation(place,target,selectedLocation,map)
+        updateLocation(place,target,selectedLocation,map,slideActive)
 
         track("location lookup", `${ selectedLocation.placeName }, ${ selectedLocation.placeState }`);
       } else {
@@ -542,7 +449,7 @@ var handler;
 
 var handlers = {
   map: new mapView(map),
-  chart: new chartView(selectedLocation),
+  chart: new chartView(map, selectedLocation),
   image: new imageView(),
   video: new imageView(),
   text: new textView(),
@@ -551,13 +458,17 @@ var handlers = {
 };
 
 var active = null;
+var previous = null;
 
 var activateSlide = function(slide, slideNumber) {  
   handlers.map.map = map;
+  handlers.map.selectedLocation = selectedLocation;
+
   handlers.chart.selectedLocation = selectedLocation;
+  handlers.chart.map = map;
 
   // skip if already in the slide
-  if (active == slide) return;
+  if (active == slide ) return;
 
   // If we changed block type, let the previous director leave
   if (handler) {
@@ -568,49 +479,44 @@ var activateSlide = function(slide, slideNumber) {
   handler = handlers[currType];
   handler.enter(slide);
 
-  active = slide;
+  previous = active;
 
-  // force video playback
-  if (!isOne) $("video[autoplay]", slide).forEach(v => {
-    v.currentTime = 1;
-    v.play();
-  });
+  active = slide;
 
   // lazy-load neighboring slides
   var neighbors = [-1, 0, 1, 2];
   var all = $(".sequence .slide");
   var index = all.indexOf(slide);
+
+  var isBackwards = index < all.indexOf(previous) ? true : false;
+
   neighbors.forEach(function(offset,i) {
     var neighbor = all[index + offset];
     if (!neighbor) return;
     var nextType = neighbor.dataset.type || "image";
-    var neighborHandler = handlers[nextType];
-    neighborHandler.preload(
-      neighbor,
-      handler != neighborHandler && offset == 1,
-      offset
-    );
-    // var images = $("[data-src]", neighbor);
-    // images.forEach(function(img) {
-    //   img.src = img.dataset.src;
-    //   img.removeAttribute("data-src");
-    //   if (img.dataset.poster) {
-    //     img.poster = img.dataset.poster;
-    //     img.removeAttribute("data-poster");
-    //   }
-    // })
-  });
-  
+    var neighborHandler = handlers[nextType];    
 
-  // Uncomment if the first slide is a video
-  // if (slide.dataset.type === "video") {
-  //   autoplayWrapper.classList.remove("hidden");
-  // } else {
-  //   autoplayWrapper.classList.add("hidden");
-  // }
+    waitForMap(function() {
+      const waiting = () => {
+        if (!map.isStyleLoaded()) {
+          setTimeout(waiting, 200);
+        } else {
+          neighborHandler.preload(
+            neighbor,
+            handler != neighborHandler && offset == 1,
+            offset,        
+            isBackwards,
+            map
+          );
+        }
+      };
+      waiting();
+    });
+
+  });
 }
 
-var onScroll = function() {
+var onScroll = function() {  
   for (var i = 0; i < slides.length; i++) {
     var slide = slides[i];
     var postTitle = i <= 1 ? null : slides[i + 1];
@@ -651,7 +557,8 @@ var onScroll = function() {
         } 
         var slideNumber = slides.length - 1 - i;  
         startingSlide = slide.id;
-        console.log(`slide ${slideNumber}, id: ${slide.id}`); 
+        // console.log(`slide ${slideNumber}, id: ${slide.id}`); 
+        slideActive = slide;
         return activateSlide(slide, slideNumber);
     }
   }
@@ -694,6 +601,22 @@ var navigate = function(d) {
   current.classList.add("current"); 
   changeDots(counter); 
 } 
+
+function waitForMap(callback) {
+  // Check if the variable is defined immediately
+  if (map !== undefined) {
+    callback();
+  } else {
+    // If not defined, set up a timeout to periodically check
+    var interval = setInterval(function() {
+
+      if (map !== undefined) {
+        clearInterval(interval);
+        callback();
+      }
+    }, 100); // Adjust the interval as needed
+  }
+}
 
 // link tracking
 var trackLink = function() {

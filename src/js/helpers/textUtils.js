@@ -94,15 +94,15 @@ function getTooltip(selectedLocation) {
 }
 
 function tempDiff(selectedLocation) {
-	console.log(selectedLocation)
-	try	{
+
+	// if temp diff exists, else LOADING
+	if (selectedLocation.tempDiffData.length > 0) {
 		var diffAmount = selectedLocation.tempDiffData[0].properties.temp_diff;		
-	} catch(err) {
-		console.log(err)
-		var diffAmount = "ERROR";	
+	} else {
+		var diffAmount = "LOADING";	
 	}
 	
-	if (diffAmount === "ERROR") {
+	if (diffAmount === "LOADING") {
 		if (selectedLocation.zoneInfo.t2012 > selectedLocation.zoneInfo.t2023) {
 			return `<span class="zoneText cooler tDiff-4">cooler</span>`	
 		} else {
