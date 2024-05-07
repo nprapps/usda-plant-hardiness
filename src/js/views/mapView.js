@@ -106,11 +106,11 @@ module.exports = class MapView extends View {
     var selectedLocation = this.selectedLocation;
     if (map) {
       // if only 1 ahead (or behind?????/)
+
       if (i != 2) {
         // add layer to map, opacity or visibility 0
-        
         addLayerFunction(map,slide.dataset.maplayer)
-        // console.log(selectedLocation)
+
         updateDom(selectedLocation,map,slide)
       }
     }    
