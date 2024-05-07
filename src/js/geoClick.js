@@ -128,6 +128,15 @@ async function updateDom(selectedLocation,map,slide) {
       }      
     },
     {
+      'id':'yourPlaceShortPoss',
+      'formula':function(s) {
+        return {
+          'value':(!s.placeName.endsWith('s') ? `${s.placeName}’s` : `${s.placeName}’`),
+          'classes': ''
+        }
+      }      
+    },
+    {
       'id':'chartPlace',
       'formula':function(s) {
         return {

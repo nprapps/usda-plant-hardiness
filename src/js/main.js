@@ -399,6 +399,16 @@ var renderMap = async function() {
     $(".inner-nav.layer").forEach(el => el.addEventListener('click',(evt)=>{
       $(".inner-nav.layer").forEach(d => d.classList.remove('active'));
       evt.target.classList.add('active');
+
+      console.log(map.getStyle().layers)
+
+      if (evt.target.id == "layer-2023") {
+
+        // map.setLayoutProperty(d.id,'visibility','none')
+      } else {
+
+      }
+
     }));
 
     
