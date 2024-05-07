@@ -338,8 +338,24 @@ var renderMap = async function() {
 
       if ($.one("#back-to-story").classList.contains('active')) {
         track("explore mode button clicked", "sticky-nav");
+
+        $.one("#layer-button-nav").classList.add("active");
+
+        $.one("#sticky-nav .inner-nav.dropdown").classList.add("disabled")
+
       } else if ($.one("#explore-map").classList.contains('active')) {
         track("back to story button clicked", "sticky-nav");
+
+        $.one("#sticky-nav .inner-nav.dropdown").classList.remove("disabled")
+        $.one("#layer-button-nav").classList.remove("active");
+
+        // go back to url
+        map.flyTo({
+          center: selectedLocation.coords,
+          zoom: 8.5,
+          speed:0.9,
+          essential: true 
+        })
       }
     });
     
@@ -360,7 +376,10 @@ var renderMap = async function() {
     $.one("#end-explore").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
-      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
+      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"));
+      $.one("#sticky-nav .inner-nav.dropdown").classList.add("disabled");
+
+      $.one("#layer-button-nav").classList.add("active");
 
       track("explore mode button clicked", "final");
     })
@@ -368,6 +387,8 @@ var renderMap = async function() {
     $.one("#restart.button").addEventListener('click',() => {
       // scroll back up to geolocation box
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+      $.one("#layer-button-nav").classList.remove("active");
+
       const geoSlide = $.one("#intro-1");
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
 
