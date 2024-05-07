@@ -328,6 +328,7 @@ var renderMap = async function() {
 
     // restore ability to interact with buttons
     map.on('moveend', () => {
+      // actually should wait for end 
       $.one(".geo-buttons").classList.remove("disabled")
     });
 
@@ -394,6 +395,13 @@ var renderMap = async function() {
 
       track("switch location button clicked", "final");
     });
+
+    $(".inner-nav.layer").forEach(el => el.addEventListener('click',(evt)=>{
+      $(".inner-nav.layer").forEach(d => d.classList.remove('active'));
+      evt.target.classList.add('active');
+    }));
+
+    
 
     $.one(".surpriseMe").addEventListener('click',(evt) => { 
       // Check if locations is defined and not empty

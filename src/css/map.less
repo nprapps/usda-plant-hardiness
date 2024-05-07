@@ -254,8 +254,13 @@
     position: fixed;
     top: 32px;
     transition: all 0.9s ease-in-out;
-
+    display: block;
     
+
+    &.disabled {
+      display: none;
+    }
+
     &.active {
       left: -33px;  
     }
@@ -405,7 +410,7 @@
 }
 
 .geo-buttons {
-  &:hover {
+  .surpriseMe:hover {
     opacity: 0.5;
   }
 

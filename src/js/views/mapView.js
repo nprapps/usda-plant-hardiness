@@ -21,14 +21,21 @@ module.exports = class MapView extends View {
   enter(slide) {
     super.enter(slide);
     var map = this.map;
-
+    
     mapElement.classList.add("active");
     mapElement.classList.remove("exiting");
     
+    if (slide.id == "explore") {        
+      $.one('#layer-button-nav').classList.remove("disabled");
+    } else {
+      $.one('#layer-button-nav').classList.add("disabled");
+    }
+
     if (map) {
       // pan and zoom
+      if (slide.id == "explore") {        
+        $.one('#layer-button-nav').classList.remove("disabled");
 
-      if (slide.id == "explore") {
         // remove all other layers
         var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
         layers.forEach(d=> {
@@ -104,9 +111,12 @@ module.exports = class MapView extends View {
     mapElement.classList.remove("active");
       
     if (slide.id == "explore") {      
+      $.one('#layer-button-nav').classList.add("disabled");
+
       layers.forEach(d=> {
         map.setLayoutProperty(d.id,'visibility','visible')
       })
+
     }
 
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
