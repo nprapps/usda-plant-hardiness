@@ -425,7 +425,12 @@ var renderMap = async function() {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"));
-      track("explore mode button clicked", "sticky-nav");
+
+      if ($.one("#back-to-story").classList.contains('active')) {
+        track("explore mode button clicked", "sticky-nav");
+      } else if ($.one("#explore-map").classList.contains('active')) {
+        track("back to story button clicked", "sticky-nav");
+      }
     });
     
     $.one("#sticky-nav .dropdown").addEventListener('click',() => {
@@ -447,7 +452,7 @@ var renderMap = async function() {
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
 
-      track("return to story button clicked", "sticky-nav");
+      track("explore mode button clicked", "final");
     })
 
     $.one("#restart.button").addEventListener('click',() => {

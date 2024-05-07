@@ -47,6 +47,21 @@ Data sources
 
 Jupyter Notebook for processing PRISM minimum temperature data: https://github.com/nprapps/PRISM-min-temp
 
+
+Custom events
+-------------
+
+This project fires some custom GA events:
+
+* ``location lookup`` — User looked up a location. Also tracks the location folks looked up.
+* ``surprise me button clicked`` - User clicked the "surprise me" button. Also tracks the location folks were sent to
+* ``explore mode button clicked`` - User clicked on the "Explore Mode" button. Also tracks which version of the button was clicked (``sticky-nav`` and ``final``).
+* ``switch location button clicked`` - User clicked on the "Switch location" button. Also tracks which version of the button was clicked (``sticky-nav`` and ``final``).
+* ``back to story button clicked`` - While in "Explore Mode," user clicked on the "Back to Story" button.
+* ``extension detail button clicked`` - User clicked to read more of the extension office accounts.
+* ``click`` - User clicked anything with a data-tracker attribute (which provides the event label). Used mostly for footer links.
+
+
 Useful conventions in the content doc
 -------------------------------------
 
