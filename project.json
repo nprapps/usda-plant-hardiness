@@ -19,7 +19,7 @@
   "title": "TKTK",
   "description": "TKTK",
   "url": "https://apps.npr.org/plant-hardiness-garden-map/",
-  "image": "assets/logo.png",
+  "image": "assets/synced/promo.jpg",
   "analytics": {
     "topicIDs": [1001,1007,1025,1167,125938077,128651863,142302755,228520545,1149128116],
     "primaryTopic": "climate",
