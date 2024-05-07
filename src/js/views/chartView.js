@@ -15,6 +15,8 @@ var {setupChart} = require("../chart");
 
 var { updateDom } = require("../geoClick.js")
 
+var { addLayerFunction } = require("../helpers/mapHelpers");
+
 module.exports = class ChartView extends View {
   constructor(map,selectedLocation) {
     super();
@@ -36,7 +38,6 @@ module.exports = class ChartView extends View {
   }
 
   preload = async function(slide,active,i,isBackwards) {
-    console.log('in preload chart -----------------')
     // do some d3 code? transition the thing in?
     var selectedLocation = this.selectedLocation;
     var map = this.map;
@@ -48,7 +49,6 @@ module.exports = class ChartView extends View {
     }
 
     if (i == toContinue || i == 0) {
-      console.log(slide.id)
       if (slide.id == "temperature-chart-return") {
         // get temp data for selected center
         var exampleLocation = {};
@@ -75,6 +75,8 @@ module.exports = class ChartView extends View {
         setupChart(exampleLocation);
 
       } else if (slide.id == "temperature-chart") {
+        addLayerFunction(map,"2012_zones",false)
+        addLayerFunction(map,"2023_zones",true)
 
         selectedLocation = await getAndParseTemps(selectedLocation);        
         // setupChart(temps);

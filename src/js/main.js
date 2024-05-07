@@ -474,7 +474,6 @@ var activateSlide = function(slide, slideNumber) {
   var index = all.indexOf(slide);
 
   var isBackwards = index < all.indexOf(previous) ? true : false;
-  console.log(isBackwards)
 
   neighbors.forEach(function(offset,i) {
     var neighbor = all[index + offset];

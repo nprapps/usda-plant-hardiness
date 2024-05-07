@@ -28,6 +28,14 @@ module.exports = class MapView extends View {
     if (map) {
       // pan and zoom
 
+      if (slide.id == "explore") {
+        // remove all other layers
+        var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
+        layers.forEach(d=> {
+          map.setLayoutProperty(d.id,'visibility','none')
+        })
+      }
+
       var {oldLng, oldLat} = map.getCenter();
       var oldCenter = [oldLng,oldLat];   
 
@@ -87,14 +95,22 @@ module.exports = class MapView extends View {
 
   exit(slide) {
     super.exit(slide);
+
+    var map = this.map;
+    console.log("----")
+    console.log(slide.id)
+    var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
+    console.log(map.getStyle().layers)
+    console.log(layers)
+
     mapElement.classList.add("exiting");
     mapElement.classList.remove("active");
       
-    // if not 2023, remove layer from map
-    // if (slide.dataset.maplayer != "2023_zones") {
-
-
-    // }
+    if (slide.id == "explore") {      
+      layers.forEach(d=> {
+        map.setLayoutProperty(d.id,'visibility','visible')
+      })
+    }
 
     setTimeout(() => mapElement.classList.remove("exiting"), 1000);
   }
@@ -104,9 +120,10 @@ module.exports = class MapView extends View {
     // console.log(map)
 
     var selectedLocation = this.selectedLocation;
-    if (map) {
-      // if only 1 ahead (or behind?????/)
 
+    if (map) {  
+      
+      // if only 1 ahead (or behind?????/)
       if (i != 2) {
         // add layer to map, opacity or visibility 0
         addLayerFunction(map,slide.dataset.maplayer)
