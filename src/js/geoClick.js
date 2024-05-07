@@ -146,6 +146,20 @@ async function updateDom(selectedLocation,map,slide) {
       }      
     },
     {
+      'id':'chartPlaceShort',
+      'formula':function(s) {
+        var o = chartPlace(s);
+        var lastIndex = o.lastIndexOf(',');
+        if (lastIndex !== -1) {
+            o = o.substring(0, lastIndex);
+        }
+        return {
+          'value':o,
+          'classes': 'placeText'
+        }
+      }      
+    },
+    {
       'id':'oldZone',
       'formula':function(s) {
         return {
@@ -221,7 +235,7 @@ async function updateDom(selectedLocation,map,slide) {
 
   var modsToUpdate = $(`#${slide.id} .mod span[data-item]`)
   
-  modsToUpdate.forEach(mod => {    
+  modsToUpdate.forEach(mod => {   
     var changeSet = changeItems.filter(d=> d.id == mod.dataset.item)[0].formula(selectedLocation);
     mod.innerHTML = changeSet.value;
     mod.className = changeSet.classes;

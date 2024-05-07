@@ -399,15 +399,28 @@ var renderMap = async function() {
     $(".inner-nav.layer").forEach(el => el.addEventListener('click',(evt)=>{
       $(".inner-nav.layer").forEach(d => d.classList.remove('active'));
       evt.target.classList.add('active');
+      addLayerFunction(map,"2012_zones",true)
+      addLayerFunction(map,"2023_zones",true)
 
-      console.log(map.getStyle().layers)
+      console.log(evt.target.id)
+      if (evt.target.id == "layer-2012") {        
+        map.setLayoutProperty('2012_zones','visibility','visible')
+        map.setLayoutProperty('2012_zones_labels','visibility','visible')
+        map.setLayoutProperty('2023_zones','visibility','none')
+        map.setLayoutProperty('2023_zones_labels','visibility','none')
+        
+        console.log(map.getStyle().layers)
+      }
 
       if (evt.target.id == "layer-2023") {
+        map.setLayoutProperty('2023_zones','visibility','visible')
+        map.setLayoutProperty('2023_zones_labels','visibility','visible')
+        map.setLayoutProperty('2012_zones','visibility','none')
+        map.setLayoutProperty('2012_zones_labels','visibility','none')
 
-        // map.setLayoutProperty(d.id,'visibility','none')
-      } else {
-
+        console.log(map.getStyle().layers)
       }
+
 
     }));
 
@@ -611,7 +624,6 @@ window.addEventListener("load", onWindowLoaded);
 // extension office write-ups
 // highlight dots as you go through
 var changeDots = function(n) {
-  console.log("changeDots", n);
     for (var d = 0; d < dots.length; d++) {
     dots[d].classList.remove("active"); 
 
