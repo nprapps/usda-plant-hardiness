@@ -334,7 +334,13 @@ var renderMap = async function() {
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
-      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
+      $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"));
+
+      if ($.one("#back-to-story").classList.contains('active')) {
+        track("explore mode button clicked", "sticky-nav");
+      } else if ($.one("#explore-map").classList.contains('active')) {
+        track("back to story button clicked", "sticky-nav");
+      }
     });
     
     $.one("#sticky-nav .dropdown").addEventListener('click',() => {
@@ -347,12 +353,16 @@ var renderMap = async function() {
       $.one("#explore-map").classList.add('active');
 
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      track("switch location button clicked", "sticky-nav");
     });
 
     $.one("#end-explore").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"))
+
+      track("explore mode button clicked", "final");
     })
 
     $.one("#restart.button").addEventListener('click',() => {
@@ -360,6 +370,8 @@ var renderMap = async function() {
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
       const geoSlide = $.one("#intro-1");
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      track("switch location button clicked", "final");
     });
 
     $.one(".surpriseMe").addEventListener('click',(evt) => { 
@@ -386,6 +398,8 @@ var renderMap = async function() {
       // restore "surprise me!" text
       setTimeout(() => $.one(".surprise-text").classList.add("active"), 1500);
       setTimeout(() => $.one(".surpriseMe .lds-ellipsis").classList.remove("active"), 1500);
+
+      track("surprise me button clicked", `${ selectedLocation.placeName }, ${ selectedLocation.placeState }`);
     });
 
     // Setup search box listeners
@@ -404,6 +418,7 @@ var renderMap = async function() {
   
         updateLocation(place,target,selectedLocation,map,slideActive)
 
+        track("location lookup", `${ selectedLocation.placeName }, ${ selectedLocation.placeState }`);
       } else {
         searchNone.classList.remove("is-hidden");
       }
@@ -554,8 +569,10 @@ window.addEventListener("scroll", debounce(onScroll, 50)); //ruth
 onScroll();
 window.addEventListener("load", onWindowLoaded);
 
-//  highlight dots as you go through
+// extension office write-ups
+// highlight dots as you go through
 var changeDots = function(n) {
+  console.log("changeDots", n);
     for (var d = 0; d < dots.length; d++) {
     dots[d].classList.remove("active"); 
 
@@ -563,6 +580,8 @@ var changeDots = function(n) {
       dots[d].classList.add("active"); 
     }
   }
+
+  track("extension detail button clicked", n);
 }
 
 // prev + next btns
