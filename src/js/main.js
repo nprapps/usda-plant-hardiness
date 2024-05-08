@@ -243,7 +243,7 @@ var renderMap = async function() {
 
       map.addSource('hillshade', {
         type: 'raster-dem',
-        url: `pmtiles://https://r2-public.protomaps.com/protomaps-sample-datasets/terrarium_z9.pmtiles`,
+        url: `pmtiles://https://apps.npr.org/plant-hardiness-garden-map/assets/hillshade.pmtiles`,
         encoding: 'terrarium'
       })
 
