@@ -454,6 +454,10 @@ var renderMap = async function() {
         console.error('CSV data is not available.');
       }
 
+      // clear out the existing data
+      selectedLocation.zonesData = [];
+
+      // interstitial loads
       loadingTextUtil($("span[data-item"));
 
       // // get the parent container of this
@@ -489,6 +493,8 @@ var renderMap = async function() {
         // var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
         var target = evt.target.closest("section");
         var place = locations[idx];        
+        
+        selectedLocation.zonesData = [];
         loadingTextUtil($("span[data-item"))
         updateLocation(place,target,selectedLocation,map,slideActive)
 

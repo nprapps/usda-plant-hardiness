@@ -86,20 +86,41 @@ var geoClick = function(selectedLocation,target,map,slide) {
 
 async function updateDom(selectedLocation,map,slide) {
 
-  // console.log("__________"+slide.id+"_________")
+  // console.log("__________"+slide.id+"___updater of dom.   ______")
 
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
   // get marker and use to get data
   const features = map.queryRenderedFeatures(point);
-
-  selectedLocation.zonesData = features.filter(d => {
+  
+  var newZoneData = features.filter(d => {
     return d.source == "usda_zones";
-  });
+  });  
 
-  selectedLocation.tempDiffData = features.filter(d => {
-    return d.source == "temp_diff";
-  });
+  // if it doesn't exist get it
+  if (selectedLocation.zonesData == undefined || selectedLocation.zonesData.length == 0) {
+    selectedLocation.zonesData = newZoneData;
+  } else if (
+      selectedLocation.zonesData.filter(d=>d.sourceLayer=="2012_zones").length == 0 &&
+      newZoneData.filter(d=>d.sourceLayer=="2012_zones").length > 0
+    ) {
+
+    // if missing one, add it
+    selectedLocation.zonesData.push(newZoneData.filter(d=>d.sourceLayer=="2012_zones")[0])
+  } else if (
+    selectedLocation.zonesData.filter(d=>d.sourceLayer=="2023_zones").length == 0 &&
+    newZoneData.filter(d=>d.sourceLayer=="2023_zones").length > 0
+    ) {
+    // if missing one, add it
+    selectedLocation.zonesData.push(newZoneData.filter(d=>d.sourceLayer=="2023_zones")[0])
+  }
+  
+  if (selectedLocation.tempDiffData == undefined || selectedLocation.tempDiffData.length == 0) {
+    selectedLocation.tempDiffData = features.filter(d => {
+      return d.source == "temp_diff";
+    });  
+  }
+  
 
   try {
     selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  
