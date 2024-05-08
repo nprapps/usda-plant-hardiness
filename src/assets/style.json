@@ -1016,6 +1016,55 @@
       ]
     },
     {
+      "id": "Water labels",
+      "type": "symbol",
+      "source": "npr_osm",
+      "source-layer": "physical_point",
+      "minzoom": 7,
+      "maxzoom": 16,
+      "layout": {
+        "text-font": [
+          "NPR Serif Bold Italic"
+        ],
+        "text-letter-spacing": 0.1,
+        "text-size": [
+          "interpolate",
+          [
+            "linear",
+            1
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          8,
+          1,
+          14
+        ],
+        "text-field": "{name}",
+        "visibility": "visible",
+        "text-padding": {
+          "stops": [
+            [
+              1,
+              0
+            ],
+            [
+              4,
+              2
+            ]
+          ]
+        },
+        "text-max-width": 8
+      },
+      "paint": {
+        "text-color": "hsla(205, 56%, 45%, 1)",
+        "text-halo-blur": 1,
+        "text-halo-color": "hsla(0, 0%, 100%, 0.75)",
+        "text-halo-width": 2
+      }
+    },
+    {
       "id": "Place labels",
       "type": "symbol",
       "source": "npr_osm",
