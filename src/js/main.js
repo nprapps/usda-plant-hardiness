@@ -244,7 +244,6 @@ var renderMap = async function() {
       map.addSource('hillshade', {
         type: 'raster-dem',
         url: `pmtiles://https://r2-public.protomaps.com/protomaps-sample-datasets/terrarium_z9.pmtiles`,
-        attribution: 'United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey.',
         encoding: 'terrarium'
       })
 

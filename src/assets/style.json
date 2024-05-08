@@ -1,14 +1,10 @@
 {
   "version": 8,
-  "id": "basic-v2",
-  "name": "Basic",
+  "id": "npr-v2",
+  "name": "NPR",
   "sources": {
     "npr_osm": {
       "url": "pmtiles://https://apps.npr.org/plant-hardiness-garden-map/assets/osm.pmtiles",
-      "type": "vector"
-    },
-    "maptiler_attribution": {
-      "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
       "type": "vector"
     }
   },
