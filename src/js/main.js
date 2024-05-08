@@ -97,6 +97,14 @@ if (isOne) {
 var onWindowLoaded = async function() {
   // Preset the second slides' data to default place
 
+  // Preset all text to Loading
+  var mods = $("span[data-item");
+  console.log(mods)
+  mods.forEach(d => {
+    d.innerHTML = "Loading"
+    d.className = "loading"
+  })
+
   // Set the next slide's dataset to the new place
   var zoomSlide = $.one("#zoomIn");
 
@@ -115,6 +123,9 @@ var onWindowLoaded = async function() {
     selectedLocation.placeName = params.name;
     selectedLocation.placeState = params.state;
   
+  }
+  if (urlParams.has('debug')) {
+    $.one("#speed-shit").classList.add('active')
   }
 
   zoomSlide.dataset.center = JSON.stringify(selectedLocation.coords);

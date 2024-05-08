@@ -68,7 +68,7 @@ function tempRange(min) {
 	} else if (min == 65) {
     minText = "above 65"  
   } else if (min == -60) {
-    minText = 'Lower than -55'
+    minText = 'lower than -55'
   } else {
     minText = `between ${min} and ${min+5}`
   }
