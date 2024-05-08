@@ -69,6 +69,7 @@ var map;
 let locations;
 var startingSlide;
 let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
+var slideActive;
 
 // global place variable...default to Raleigh
 var selectedLocation = {
@@ -78,8 +79,6 @@ var selectedLocation = {
   type: "default",
   loadIterations: 0
 };
-
-var slideActive;
 
 if (false) "play canplay canplaythrough ended stalled waiting suspend".split(" ").forEach(e => {
   $("video").forEach(v => v.addEventListener(e, console.log));
@@ -247,6 +246,9 @@ var renderMap = async function() {
         'id': 'hillshade_',
         'source': 'hillshade',        
         'type': 'hillshade',
+        'layout':{
+          'visibility':'visible'
+        },
         'minzoom':8,
         'maxzoom':15
       },
@@ -274,6 +276,9 @@ var renderMap = async function() {
     })
 
     // used for speed analytics
+    // url param
+
+
     $.one("#hidden-button").addEventListener('click',() => {
       $.one("#speed-shit").classList.toggle('active')
       if (map.showTileBoundaries) {
@@ -301,7 +306,7 @@ var renderMap = async function() {
     })
 
     // Listen for end of paint
-    map.on('idle', async () => {    
+    map.on('idle', async () => {
       // optimization analytics
       if (selectedLocation.loadIterations == 0) {
         $.one("#initTiles").innerHTML = tileCount;  
@@ -311,7 +316,21 @@ var renderMap = async function() {
       
       $.one("#Totaltilesrequested").innerHTML = tileCount;
 
-      $.one(".geo-buttons").classList.remove("disabled")
+      var layersLoaded = function() {
+        var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff"))
+        var text;
+
+        layers.forEach(d=> {
+          text += `<p>${d.id}: ${d.layout.visibility}</p>`          
+        })
+        return text;
+      };
+
+      $.one("#slideID").innerHTML = slideActive.id;
+      $.one("#layers-loaded").innerHTML = layersLoaded();
+
+      $.one(".geo-buttons").classList.remove("disabled");
+
       try {
         selectedLocation = await getAndParseTemps(selectedLocation);
         updateDom(selectedLocation,map,slideActive)
@@ -402,14 +421,12 @@ var renderMap = async function() {
       addLayerFunction(map,"2012_zones",true)
       addLayerFunction(map,"2023_zones",true)
 
-      console.log(evt.target.id)
       if (evt.target.id == "layer-2012") {        
         map.setLayoutProperty('2012_zones','visibility','visible')
         map.setLayoutProperty('2012_zones_labels','visibility','visible')
         map.setLayoutProperty('2023_zones','visibility','none')
-        map.setLayoutProperty('2023_zones_labels','visibility','none')
-        
-        console.log(map.getStyle().layers)
+        map.setLayoutProperty('2023_zones_labels','visibility','none')        
+        // console.log(map.getStyle().layers)
       }
 
       if (evt.target.id == "layer-2023") {
@@ -418,10 +435,8 @@ var renderMap = async function() {
         map.setLayoutProperty('2012_zones','visibility','none')
         map.setLayoutProperty('2012_zones_labels','visibility','none')
 
-        console.log(map.getStyle().layers)
+        // console.log(map.getStyle().layers)
       }
-
-
     }));
 
     
@@ -568,19 +583,17 @@ var activateSlide = function(slide, slideNumber) {
   });
 }
 
-var onScroll = function() {  
+var onScroll = function() {
   for (var i = 0; i < slides.length; i++) {
     var slide = slides[i];
     var postTitle = i <= 1 ? null : slides[i + 1];
     var isAfterTitleCard = (postTitle && postTitle.classList.contains("titlecard")) ? true : false;
     var bounds = slide.getBoundingClientRect();
-
     // tweaking slide toggle tolerances if this is the first card after a titlecard
     if (
       (isAfterTitleCard && (bounds.top < window.innerHeight && bounds.bottom > 0)) ||
       (!isAfterTitleCard && (bounds.top < window.innerHeight * .9 && bounds.bottom > 0))
       ) {
-
         // chart triggers
         if (slide.id == "temperature-chart" || slide.id == "temperature-chart-return") {          
           var textBlocks = $(`#${slide.id} > .text`);

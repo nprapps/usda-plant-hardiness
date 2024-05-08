@@ -78,6 +78,9 @@ module.exports = class ChartView extends View {
         addLayerFunction(map,"2012_zones",false)
         addLayerFunction(map,"2023_zones",true)
 
+        map.setLayoutProperty("2012_zones",'visibility','visible')
+        map.setLayoutProperty("2023_zones",'visibility','visible')
+
         selectedLocation = await getAndParseTemps(selectedLocation);        
         // setupChart(temps);
 

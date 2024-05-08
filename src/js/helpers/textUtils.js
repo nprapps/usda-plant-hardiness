@@ -61,9 +61,11 @@ function getName(data) {
 	return `${data.placeName}, ${ap_state(data.placeState)}`
 }
 
-function tempRange(min) {    
+function tempRange(min) {
 	let minText;
-	if (min == 65) {
+	if (min == "Loading") {
+		minText = `Loading`
+	} else if (min == 65) {
     minText = "above 65"  
   } else if (min == -60) {
     minText = 'Lower than -55'

@@ -32,17 +32,64 @@ module.exports = class MapView extends View {
     }
 
     if (map) {
-      // pan and zoom
-      if (slide.id == "explore") {        
-        $.one('#layer-button-nav').classList.remove("disabled");
 
-        // remove all other layers
-        var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
-        layers.forEach(d=> {
+      var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff"))
+
+      // Make sure the right layers are painted and opacity is correct.       
+      
+
+        
+      // // TODO does this need to include the labels layer too?
+      // var hiddenLayers = layers.filter(a => a.id != slide.dataset.maplayer)
+
+      var siblingBefore = slide.previousElementSibling;
+      var siblingAfter = slide.nextElementSibling;
+      var sibBeforeMap = siblingBefore != null ? siblingBefore.dataset.maplayer : null;
+      var sibAfterMap = siblingAfter != null ? siblingAfter.dataset.maplayer : null;
+
+      layers.forEach(d=> {
+        
+        if (
+            d.id != slide.dataset.maplayer  &&
+            d.id != `${slide.dataset.maplayer}_labels`  && 
+            d.id != sibBeforeMap &&
+            d.id != `${sibBeforeMap}_labels`  &&
+            d.id != sibAfterMap  && 
+            d.id != `${sibAfterMap}_labels`
+          ) {
+
+          // make unneeded maps visibility:none  
           map.setLayoutProperty(d.id,'visibility','none')
-        })
-      }
+        } else if (
+            d.id != slide.dataset.maplayer &&
+            d.id != `${slide.dataset.maplayer}_labels`
+          ){
 
+          // make preloaded maps fill-opacity:0
+          map.setLayoutProperty(d.id,'visibility','visible')
+          map.setPaintProperty(d.id,'fill-opacity',0)  
+        } else {            
+          if (d.id.includes("_labels")) {
+            // style the labels layer
+            map.setPaintProperty(`${d.id}`, 'fill-opacity',0.5);
+          } else {
+            // style the fill layer
+            map.setPaintProperty(d.id, 'fill-opacity',[
+                'interpolate',
+                ['linear'],
+                ['zoom'],
+                  0, 1, // Fill opacity of 1 for zoom levels 0 through 7
+                  7, 1, // Fill opacity of 1 for zoom levels 0 through 7
+                  8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
+                  22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
+              ]
+            );                          
+          }            
+        }
+        
+      })   
+
+      // pan and zoom
       var {oldLng, oldLat} = map.getCenter();
       var oldCenter = [oldLng,oldLat];   
 
@@ -60,12 +107,12 @@ module.exports = class MapView extends View {
         var newZoom = oldZoom;
       }      
 
-      if (oldZoom != newZoom || oldCenter != newCenter) {
+      if (slide.id == "explore") {        
+        $.one('#layer-button-nav').classList.remove("disabled");
+      }
 
-      // move pointer
-        // map.getSource('userPoint').setData(makePoint(newCenter));
-        
-        // map.setLayerZoomRange('userPoint',7,20)
+      // if you changed zoom from previous, do something
+      if (oldZoom != newZoom || oldCenter != newCenter) {
 
         map.flyTo({
           center: newCenter,
@@ -73,30 +120,7 @@ module.exports = class MapView extends View {
           speed:0.9,
           essential: true 
         })
-      }
-
-      // filter pmtiles data layer to what the slide says
-      try {
-        var layers = map.getStyle().layers.filter(a=> (a.source == "usda_zones" || a.source == "temp_diff") && a.id != slide.dataset.maplayer)
-        layers.forEach(d=> {
-          map.setPaintProperty(d.id,'fill-opacity',0)
-        })
-        map.setPaintProperty(slide.dataset.maplayer, 'fill-opacity',[
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-              0, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              7, 1, // Fill opacity of 1 for zoom levels 0 through 7
-              8, 0.78, // Fill opacity of 0.5 from zoom level 8 onwards
-              22, 0.78 // Fill opacity of 0.5 from zoom level 8 through 22
-          ]
-          );
-        if (slide.dataset.maplayer != "temp_diff_layer") {
-          map.setPaintProperty(`${slide.dataset.maplayer}_labels`, 'fill-opacity',0.5);
-        }        
-      } catch(err) {
-        console.log(err)
-      }
+      }      
     }
   }
 
@@ -132,6 +156,11 @@ module.exports = class MapView extends View {
       
       // if only 1 ahead (or behind?????/)
       if (i != 2) {
+        if (slide.id == "explore") {
+          // console.log(slide)
+          // console.log(slide.dataset.maplayer)  
+        }
+        
         // add layer to map, opacity or visibility 0
         addLayerFunction(map,slide.dataset.maplayer)
 

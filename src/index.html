@@ -104,6 +104,9 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
           Initial tiles transfered:<span id="initTiles"></span><br>
         <h3>Cumulative</h3>
           Total tiles requested:   <span id="Totaltilesrequested"></span><br>
+        <h3>current slide ID: <span id='slideID'></span></h3>
+        <h3>Layers Loaded</h3>
+          <div id="layers-loaded"></div>
       </div>
       <%
         doc.sequence.forEach(function(slide, id) {

@@ -238,7 +238,10 @@ async function updateDom(selectedLocation,map,slide) {
   modsToUpdate.forEach(mod => {   
     var changeSet = changeItems.filter(d=> d.id == mod.dataset.item)[0].formula(selectedLocation);
     mod.innerHTML = changeSet.value;
-    mod.className = changeSet.classes;
+    if (changeSet.value.includes("Loading")) {
+      changeSet.classes += " loading"
+    }
+    mod.className = changeSet.classes;    
   })
 
   var {

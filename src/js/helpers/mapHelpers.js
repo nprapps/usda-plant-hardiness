@@ -264,6 +264,9 @@ function addLayerFunction(map,id,style=false){
         'source': 'usda_zones',
         'source-layer': '2012_zones',
         'type': 'fill',
+        'layout':{
+          'visibility':'visible'
+        },
         'paint': {
           "fill-color": [
           "case",
@@ -283,6 +286,9 @@ function addLayerFunction(map,id,style=false){
         'source': 'usda_zones',
         'source-layer': '2012_zones',
         'type': 'fill',
+        'layout':{
+          'visibility':'visible'
+        },
         "minzoom": 8,
         'paint': {
           "fill-color": "rgba(255, 255, 0, 1)",
@@ -301,6 +307,9 @@ function addLayerFunction(map,id,style=false){
         'source': 'usda_zones',
         'source-layer': '2023_zones',
         'type': 'fill',
+        'layout':{
+          'visibility':'visible'
+        },
         'paint': {
           "fill-color": [
           "case",
@@ -317,6 +326,9 @@ function addLayerFunction(map,id,style=false){
         'source': 'usda_zones',
         'source-layer': '2023_zones',
         'type': 'fill',
+        'layout':{
+          'visibility':'visible'
+        },
         "minzoom": 8,
         'paint': {
           "fill-color": "rgba(255, 255, 0, 1)",
@@ -334,6 +346,9 @@ function addLayerFunction(map,id,style=false){
       'source-layer': 'temp_diffgeojsonl',
       'minZoom':8,
       'type': 'fill',
+      'layout':{
+        'visibility':'visible'
+      },
       'paint': {
         "fill-color": [
         "case",
