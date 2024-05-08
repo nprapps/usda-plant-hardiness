@@ -38,7 +38,7 @@ var {
 
 var { fetchCSV } = require("./helpers/csvUtils");
 
-var { getTooltip } = require('./helpers/textUtils')
+var { getTooltip, loadingTextUtil } = require('./helpers/textUtils')
 
 var {
   updateLocation,
@@ -98,13 +98,8 @@ var onWindowLoaded = async function() {
   // Preset the second slides' data to default place
 
   // Preset all text to Loading
-  var mods = $("span[data-item");
-  console.log(mods)
-  mods.forEach(d => {
-    d.innerHTML = "Loading"
-    d.className = "loading"
-  })
-
+  loadingTextUtil($("span[data-item"))
+  
   // Set the next slide's dataset to the new place
   var zoomSlide = $.one("#zoomIn");
 
@@ -460,6 +455,8 @@ var renderMap = async function() {
         console.error('CSV data is not available.');
       }
 
+      loadingTextUtil($("span[data-item"));
+
       // // get the parent container of this
       // var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
       var target = evt.target.closest("section.map");
@@ -493,7 +490,7 @@ var renderMap = async function() {
         // var target = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
         var target = evt.target.closest("section");
         var place = locations[idx];        
-  
+        loadingTextUtil($("span[data-item"))
         updateLocation(place,target,selectedLocation,map,slideActive)
 
         track("location lookup", `${ selectedLocation.placeName }, ${ selectedLocation.placeState }`);

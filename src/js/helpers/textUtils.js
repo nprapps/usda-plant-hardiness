@@ -123,11 +123,20 @@ function tempDiff(selectedLocation) {
 		return `<span class="zoneText ${upDown} ${tDiff}">${Math.abs(diffAmount)}ºF ${upDown}</span>`
 	}	
 }
+function loadingTextUtil(mods) {
+	  mods.forEach(d => {
+	    d.innerHTML = "Loading"
+	    d.className = "loading"
+	  })	
+}
+  
+
 
 module.exports = {
 	ap_state,
 	getName,
 	tempRange,
 	tempDiff,
-	getTooltip
+	getTooltip,
+	loadingTextUtil
 }
