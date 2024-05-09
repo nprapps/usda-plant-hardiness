@@ -271,25 +271,6 @@ var renderMap = async function() {
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")
-
-      map.addLayer({
-        'id': 'water-pattern',
-        'source': "npr_osm",
-        'source-layer': 'water',
-        'type': 'fill',
-        "paint": {
-          "fill-color": "rgba(255, 255, 0, 1)",
-          "fill-opacity":0.05,
-          "fill-pattern": [
-            "case",
-            ["==", ["get", "class"], "ocean"],
-            "zones:wave2",
-            ["==", ["get", "class"], "lake"],
-            "zones:wave2",
-            "zones:wave2"
-          ]
-        }      
-      },"River")      
       
       if (slideActive.dataset.type == "map") {         
         // add layer and style
