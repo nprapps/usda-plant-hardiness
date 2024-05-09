@@ -5,18 +5,36 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
 <footer class="closing">
   <div class="more-stories">
     <div class="constrained">
+
       <h3><%= renderMarkdownText(doc.footer.outboundTitle) %></h3>
 
       <ul class="outbound">
         <% doc.footer.outbound.forEach(function(link) { %>
           <li>
             <a href="<%= link.url %>">
-              <img src="./<%= link.thumbnail %>" alt="">
+              <img src="<%= link.thumbnail %>" alt="">
               <%= renderMarkdownText(link.title) %>
+              <% if (link.program) { %>
+                <span class="program"><%= renderMarkdownText(link.program) %></span>
+              <% } %>
             </a>
           </li>
         <% }) %>
       </ul>
+
+      <h3><%= renderMarkdownText(doc.footer.podcastTitle) %></h3>
+
+      <ul class="network">
+        <% doc.footer.podcasts.forEach(function(link) { %>
+          <li>
+            <a href="<%= link.url %>">
+              <%= renderMarkdownText(link.title) %>
+              <span class="station"><%= renderMarkdownText(link.station) %></span>
+            </a>
+          </li>
+        <% }) %>
+      </ul>
+
     </div>
   </div>
 
@@ -28,29 +46,27 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
         <div class="block">
 
           <h4><%= doc.footer.digitalCreditHeadline %></h4>
-          <ul class="credits">
+          <ul class="credits main">
             <% doc.footer.digitalCredits.forEach(function(credit) { %>
             <li><%= credit %></li>
             <% }) %>
-          </ul>
-
-        </div>
-
-        <div class="block">
-
-          <h4><%= doc.footer.additionalCreditHeadline %></h4>
-          <%= t.renderMarkdown(doc.footer.additionalCredits) %>
-
-          <h4><%= doc.footer.dataCreditHeadline %></h4>
-          <ul class="credits">
-            <% doc.footer.dataSources.forEach(function(credit) { %>
-            <li><%= t.renderMarkdown(credit) %></li>
-            <% }) %>
+            <li><%= t.renderMarkdown(doc.footer.additionalCredits) %></li>
           </ul>
 
         </div>
 
       </div>
+
+      <div class="hr-wrapper">
+        <img class="hose" src="./assets/synced/illo/resized/hose.png" width="600" height="400" alt=””>
+      </div>            
+
+      <h4><%= doc.footer.dataCreditHeadline %></h4>
+      <ul class="credits data">
+        <% doc.footer.dataSources.forEach(function(credit) { %>
+        <li><%= t.renderMarkdown(credit) %></li>
+        <% }) %>
+      </ul>
 
     </div>
   </div>
