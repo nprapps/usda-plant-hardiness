@@ -1,7 +1,8 @@
 // ai2html artboard sizes
+@paddingPage: 40px;
+
 .g-artboard {
-
-  @media screen and (min-width: 730px) {
+  @media screen and (min-width: (calc(730px + @paddingPage))) {
     &[id$="-small"],
     &[id$="-medium"],
     &[id$="-full_bleed"] {
@@ -9,7 +10,7 @@
     }
   }
 
-  @media screen and (max-width: 729px) and (min-width: 400px) {
+  @media screen and (max-width: calc(729px + @paddingPage)) and (min-width: calc(500px + @paddingPage)) {
     &[id$="-small"],
     &[id$="-wide"],
     &[id$="-full_bleed"] {
@@ -17,11 +18,88 @@
     }
   }
 
-  @media screen and (max-width: 399px) {
+  @media screen and (max-width: calc(499px + @paddingPage)) {
     &[id$="-medium"],
     &[id$="-wide"],
     &[id$="-full_bleed"] {
       display: none !important;
     }
+  }
+}
+
+#g-_perennials-box {
+  [id^="zone-"] {
+    background: white;
+    border-radius: 4px;
+    padding: 1px;
+
+    p {
+      color: #000 !important;
+    }
+  }
+  #zone-3-9 {
+    background: linear-gradient(
+      to right,
+      @z3a,
+      @z3b,
+      @z4a,
+      @z4b,
+      @z5a,
+      @z5b,
+      @z6a,
+      @z6b,
+      @z7a,
+      @z7b,
+      @z8a,
+      @z8b,
+      @z9a,
+      @z9b
+    );
+  }
+
+  #zone-5-9 {
+    background: linear-gradient(
+      to right,
+      @z5a,
+      @z5b,
+      @z6a,
+      @z6b,
+      @z7a,
+      @z7b,
+      @z8a,
+      @z8b,
+      @z9a,
+      @z9b
+    );
+  }
+
+  #zone-6-9 {
+    background: linear-gradient(
+      to right,
+      @z6a,
+      @z6b,
+      @z7a,
+      @z7b,
+      @z8a,
+      @z8b,
+      @z9a,
+      @z9b
+    );
+  }
+
+  #zone-7-11 {
+    background: linear-gradient(
+      to right,
+      @z7a,
+      @z7b,
+      @z8a,
+      @z8b,
+      @z9a,
+      @z9b,
+      @z10a,
+      @z10b,
+      @z11a,
+      @z11b
+    );
   }
 }
