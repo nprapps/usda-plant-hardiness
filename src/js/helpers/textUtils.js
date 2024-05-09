@@ -1,3 +1,7 @@
+var $ = require("../lib/qsa")
+
+var {temp2zone} = require("./temperatureUtils");
+
 var USPS_TO_AP_STATE = {
 	'AL': 'Ala.',
 	'AK': 'Alaska',
@@ -95,6 +99,44 @@ function getTooltip(selectedLocation) {
   `;  
 }
 
+function getLegendPointer(selectedLocation) {
+	var triangle = "◀";
+	var {
+		zoneInfo,
+		temperatures
+	}	= selectedLocation;
+
+	
+	// console.log(temperatures.data)
+	$('.zone-after').forEach(d => {
+		d.classList.remove("warmest");
+		d.classList.remove("coldest");
+		d.innerHTML = ""
+	});
+
+	if (zoneInfo.z2012 != zoneInfo.z2023) {
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `${triangle} New zone!`;
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2023} .zone-after`).innerHTML = `${triangle} Old zone!`;	
+	} else {
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `${triangle} New and old zone!`;
+	}
+
+	if (temperatures) {
+		var min = Math.min(...temperatures.data);
+		var max = Math.max(...temperatures.data);
+		
+		if (temp2zone(min) != zoneInfo.z2012 && temp2zone(min) != zoneInfo.z2023) {
+			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `${triangle} <span>Coldest winter, ${2020 - temperatures.data.reverse().indexOf(min)}</span>`;
+			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).classList.add("coldest")	
+		}
+
+		if (temp2zone(max) != zoneInfo.z2012 && temp2zone(max) != zoneInfo.z2023) {
+			$.one(`#sticky-legend .zone.z${temp2zone(max)} .zone-after`).innerHTML = `${triangle} <span>Warmest winter, ${2020 - temperatures.data.reverse().indexOf(max)}</span>`;
+			$.one(`#sticky-legend .zone.z${temp2zone(max)} .zone-after`).classList.add("warmest")	
+		}
+	}
+}
+
 function tempDiff(selectedLocation) {
 
 	// if temp diff exists, else LOADING
@@ -133,5 +175,6 @@ module.exports = {
 	tempRange,
 	tempDiff,
 	getTooltip,
-	loadingTextUtil
+	loadingTextUtil,
+	getLegendPointer
 }

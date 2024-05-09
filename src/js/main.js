@@ -38,7 +38,7 @@ var {
 
 var { fetchCSV } = require("./helpers/csvUtils");
 
-var { getTooltip, loadingTextUtil } = require('./helpers/textUtils')
+var { getTooltip, loadingTextUtil, getLegendPointer } = require('./helpers/textUtils')
 
 var {
   updateLocation,
@@ -506,7 +506,7 @@ var renderMap = async function() {
       }
     });  
 
-    map.on('mousemove', async function(e) {
+    map.on('mousemove', debounce(async function(e) {
       // get features under point
       var features = map.queryRenderedFeatures(e.point);
 
@@ -515,17 +515,22 @@ var renderMap = async function() {
       });
       var zoneInfo = getZone(zonesData);
 
-      var temperatures = await getTemps(e.lngLat);
-
       try {
-        $.one(".info-inner").innerHTML = getTooltip({zoneInfo,temperatures})
+        var temperatures = await getTemps(e.lngLat);  
+      } catch(err) {
+        console.log(err)
+      }
+      console.log('hello')
+
+      // try {
+        // $.one(".info-inner").innerHTML = getTooltip({zoneInfo,temperatures})
+        getLegendPointer({zoneInfo,temperatures})
 
         
-        
-        } catch(err) {
-          console.log(err)
-        }
-    });
+        // } catch(err) {
+        //   console.log(err)
+        // }
+    },300));
   })
 }
 
