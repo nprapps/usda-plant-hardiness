@@ -230,11 +230,15 @@ function getStartingCoords() {
 
 // Check if a layer exists
 function layerExists(map,layerId) {
+  if (map) {
     var style = map.getStyle();
     if (!style || !style.layers) return false;
     return style.layers.some(function(layer) {
         return layer.id === layerId;
     });
+  } else {
+    console.log("error in layerExist: no map")
+  }
 }
 
 function addLayerFunction(map,id,style=false){

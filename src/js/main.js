@@ -402,7 +402,6 @@ var renderMap = async function() {
       $.one("#back-to-story").classList.remove('active');
       $.one("#explore-map").classList.add('active');
 
-      // debounce(onScroll, 50); //ruth
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
 
       track("switch location button clicked", "sticky-nav");
@@ -661,7 +660,7 @@ var onScroll = function() {
 }
 
 document.body.classList.add("boot-complete");
-window.addEventListener("scroll", debounce(onScroll, 50)); //ruth
+window.addEventListener("scroll", debounce(onScroll, 100)); //ruth
 onScroll();
 window.addEventListener("load", onWindowLoaded);
 

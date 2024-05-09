@@ -15,7 +15,7 @@ var {setupChart} = require("../chart");
 
 var { updateDom } = require("../geoClick.js")
 
-var { addLayerFunction } = require("../helpers/mapHelpers");
+var { addLayerFunction, waitForMap } = require("../helpers/mapHelpers");
 
 module.exports = class ChartView extends View {
   constructor(map,selectedLocation) {
@@ -72,7 +72,18 @@ module.exports = class ChartView extends View {
         exampleLocation.placeState = "MO";
 
         // update d3
-        setupChart(exampleLocation);
+
+        waitForMap(function() {
+          const waiting = () => {
+            if (!map.isStyleLoaded()) {
+              setTimeout(waiting, 200);
+            } else {
+              setupChart(exampleLocation);
+            }
+          };
+          waiting();
+        });
+        
 
       } else if (slide.id == "temperature-chart") {
         addLayerFunction(map,"2012_zones",false)
@@ -81,19 +92,40 @@ module.exports = class ChartView extends View {
         map.setLayoutProperty("2012_zones",'visibility','visible')
         map.setLayoutProperty("2023_zones",'visibility','visible')
 
-        selectedLocation = await getAndParseTemps(selectedLocation);        
-        // setupChart(temps);
-
-        // if (selectedLocation.placeState == "AK" || selectedLocation.placeState == "HI") {    
-        //   setupChart(atlLocation)
-        // } else {
-          setupChart(selectedLocation);
-        // }        
+        selectedLocation = await getAndParseTemps(selectedLocation);
+        waitForMap(function() {
+          const waiting = () => {
+            if (!map.isStyleLoaded()) {
+              setTimeout(waiting, 200);
+            } else {
+              setupChart(selectedLocation);
+            }
+          };
+          waiting();
+        });
       }
     }
 
     if (i==0 || i==1) {
       updateDom(selectedLocation,map,slide)
-    }    
+    }
+
+    function waitForMap(callback) {
+      // Check if the variable is defined immediately
+      if (map !== undefined) {
+        callback();
+      } else {
+        // If not defined, set up a timeout to periodically check
+        var interval = setInterval(function() {
+
+          if (map !== undefined) {
+            clearInterval(interval);
+            callback();
+          }
+        }, 100); // Adjust the interval as needed
+      }
+    }
+    
   }
 };
+
