@@ -100,7 +100,7 @@ function getTooltip(selectedLocation) {
 }
 
 function getLegendPointer(selectedLocation) {
-	var triangle = "◀";
+
 	var {
 		zoneInfo,
 		temperatures
@@ -113,10 +113,10 @@ function getLegendPointer(selectedLocation) {
 	});
 
 	if (zoneInfo.z2012 != zoneInfo.z2023) {
-		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `${triangle} Old zone`;
-		$.one(`#sticky-legend .zone.z${zoneInfo.z2023} .zone-after`).innerHTML = `${triangle} New zone`;	
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `<span>Old zone</span>`;
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2023} .zone-after`).innerHTML = `<span>New zone</span>`;	
 	} else {
-		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `${triangle} New and old zone`;
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `<span>New and old zone</span>`;
 	}
 
 	if (temperatures) {
@@ -124,10 +124,10 @@ function getLegendPointer(selectedLocation) {
 		var max = Math.max(...temperatures.data);
 		var reversedTemps = JSON.parse(JSON.stringify(temperatures.data)).reverse();
 
-		// only display the min/max if they are the same as zone or on the wrong side of zone. 
+		// only display the min if it is the same as zone or on the wrong side of zone. 
 		if (
 			Math.floor(min/5)*5 < zone2temp(zoneInfo.z2012) && Math.floor(min/5)*5 < zone2temp(zoneInfo.z2023)) {
-			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `${triangle} <span>Coldest temperature: ${min}ºF (${2020 - reversedTemps.indexOf(min)})</span>`;
+			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `<span>Coldest temperature: ${min}ºF (${2020 - reversedTemps.indexOf(min)})</span>`;
 			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).classList.add("coldest")	
 		}
 	}
