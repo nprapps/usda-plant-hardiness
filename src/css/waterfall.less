@@ -40,6 +40,8 @@
     background: #E4C471; 
     padding-left: 5px; 
     padding-right: 5px; 
+    white-space: nowrap;
+    border-radius: 5px;
   }
 
   .graphic, .slides-container {
@@ -65,14 +67,14 @@
 
   .headline-item {
     padding: 10px 10px 15px 10px;
-    width: fit-content;
-    width: -moz-fit-content;
-    margin-left: auto; 
-    margin-right: auto; 
+    width: 95%;    
     text-align: center;
     background: white;
     font-size: 17px;
     border: 2px solid black; 
+    margin-left: 10px;
+    margin-right: 10px;
+    width: calc(100% - 20px);
 
     @media @mobile {
       max-width: 100%; 
@@ -108,28 +110,11 @@
       font-size: 14px;
       color: #777;
     }
-
-    &:after {
-      content: ""; 
-      display: block; 
-      height: 10px; 
-      position: absolute; 
-      width: 100%; 
-      left: 0px;
-      bottom: 0px; 
-    }
   }
 
-  .headline-item:nth-child(4n), .headline-item:nth-child(4n-1) {
-    transform: rotate(-1deg) skew(-1deg);
-  }
-
-  .headline-item:nth-child(4n-2), .headline-item:nth-child(4n-3) {
-    transform: rotate(1deg) skew(1deg);
-  }
-
-  .headline-item:not(:first-child) {
-    filter: drop-shadow(0 -2px 1px #ddd); 
+  .headline-item {
+    filter: drop-shadow(4px 4px 3px #93C16F); 
+    border-radius: 10px;
   }
 
   .controls {
@@ -149,8 +134,8 @@
     transition: 0.6s ease; 
     border-radius: 5px; 
     user-select: none; 
-    background-color: #E4C471; 
-    border: 2px solid #E4C471; 
+    background-color: #93C16F; 
+    border: 2px solid #93C16F; 
   }
 
   .next {
