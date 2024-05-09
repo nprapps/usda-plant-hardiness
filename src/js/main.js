@@ -220,6 +220,9 @@ var renderMap = async function() {
       minZoom:2.5,
       maxZoom:12.5
     });
+    
+    map.touchZoomRotate.disableRotation();
+    map.dragRotate.disable();
 
     map.addControl(new maplibregl.NavigationControl({
       visualizePitch:false,
