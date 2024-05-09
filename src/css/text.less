@@ -61,20 +61,38 @@
     }
 
     h3 {
-      .serif();
+      .sans();
       font-weight: bold;
       margin-top: 4rem;
-      color: #fff;
-      font-size: 1.3rem;
+      color: @z7b;
+      font-size: 1.4rem;
     }
 
     h4 {
-      .serif();
+      .sans();
       font-weight: bold;
-      font-style: italic;
       margin-top: 3rem;
       color: #fff;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      line-height: 1.2;
+
+      > span { color: var(--subhed, #999); }
+
+      b {
+        font-size: 2rem;
+        display: inline-block;  
+        background-color: var(--subhed, #999);
+        color: #fff;
+        border-radius: 4px;
+        text-align: center;
+        width: 50px;
+        float: left;
+        margin-right: 10px;
+      }
+
+      .one   { --subhed: @z3a; }
+      .two   { --subhed: lighten(@z5b, 10%); }
+      .three { --subhed: @z9a; }
     }
 
     hr + h3 {
