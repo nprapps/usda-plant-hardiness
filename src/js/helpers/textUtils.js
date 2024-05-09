@@ -104,13 +104,8 @@ function tempDiff(selectedLocation) {
 		var diffAmount = "LOADING";	
 	}
 	
-	if (diffAmount === "LOADING") {
-		if (selectedLocation.zoneInfo.t2012 > selectedLocation.zoneInfo.t2023) {
-			return `<span class="zoneText cooler tDiff-4">cooler</span>`	
-		} else {
-			return `<span class="zoneText warmer tDiff4">warmer</span>`
-		}
-		
+	if (diffAmount === "LOADING") {		
+		return `<span class="loading">Loading</span>`			
 	}
 	else if (diffAmount === 0) {
 		console.log("EXACTLY 0!")

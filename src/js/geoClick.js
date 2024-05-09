@@ -59,23 +59,24 @@ var geoClick = function(selectedLocation,target,map,slide) {
   var nextSlide = document.getElementById(target.nextElementSibling.id);
 
   setTimeout(() => {
-    nextSlide.scrollIntoView({ block:"center",behavior: "smooth" })
+    
     // update the DOM
 
     if (selectedLocation.placeState) {
       if (selectedLocation.placeState != "AK" && selectedLocation.placeState != "HI") {
         // only update dom immidately if item is in view
-        updateDom(selectedLocation,map,slide)      
+        updateDom(selectedLocation,map,nextSlide)      
       } else {
         $("div.mod div").forEach(d=>d.classList.remove("active"))  
       }
     }  
 
+    nextSlide.scrollIntoView({ block:"center",behavior: "smooth" })
     var rotatorFlying = true;
 
     map.on('moveend', function(e){
       if (rotatorFlying) {
-        updateDom(selectedLocation,map,slide)    
+        updateDom(selectedLocation,map,nextSlide)    
         rotatorFlying = false  
       }    
     }); 
@@ -85,14 +86,11 @@ var geoClick = function(selectedLocation,target,map,slide) {
 }
 
 async function updateDom(selectedLocation,map,slide) {
-
-  // console.log("__________"+slide.id+"___updater of dom.   ______")
-
   // Get data under a lat/lon
   var point = map.project(selectedLocation.coords);
   // get marker and use to get data
   const features = map.queryRenderedFeatures(point);
-  
+
   var newZoneData = features.filter(d => {
     return d.source == "usda_zones";
   });  
@@ -120,8 +118,8 @@ async function updateDom(selectedLocation,map,slide) {
       return d.source == "temp_diff";
     });  
   }
-  
-
+    
+  // console.log(selectedLocation)
   try {
     selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  
   } catch(err) {
@@ -256,6 +254,8 @@ async function updateDom(selectedLocation,map,slide) {
 
   var modsToUpdate = $(`#${slide.id} .mod span[data-item]`)
   
+  // console.log(slide.id)
+  // console.log(modsToUpdate)
   modsToUpdate.forEach(mod => {   
     var changeSet = changeItems.filter(d=> d.id == mod.dataset.item)[0].formula(selectedLocation);
     mod.innerHTML = changeSet.value;
