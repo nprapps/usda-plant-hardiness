@@ -27,7 +27,8 @@ require("./analytics");
 var {                        
     getZone,
     getStartingCoords,
-    addLayerFunction
+    addLayerFunction,
+    paramLint
   } = require("./helpers/mapHelpers");
 
 var {
@@ -102,23 +103,8 @@ var onWindowLoaded = async function() {
   
   // Set the next slide's dataset to the new place
   var zoomSlide = $.one("#zoomIn");
-
-  // if url params, set default selectedLocation to that place
-
-  // Get current URL parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('lat') && urlParams.has('lng')) {
-    const params = {};
-
-    for (const [key, value] of urlParams.entries()) {
-        params[key] = value;
-    }  
-
-    selectedLocation.coords = [params.lng,params.lat];
-    selectedLocation.placeName = params.name;
-    selectedLocation.placeState = params.state;
   
-  }
+  const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('debug')) {
     $.one("#speed-shit").classList.add('active')
   }
@@ -131,8 +117,31 @@ var onWindowLoaded = async function() {
   // Load up all the 30k locations
   fetchCSV(locations_url).then(data => {
     locations = data;
+    // if url params, set default selectedLocation to that place
+
+    // Get current URL parameters
+    
+    if (
+      urlParams.has('lat') && 
+      urlParams.has('lng') &&
+      urlParams.has('name') &&
+      urlParams.has('state')) {
+      const params = {};
+
+      for (const [key, value] of urlParams.entries()) {
+          params[key] = value;
+      }  
+      if (paramLint(params,locations)) {
+        selectedLocation.coords = [params.lng,params.lat];
+        selectedLocation.placeName = params.name;
+        selectedLocation.placeState = params.state;
+      }
+    }
+
     initializeLookup();    
   }).catch(error => console.error('Error fetching CSV:', error));
+
+
 
   // load the map
   renderMap();

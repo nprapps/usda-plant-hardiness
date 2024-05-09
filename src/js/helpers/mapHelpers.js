@@ -366,6 +366,31 @@ function addLayerFunction(map,id,style=false){
   }
 }
 
+function paramLint(params,locations) {
+  var allTrue = false;
+
+  if (/\D/.test(params.lat)) {    
+    if (/\D/.test(params.lng)) {
+      if (isValueInArray(locations,"state",params.state)) {
+        if (isValueInArray(locations,"name",params.name)) {
+          allTrue = true;
+        }
+      }
+    }
+  }
+  return allTrue;
+}
+
+function isValueInArray(array, key, targetValue) {
+  for (let i = 0; i < array.length; i++) {
+    const obj = array[i];
+    if (obj.hasOwnProperty(key) && obj[key] === targetValue) {
+      return true;
+    }
+  }
+  return false;
+}
+
 module.exports = {
   compileLegendStyle,
   getLegendConfig,
@@ -376,7 +401,8 @@ module.exports = {
   legendColors,
   getStartingCoords,
   layerExists,
-  addLayerFunction
+  addLayerFunction,
+  paramLint
 }
 
 
