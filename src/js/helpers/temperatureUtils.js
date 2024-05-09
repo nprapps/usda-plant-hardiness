@@ -165,10 +165,17 @@ function temp2zone(temperature) {
   if (temperature == "Loading") {
     return "Loading"
   } else {
-    var num = (temperature / 5) + 12;
+    var rounded = Math.floor(temperature/5)*5
+
+    var num = (rounded / 5) + 12;
     var letter = num % 2 == 0 ? "a" : "b"
     return `${Math.floor(num/2)+1}${letter}`;  
   }
+}
+
+function zone2temp(zone) {
+  var letterVal = zone[zone.length -1] == "a" ? 0 : 5;
+  return (((Number(zone.slice(0,-1))*2)-13)*5)+letterVal -5
 }
 
 module.exports = {
@@ -176,5 +183,6 @@ module.exports = {
   getData,
   formatTemperatures,
   temp2zone,
+  zone2temp,
   getAndParseTemps
 }

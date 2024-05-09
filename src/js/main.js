@@ -371,6 +371,11 @@ var renderMap = async function() {
 
       } else if ($.one("#explore-map").classList.contains('active')) {
         track("back to story button clicked", "sticky-nav");
+        $('.zone-after').forEach(d => {
+          d.classList.remove("warmest");
+          d.classList.remove("coldest");
+          d.innerHTML = ""
+        });
 
         $.one("#sticky-nav .inner-nav.dropdown").classList.remove("disabled")
         $.one("#layer-button-nav").classList.remove("active");
