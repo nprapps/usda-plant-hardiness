@@ -271,7 +271,8 @@ var renderMap = async function() {
         slideActive.dataset.type == "chart" ||
         slideActive.id == "transition-1" || 
         slideActive.id == "how-to" || 
-        slideActive.id == "limits-of-hardiness"
+        slideActive.id == "limits-of-hardiness" || 
+        slideActive.id == "explore"
         ) {
         console.log('loading 2012 and 2023')
         addLayerFunction(map,"2012_zones",false)
@@ -407,6 +408,8 @@ var renderMap = async function() {
       $.one("#layer-button-nav").classList.add("active");
 
       track("explore mode button clicked", "final");
+      addLayerFunction(map,"2012_zones",true)
+      addLayerFunction(map,"2023_zones",true)
     })
 
     $.one("#restart.button").addEventListener('click',() => {
@@ -420,6 +423,8 @@ var renderMap = async function() {
       track("switch location button clicked", "final");
     });
 
+    var standardOpacity = ['interpolate',['linear'],['zoom'],0, 1, 7, 1, 8, 0.78, 22, 0.78 ]
+
     $(".inner-nav.layer").forEach(el => el.addEventListener('click',(evt)=>{
       $(".inner-nav.layer").forEach(d => d.classList.remove('active'));
       evt.target.classList.add('active');
@@ -427,20 +432,17 @@ var renderMap = async function() {
       addLayerFunction(map,"2023_zones",true)
 
       if (evt.target.id == "layer-2012") {        
-        map.setLayoutProperty('2012_zones','visibility','visible')
-        map.setLayoutProperty('2012_zones_labels','visibility','visible')
-        map.setLayoutProperty('2023_zones','visibility','none')
-        map.setLayoutProperty('2023_zones_labels','visibility','none')        
-        // console.log(map.getStyle().layers)
+        map.setPaintProperty('2012_zones','fill-opacity',standardOpacity)
+        map.setPaintProperty('2012_zones_labels','fill-opacity',0.5)
+        map.setPaintProperty('2023_zones','fill-opacity',0)
+        map.setPaintProperty('2023_zones_labels','fill-opacity',0)
       }
 
       if (evt.target.id == "layer-2023") {
-        map.setLayoutProperty('2023_zones','visibility','visible')
-        map.setLayoutProperty('2023_zones_labels','visibility','visible')
-        map.setLayoutProperty('2012_zones','visibility','none')
-        map.setLayoutProperty('2012_zones_labels','visibility','none')
-
-        // console.log(map.getStyle().layers)
+        map.setPaintProperty('2023_zones','fill-opacity',standardOpacity)
+        map.setPaintProperty('2023_zones_labels','fill-opacity',0.5)
+        map.setPaintProperty('2012_zones','fill-opacity',0)
+        map.setPaintProperty('2012_zones_labels','fill-opacity',0)
       }
     }));
 
@@ -507,7 +509,7 @@ var renderMap = async function() {
     map.on('mousemove', async function(e) {
       // get features under point
       var features = map.queryRenderedFeatures(e.point);
-      
+
       var zonesData = features.filter(d => {
         return d.source == "usda_zones";
       });
@@ -517,6 +519,8 @@ var renderMap = async function() {
 
       try {
         $.one(".info-inner").innerHTML = getTooltip({zoneInfo,temperatures})
+
+        
         
         } catch(err) {
           console.log(err)
