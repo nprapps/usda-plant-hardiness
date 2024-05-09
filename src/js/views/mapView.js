@@ -68,9 +68,10 @@ module.exports = class MapView extends View {
           // make preloaded maps fill-opacity:0
           map.setLayoutProperty(d.id,'visibility','visible')
           map.setPaintProperty(d.id,'fill-opacity',0)  
-        } else {            
+        } else {
           if (d.id.includes("_labels")) {
             // style the labels layer
+            map.setLayoutProperty(d.id,'visibility','visible')
             map.setPaintProperty(`${d.id}`, 'fill-opacity',0.5);
           } else {
             // style the fill layer
@@ -155,12 +156,7 @@ module.exports = class MapView extends View {
     if (map) {  
       
       // if only 1 ahead (or behind?????/)
-      if (i != 2) {
-        if (slide.id == "explore") {
-          // console.log(slide)
-          // console.log(slide.dataset.maplayer)  
-        }
-        
+      if (i != 2) {        
         // add layer to map, opacity or visibility 0
         addLayerFunction(map,slide.dataset.maplayer)
 

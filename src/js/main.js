@@ -266,7 +266,7 @@ var renderMap = async function() {
         updateDom(selectedLocation,map,slideActive)
       }
 
-      // If during or right before/after a chart, load 2012 and 2023
+      // If load during or right before/after a chart, load 2012 and 2023
       if (
         slideActive.dataset.type == "chart" ||
         slideActive.id == "transition-1" || 
@@ -371,8 +371,8 @@ var renderMap = async function() {
 
       } else if ($.one("#explore-map").classList.contains('active')) {
         track("back to story button clicked", "sticky-nav");
+        
         $('.zone-after').forEach(d => {
-          d.classList.remove("warmest");
           d.classList.remove("coldest");
           d.innerHTML = ""
         });
@@ -399,12 +399,18 @@ var renderMap = async function() {
       $.one("#back-to-story").classList.remove('active');
       $.one("#explore-map").classList.add('active');
 
+      // debounce(onScroll, 50); //ruth
       geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
 
       track("switch location button clicked", "sticky-nav");
     });
 
     $.one("#end-explore").addEventListener('click',() => {
+      map.setLayoutProperty('2012_zones','visibility','visible')
+      map.setLayoutProperty('2012_zones_labels','visibility','visible')
+      map.setPaintProperty('2012_zones','fill-opacity',0)
+      map.setPaintProperty('2012_zones_labels','fill-opacity',0)
+
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"));
@@ -413,8 +419,7 @@ var renderMap = async function() {
       $.one("#layer-button-nav").classList.add("active");
 
       track("explore mode button clicked", "final");
-      addLayerFunction(map,"2012_zones",true)
-      addLayerFunction(map,"2023_zones",true)
+      
     })
 
     $.one("#restart.button").addEventListener('click',() => {
@@ -525,16 +530,12 @@ var renderMap = async function() {
       } catch(err) {
         console.log(err)
       }
-      console.log('hello')
 
-      // try {
-        // $.one(".info-inner").innerHTML = getTooltip({zoneInfo,temperatures})
+      try {
         getLegendPointer({zoneInfo,temperatures})
-
-        
-        // } catch(err) {
-        //   console.log(err)
-        // }
+        } catch(err) {
+          console.log(err)
+        }
     },300));
   })
 }

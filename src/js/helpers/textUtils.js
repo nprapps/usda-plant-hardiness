@@ -122,22 +122,13 @@ function getLegendPointer(selectedLocation) {
 	if (temperatures) {
 		var min = Math.min(...temperatures.data);
 		var max = Math.max(...temperatures.data);
-		
-		console.log(min)
-		console.log(temp2zone(min))
-		console.log(zone2temp(zoneInfo.z2012))
-		console.log(zoneInfo.z2012)
+		var reversedTemps = JSON.parse(JSON.stringify(temperatures.data)).reverse();
 
+		// only display the min/max if they are the same as zone or on the wrong side of zone. 
 		if (
 			Math.floor(min/5)*5 < zone2temp(zoneInfo.z2012) && Math.floor(min/5)*5 < zone2temp(zoneInfo.z2023)) {
-			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `${triangle} <span>Coldest winter, ${2020 - temperatures.data.reverse().indexOf(min)}</span>`;
+			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `${triangle} <span>Coldest temperature: ${min}ºF (${2020 - reversedTemps.indexOf(min)})</span>`;
 			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).classList.add("coldest")	
-		}
-
-		if (
-			Math.floor(max/5)*5 > zone2temp(zoneInfo.z2012) && Math.floor(max/5)*5 > zone2temp(zoneInfo.z2023)) {
-			$.one(`#sticky-legend .zone.z${temp2zone(max)} .zone-after`).innerHTML = `${triangle} <span>Warmest winter, ${2020 - temperatures.data.reverse().indexOf(max)}</span>`;
-			$.one(`#sticky-legend .zone.z${temp2zone(max)} .zone-after`).classList.add("warmest")	
 		}
 	}
 }
