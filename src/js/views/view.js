@@ -4,6 +4,11 @@ module.exports = class View {
   constructor() {}
 
   enter(slide) {
+
+    if (slide.id != "titlecard") {
+      $.one(".pot2").classList.add("walking")
+    }
+
     if (slide.id == "zoomIn" || 
      slide.id == "intro-3" || 
      slide.id == "intro-4" || 
