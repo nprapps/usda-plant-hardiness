@@ -71,6 +71,8 @@ var startingSlide;
 let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
 var slideActive;
 
+var standardOpacity = ['interpolate',['linear'],['zoom'],0, 1, 7, 1, 8, 0.78, 22, 0.78 ]
+
 // global place variable...default to Raleigh
 var selectedLocation = {
   coords:[-78.6399539,35.7915083],
@@ -449,6 +451,12 @@ var renderMap = async function() {
       map.setPaintProperty('2012_zones','fill-opacity',0)
       map.setPaintProperty('2012_zones_labels','fill-opacity',0)
 
+      // default to 2023 when you enter 
+      map.setPaintProperty('2023_zones','fill-opacity',standardOpacity);
+      map.setPaintProperty('2023_zones_labels','fill-opacity',0.5);
+      $.one("#layer-2012.inner-nav").classList.remove("active");
+      $.one("#layer-2023.inner-nav").classList.add("active");
+
       $.one("#base-map").classList.toggle('explore-mode');
       $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"));
@@ -471,7 +479,7 @@ var renderMap = async function() {
       track("switch location button clicked", "final");
     });
 
-    var standardOpacity = ['interpolate',['linear'],['zoom'],0, 1, 7, 1, 8, 0.78, 22, 0.78 ]
+    
 
     $(".inner-nav.layer").forEach(el => el.addEventListener('click',(evt)=>{
       $(".inner-nav.layer").forEach(d => d.classList.remove('active'));
