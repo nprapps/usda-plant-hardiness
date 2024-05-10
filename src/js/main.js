@@ -119,7 +119,7 @@ var onWindowLoaded = async function() {
     selectedLocation.placeState = params.state;
   
   }
-  
+
   if (urlParams.has('debug')) {
     $.one("#speed-shit").classList.add('active')
   }
@@ -229,6 +229,41 @@ var renderMap = async function() {
       visualizePitch:false,
       showCompass:false
     }));
+    
+    // clone the +/-
+    var clone = $.one(".maplibregl-ctrl.maplibregl-ctrl-group").cloneNode(true);
+    clone.setAttribute("id","zoomerButtons")    
+
+    // add another button to cloned +/-
+    var clone2 = $("button", clone)[0].cloneNode(true);
+    clone.append(clone2)    
+
+    var places = [
+      {"name":"usa","center":[-98, 39],"zoom":3.8,"zoomMobile":3.3},
+      {"name":"alaska","center":[-149,63],"zoom":3.8,"zoomMobile":3.5},
+      {"name":"hawaii","center":[-157.67,20.59],"zoom":6.5,"zoomMobile":5.59},
+      ]
+    // bind the listeners for each
+    $("button", clone).forEach((el,i) => {
+
+      // remove the class of each and add another class or id
+      el.className = places[i].name;
+
+      // bind the listener
+      el.addEventListener("click",() => {
+
+        map.flyTo({
+          center: places[i].center,
+          zoom: isMobile.matches ? places[i].zoomMobile : places[i].zoom,
+          speed:0.9,
+          essential: true 
+        })
+      })
+    });
+
+    $.one(".maplibregl-ctrl.maplibregl-ctrl-group").parentNode.append(clone);
+    
+    
     
     map.attributionControl = false;
   
