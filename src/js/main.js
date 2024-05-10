@@ -69,7 +69,7 @@ var map;
 let locations;
 var startingSlide;
 let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
-var slideActive;
+var slideActive = {'id':'intro-1','dataset':{'maplayer':'2012_zones'}};
 
 var standardOpacity = ['interpolate',['linear'],['zoom'],0, 1, 7, 1, 8, 0.78, 22, 0.78 ]
 
@@ -373,7 +373,13 @@ var renderMap = async function() {
         return text;
       };
 
-      $.one("#slideID").innerHTML = slideActive.id;
+      try {
+        $.one("#slideID").innerHTML = slideActive.id;  
+      } catch(err) {
+        console.log(err)
+      }
+
+      
       $.one("#layers-loaded").innerHTML = layersLoaded();
 
       $.one(".geo-buttons").classList.remove("disabled");
@@ -696,7 +702,7 @@ var onScroll = function() {
         } 
         var slideNumber = slides.length - 1 - i;  
         startingSlide = slide.id;
-        // console.log(`slide ${slideNumber}, id: ${slide.id}`); 
+        console.log(`slide ${slideNumber}, id: ${slide.id}`); 
         slideActive = slide;
         return activateSlide(slide, slideNumber);
     }
