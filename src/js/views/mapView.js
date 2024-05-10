@@ -146,9 +146,7 @@ module.exports = class MapView extends View {
     mapElement.classList.add("exiting");
     mapElement.classList.remove("active");
 
-    console.log("Hi, I am here");
     if (slide.id == "explore") {
-      console.log("Shajia here! What is up?");
       $.one("#layer-button-nav").classList.add("disabled");
 
       layers.forEach((d) => {
