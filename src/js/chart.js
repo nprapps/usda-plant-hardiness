@@ -143,7 +143,7 @@ var renderDotChart = function(config) {
   chartElement.call(arrow);
 
   chartElement.append("defs").html(`<defs>
-    <filter id="f3" width="120" height="1020">
+    <filter id="f3" >
       <feOffset in="SourceAlpha" dx="2" dy="2" />
       <feGaussianBlur stdDeviation="2" />
       <feBlend in="SourceGraphic" in2="blurOut" />

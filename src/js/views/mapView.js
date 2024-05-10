@@ -24,6 +24,8 @@ module.exports = class MapView extends View {
     mapElement.classList.add("active");
     mapElement.classList.remove("exiting");
 
+    $.one(".pot2").classList.add("walking")
+
     if (slide.id == "explore") {
       $.one("#layer-button-nav").classList.remove("disabled");
       var images = $("[data-src]", slide);

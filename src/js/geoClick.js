@@ -235,7 +235,7 @@ async function updateDom(selectedLocation,map,slide) {
       'id':'avg',
       'formula':function(s) {
         return {
-          'value':`${Math.round(s.temperatures.avg)} ºF`,
+          'value':`${Math.round(s.temperatures.avg)}º F`,
           'classes':''
         }
       }      
