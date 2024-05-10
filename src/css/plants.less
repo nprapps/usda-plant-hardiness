@@ -92,4 +92,8 @@ section.map {
 	z-index: 10000;
 	pointer-events: none;
 	animation: walkingScreen 120s linear infinite;
+
+	@media @mobile-above {
+		animation: walkingScreen 180s linear infinite;
+	}
 }

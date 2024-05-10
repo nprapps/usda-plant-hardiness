@@ -6,7 +6,7 @@
 
   background: #111;
   color: #eee;
-  padding: 0 0 60vh;
+  padding: 0 0 5vh;
   .serif(); 
 
   @keyframes post-appear {
@@ -58,12 +58,18 @@
     &.active {
       height: 400px; 
 
+      @media @mobile {
+        height: 90vh;
+      }
+
       .headline-item {
         position: absolute; 
         top: 2000px; 
+        display: none;
 
         &.current {
           top: 20px; 
+          display: block;
         }
       }
     }
@@ -117,8 +123,12 @@
   }
 
   .headline-item {
-    filter: drop-shadow(4px 4px 3px #93C16F); 
+    
     border-radius: 10px;
+
+    &.current {
+      filter: drop-shadow(4px 4px 3px #93C16F); 
+    }
   }
 
   .controls {

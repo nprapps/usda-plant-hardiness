@@ -303,7 +303,7 @@ var renderDotChart = function(config) {
 
     if (d.includes("st-louis")) {
       lblConfig = stLouisLabelConfig;
-      lblTitle = "Coldest night in 2014, -10ºF";
+      lblTitle = "Coldest night in 2014, -10 ºF";
     }
 
     chartElement

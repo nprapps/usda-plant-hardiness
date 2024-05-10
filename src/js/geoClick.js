@@ -3,8 +3,7 @@ var $ = require("./lib/qsa")
 var {
   getName,
   tempRange,
-  tempDiff,
-  getTooltip
+  tempDiff
 } = require("./helpers/textUtils")
 
 var {
@@ -236,7 +235,7 @@ async function updateDom(selectedLocation,map,slide) {
       'id':'avg',
       'formula':function(s) {
         return {
-          'value':`${Math.round(s.temperatures.avg)}ºF`,
+          'value':`${Math.round(s.temperatures.avg)} ºF`,
           'classes':''
         }
       }      
@@ -305,9 +304,6 @@ async function updateDom(selectedLocation,map,slide) {
       $('.notDiff').forEach(d=>d.classList.remove('show'))
     }
   }
-  // get all items that need to be updated for tooltip
-
-  // $.one(".info-inner").innerHTML = getTooltip(selectedLocation)  
 }
 
 function clickButton(csvData) {

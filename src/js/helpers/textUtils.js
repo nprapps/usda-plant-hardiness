@@ -79,26 +79,6 @@ function tempRange(min) {
   return minText
 }
 
-function getTooltip(selectedLocation) {
-	var {
-		zoneInfo,
-		temperatures
-	}	= selectedLocation;
-
-	if (!temperatures) {
-		temperatures.data = 'No data'
-	}
-
-	return `
-  <b>2012 zone:</b> ${zoneInfo.z2012}<br>
-  <b>2023 zone:</b> ${zoneInfo.z2023}<br>
-  <b>Half zones changed</b> ${zoneInfo.zDiff}<br>
-    <b>Average low temperature (1991-2020)</b>: ${Math.round(temperatures.avg*10)/10}ºF <br>
-    <b>Years with lows below zone</b>: ${temperatures.countBelow} <br>
-    <b>Years with lows above zone</b>: ${temperatures.countAbove}
-  `;  
-}
-
 function getLegendPointer(selectedLocation) {
 
 	var {
@@ -127,7 +107,7 @@ function getLegendPointer(selectedLocation) {
 		// only display the min if it is the same as zone or on the wrong side of zone. 
 		if (
 			Math.floor(min/5)*5 < zone2temp(zoneInfo.z2012) && Math.floor(min/5)*5 < zone2temp(zoneInfo.z2023)) {
-			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `<span>Coldest temperature: ${min}ºF (${2020 - reversedTemps.indexOf(min)})</span>`;
+			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `<span>Coldest temperature: ${min} ºF (${2020 - reversedTemps.indexOf(min)})</span>`;
 			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).classList.add("coldest")	
 		}
 	}
@@ -147,13 +127,13 @@ function tempDiff(selectedLocation) {
 	}
 	else if (diffAmount === 0) {
 		console.log("EXACTLY 0!")
-		return "0ºF warmer"
+		return "0 ºF warmer"
 	} else {
 		var upDown = diffAmount > 0 ? "warmer" : "cooler";	
 
 		var tDiff = `tDiff${Math.round(diffAmount)}`;	
 
-		return `<span class="zoneText ${upDown} ${tDiff}">${Math.abs(diffAmount)}ºF ${upDown}</span>`
+		return `<span class="zoneText ${upDown} ${tDiff}">${Math.abs(diffAmount)} ºF ${upDown}</span>`
 	}	
 }
 function loadingTextUtil(mods) {
@@ -170,7 +150,6 @@ module.exports = {
 	getName,
 	tempRange,
 	tempDiff,
-	getTooltip,
 	loadingTextUtil,
 	getLegendPointer
 }

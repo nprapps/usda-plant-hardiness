@@ -38,7 +38,7 @@ var {
 
 var { fetchCSV } = require("./helpers/csvUtils");
 
-var { getTooltip, loadingTextUtil, getLegendPointer } = require('./helpers/textUtils')
+var {loadingTextUtil, getLegendPointer } = require('./helpers/textUtils')
 
 var {
   updateLocation,
