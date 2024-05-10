@@ -87,7 +87,6 @@ function getLegendPointer(selectedLocation) {
 	}	= selectedLocation;	
 
 	$('#sticky-legend .zone').forEach(d => {
-		console.log(d)
     d.classList.remove("active");
   })  
 

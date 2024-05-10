@@ -27,7 +27,8 @@ require("./analytics");
 var {                        
     getZone,
     getStartingCoords,
-    addLayerFunction
+    addLayerFunction,
+    makePoint
   } = require("./helpers/mapHelpers");
 
 var {
@@ -270,6 +271,11 @@ var renderMap = async function() {
     map.attributionControl = false;
   
     map.on('load', () => {
+      map.addSource('userPoint', {
+        'type': 'geojson',
+        'data': makePoint([0,0])
+      });
+
 
       map.addSource('usda_zones', {
         type: 'vector',
@@ -300,7 +306,19 @@ var renderMap = async function() {
       },
       // This line is the id of the layer this layer should be immediately below
       "Water")    
-      
+
+      map.addLayer({
+        'id': 'userPoint',
+        'type': 'circle',
+        'source': 'userPoint',
+        'paint': {
+            'circle-radius': 8,
+            'circle-color': 'transparent',
+            'circle-stroke-color':'#fff',
+            'circle-stroke-width':3
+        }
+      },"Place labels");       
+
       if (slideActive.dataset.type == "map") {         
         // add layer and style
         addLayerFunction(map,slideActive.dataset.maplayer,true)
@@ -431,7 +449,7 @@ var renderMap = async function() {
       } else if ($.one("#explore-map").classList.contains('active')) {
         track("back to story button clicked", "sticky-nav");
         
-        $('#sticky-legend .zone').forEach(d => {
+        $('#sticky-legend.zone').forEach(d => {
           d.classList.remove("active");
         })  
 
@@ -584,6 +602,11 @@ var renderMap = async function() {
       // get features under point
       var features = map.queryRenderedFeatures(e.point);
 
+      if (isMobile.matches && slideActive.id == "explore") {
+        map.getSource('userPoint').setData(makePoint([e.lngLat.lng,e.lngLat.lat]));  
+      }
+      
+
       var zonesData = features.filter(d => {
         return d.source == "usda_zones";
       });
@@ -600,7 +623,7 @@ var renderMap = async function() {
         } catch(err) {
           console.log(err)
         }
-    },200));
+    },300));
   })
 }
 

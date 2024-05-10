@@ -1375,11 +1375,11 @@
       ]
     }
   ],
-  "glyphs": "http://stage-apps.npr.org/enlivened-latitude/assets/synced/map-fonts/{fontstack}/{range}.pbf",
+  "glyphs": "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/map-fonts/{fontstack}/{range}.pbf",
   "sprite": [
 		{
 			"id":"zones",
-			"url":"http://stage-apps.npr.org/enlivened-latitude/assets/zone_sprite"
+			"url":"https://apps.npr.org/plant-hardiness-garden-map/assets/zone_sprite"
 		}
   ],
   "bearing": 0,
