@@ -31,7 +31,7 @@ var renderDotChart = function(config) {
 
   // figure out chart dimensions and margins
   var margins = {
-    top: 75,
+    top: 100,
     right: 100,
     bottom: 120,
     left: 100
@@ -323,7 +323,7 @@ var renderDotChart = function(config) {
     .attr("style",() => {
       return `
         position: fixed;
-        top: 10px;
+        top: 20px;
         width:100%;
         text-align: center
       `
