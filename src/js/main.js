@@ -123,7 +123,7 @@ var onWindowLoaded = async function() {
   }
 
   if (urlParams.has('debug')) {
-    $.one("#speed-shit").classList.add('active')
+    $.one("#debugger").classList.add('active')
   }
 
   zoomSlide.dataset.center = JSON.stringify(selectedLocation.coords);
@@ -327,7 +327,7 @@ var renderMap = async function() {
 
 
     $.one("#hidden-button").addEventListener('click',() => {
-      $.one("#speed-shit").classList.toggle('active')
+      $.one("#debugger").classList.toggle('active')
       if (map.showTileBoundaries) {
         map.showTileBoundaries = false;        
       } else {
