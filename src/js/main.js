@@ -431,6 +431,10 @@ var renderMap = async function() {
       } else if ($.one("#explore-map").classList.contains('active')) {
         track("back to story button clicked", "sticky-nav");
         
+        $('#sticky-legend .zone').forEach(d => {
+          d.classList.remove("active");
+        })  
+
         $('.zone-after').forEach(d => {
           d.classList.remove("coldest");
           d.innerHTML = ""
@@ -596,7 +600,7 @@ var renderMap = async function() {
         } catch(err) {
           console.log(err)
         }
-    },300));
+    },200));
   })
 }
 

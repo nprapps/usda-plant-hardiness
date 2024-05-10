@@ -86,6 +86,11 @@ function getLegendPointer(selectedLocation) {
 		temperatures
 	}	= selectedLocation;	
 
+	$('#sticky-legend .zone').forEach(d => {
+		console.log(d)
+    d.classList.remove("active");
+  })  
+
 	$('.zone-after').forEach(d => {
 		d.classList.remove("warmest");
 		d.classList.remove("coldest");
@@ -93,10 +98,13 @@ function getLegendPointer(selectedLocation) {
 	});
 
 	if (zoneInfo.z2012 != zoneInfo.z2023) {
-		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `<span>Old zone</span>`;
-		$.one(`#sticky-legend .zone.z${zoneInfo.z2023} .zone-after`).innerHTML = `<span>New zone</span>`;	
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `<span class="triangle"></span><span class='detail'>Old zone</span>`;
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2023} .zone-after`).innerHTML = `<span class="triangle"></span><span class='detail'>New zone</span>`;	
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012}`).classList.add("active")
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2023}`).classList.add("active")
 	} else {
-		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `<span>New and old zone</span>`;
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012} .zone-after`).innerHTML = `<span class="triangle"></span><span class='detail'>New and old zone</span>`;
+		$.one(`#sticky-legend .zone.z${zoneInfo.z2012}`).classList.add("active")
 	}
 
 	if (temperatures) {
@@ -107,8 +115,9 @@ function getLegendPointer(selectedLocation) {
 		// only display the min if it is the same as zone or on the wrong side of zone. 
 		if (
 			Math.floor(min/5)*5 < zone2temp(zoneInfo.z2012) && Math.floor(min/5)*5 < zone2temp(zoneInfo.z2023)) {
-			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `<span>Coldest temperature: ${min}º F (${2020 - reversedTemps.indexOf(min)})</span>`;
+			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `<span class="triangle"></span><span class='detail'>Coldest temperature: ${min}º F (${2020 - reversedTemps.indexOf(min)})</span>`;
 			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).classList.add("coldest")	
+			$.one(`#sticky-legend .zone.z${temp2zone(min)}`).classList.add("active");
 		}
 	}
 }
