@@ -328,13 +328,20 @@ var renderDotChart = function(config) {
         text-align: center
       `
     })
-    .html(`
+    .html(()=>{
+      if (selectedLocation.placeState == "AK" || selectedLocation.placeState == "HI") {
+        var thisPlace = selectedLocation.temperatures.placeName;
+      } else {
+        var thisPlace = `${selectedLocation.placeName}, ${ap_state(selectedLocation.placeState)}`  
+      }
+            
+      return `
       <div>
-        The lowest temperature each winter in <span>${selectedLocation.placeName}, ${ap_state(selectedLocation.placeState)}</span>
-      </div>`)
-  
-  // chartTitle.call(wrapText, chartWidth, 18);
+        The lowest temperature each winter in <span>${thisPlace}</span>
+      </div>`})
 
+  console.log(selectedLocation)
+  
   chartElement
     .append("line")
     .attr("class", "avg-line")
