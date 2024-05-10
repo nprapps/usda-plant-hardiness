@@ -7,19 +7,33 @@ var setupGoogleAnalytics = function() {
   	// Bail early if opted out of Performance and Analytics consent groups
   	if (!DataConsent.hasConsentedTo(DataConsent.PERFORMANCE_AND_ANALYTICS)) return;
 
-	  var script = document.createElement("script")
+	  var docHead = document.head;
 
-	  script.src = "https://www.googletagmanager.com/gtag/js?id=G-LLLW9F9XPC"
-	
-	  script.async = true;
-	
-	  document.head.appendChild(script);
-	
-	  var script_embed = document.createElement("script");
-	
-	  script_embed.text = "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-LLLW9F9XPC');";
-	
-	document.head.appendChild(script_embed);
+	  var firstTag = docHead.getElementsByTagName("meta")[0]
+	  
+	  var script = document.createElement("script");
+
+	  script.text = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MVD397M');"
+
+	  docHead.insertBefore(script,firstTag);
+
+	  var docBody = document.body;
+
+	  var firstBodyTag = docBody.getElementsByTagName("main")[0]
+
+	  var bodyScript = document.createElement("noscript")
+
+	  var bodyScriptContent = document.createElement("iframe")
+
+	  bodyScriptContent.src = "https://www.googletagmanager.com/ns.html?id=GTM-MVD397M"
+
+	  bodyScriptContent.height = "0"
+	  bodyScriptContent.width = "0"
+	  bodyScriptContent.style = "display:none;visibility:hidden"
+
+	  bodyScript.appendChild(bodyScriptContent)
+	 
+	  docBody.insertBefore(bodyScript,firstBodyTag);
 
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
