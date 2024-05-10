@@ -78,7 +78,7 @@
     .label-min {
       paint-order: stroke fill;
       stroke: #333;
-      stroke-width: 3px;
+      stroke-width: 6px;
       stroke-linecap: round;
       stroke-linejoin: round;
       font-style: italic;
@@ -90,8 +90,13 @@
     .chart-title {
       .sans();
       font-weight: bold;
-      fill: #fff;
+      color: #fff;
       opacity: 0;
+
+      span {
+        color:#93C16F;
+        white-space: nowrap;
+      }
     }
 
     &[data-frame="return-1"], &[data-frame="return-2"], &[data-frame="return-3"] {

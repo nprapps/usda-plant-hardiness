@@ -22,6 +22,7 @@ var { getLegendConfig, legendColors } = require("./helpers/mapHelpers")
 var legendConfig = getLegendConfig(legendColors)
 
 var { labelConfig } = require("./helpers/chartHelpers")
+var { ap_state } = require("./helpers/textUtils")
 
 // Render a line chart.
 var renderDotChart = function(config) {
@@ -164,7 +165,7 @@ var renderDotChart = function(config) {
     .axisLeft()
     .scale(yScale)
     .ticks(ticksY)
-    .tickFormat( d =>  d + "ºF");
+    .tickFormat( d =>  d + " ºF");
 
   // Render axes to chart.
 
@@ -316,14 +317,23 @@ var renderDotChart = function(config) {
 
   });
 
-  var chartTitle = chartElement
-    .append("text")
-    .attr("class","chart-title")
-    .attr("x", chartWidth / 2)
-    .attr("y", chartHeight + 50)
-    .attr("text-anchor","middle")
-    .text(`The lowest temperature each winter in ${selectedLocation.placeName}, ${selectedLocation.placeState}`)
-  chartTitle.call(wrapText, chartWidth, 18);
+  var chartTitle = d3.select(".graphic-wrapper")
+    .append("div")
+    .attr("class","chart-title")    
+    .attr("style",() => {
+      return `
+        position: fixed;
+        top: 10px;
+        width:100%;
+        text-align: center
+      `
+    })
+    .html(`
+      <div>
+        The lowest temperature each winter in <span>${selectedLocation.placeName}, ${ap_state(selectedLocation.placeState)}</span>
+      </div>`)
+  
+  // chartTitle.call(wrapText, chartWidth, 18);
 
   chartElement
     .append("line")
@@ -420,7 +430,7 @@ var renderTemperatureChart = function(data,selectedLocation) {
   // var element = chartSlide.querySelector(container);
   var width = window.innerWidth;
   var height = window.innerHeight;
-  var height = isMobile.matches ? screen.height : window.innerHeight;
+  height = isMobile.matches ? Math.min(800,screen.height) : window.innerHeight;
 
   renderDotChart({
     container,
