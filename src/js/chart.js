@@ -165,7 +165,7 @@ var renderDotChart = function(config) {
     .axisLeft()
     .scale(yScale)
     .ticks(ticksY)
-    .tickFormat( d =>  d + " ºF");
+    .tickFormat( d =>  d + "º F");
 
   // Render axes to chart.
 
@@ -303,7 +303,7 @@ var renderDotChart = function(config) {
 
     if (d.includes("st-louis")) {
       lblConfig = stLouisLabelConfig;
-      lblTitle = "Coldest night in 2014, -10 ºF";
+      lblTitle = "Coldest night in 2014, -10º F";
     }
 
     chartElement
@@ -334,7 +334,7 @@ var renderDotChart = function(config) {
       } else {
         var thisPlace = `${selectedLocation.placeName}, ${ap_state(selectedLocation.placeState)}`  
       }
-            
+
       return `
       <div>
         The lowest temperature each winter in <span>${thisPlace}</span>

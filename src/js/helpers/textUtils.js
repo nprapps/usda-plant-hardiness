@@ -107,7 +107,7 @@ function getLegendPointer(selectedLocation) {
 		// only display the min if it is the same as zone or on the wrong side of zone. 
 		if (
 			Math.floor(min/5)*5 < zone2temp(zoneInfo.z2012) && Math.floor(min/5)*5 < zone2temp(zoneInfo.z2023)) {
-			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `<span>Coldest temperature: ${min} ºF (${2020 - reversedTemps.indexOf(min)})</span>`;
+			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).innerHTML = `<span>Coldest temperature: ${min}º F (${2020 - reversedTemps.indexOf(min)})</span>`;
 			$.one(`#sticky-legend .zone.z${temp2zone(min)} .zone-after`).classList.add("coldest")	
 		}
 	}
@@ -127,13 +127,13 @@ function tempDiff(selectedLocation) {
 	}
 	else if (diffAmount === 0) {
 		console.log("EXACTLY 0!")
-		return "0 ºF warmer"
+		return "0º F warmer"
 	} else {
 		var upDown = diffAmount > 0 ? "warmer" : "cooler";	
 
 		var tDiff = `tDiff${Math.round(diffAmount)}`;	
 
-		return `<span class="zoneText ${upDown} ${tDiff}">${Math.abs(diffAmount)} ºF ${upDown}</span>`
+		return `<span class="zoneText ${upDown} ${tDiff}">${Math.abs(diffAmount)}º F ${upDown}</span>`
 	}	
 }
 function loadingTextUtil(mods) {
