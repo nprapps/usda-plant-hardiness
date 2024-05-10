@@ -40,10 +40,9 @@ header.splash {
       // fade(black, 40%) calc(~"100% - 100px"),
       // transparent
     );
-    padding-top: 75px;
+    padding-top: 20px;
     padding-bottom: 90vh;
     min-height: 100vh;
-    // margin-bottom: -20vh;
   }
 
   // + .slide .text {
@@ -51,101 +50,92 @@ header.splash {
   // }
 
   .bylines {
-    // .sans();
-    font-size: 80%;
-    color: #eee;
-  }
-
-  .half-container {
-    display: flex; 
-    flex-direction: row; 
-    justify-content: center; 
-    align-items: center; 
-    width: 100%; 
-
-    @media @mobile {
-      flex-direction: column; 
-    }
-  }
-
-  .half {
-    width: 50%; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-
-    @media @mobile {
-      width: 100%; 
-    }
+    .sans();
+    font-size: 85%;
+    color: @primaryColorFaded;
+    text-align: center;
   }
 
   .chatter {
-    // .sans();
-    width: 650px;
-    max-width: 100%;
-    text-align: center;
-    color: white;
+    .serif();
+    max-width: @contentWidth;
+    text-align: left;
     font-size: 17px;
     line-height: 1.6;
-    padding: 20px;
+    padding: 0 20px;
     text-shadow: @textShadow;
-    margin: 40px auto 0 auto;
-
-    @media @mobile {
-      margin-top: 0;
-      max-width: 100%;
-    }
+    margin: 0 auto;
   }
 
   .logo {
-    height: 32px;
-    margin-bottom: 6px;
+    text-align: center;
+    margin-bottom: 3px;
+
+    svg {
+      height: 32px;
+      color: @primaryColor;
+    }
+
+    a { display: inline-block; }
   }
 
   .title-gif {
-    padding: 10px; 
+    max-width: 75%; 
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 
-    @media @mobile {
-      max-width: 200px; 
+    @media @tablet-above {
+      width: 75%;
+      max-width: 900px;
     }
   }
 
   h1 {
-    font-size: 30px;
-    color: white;
+    .serif();
+    color: lighten(@primaryColor, 5%);
     line-height: 1.3;
     text-align: center;
     margin: 0;
-    padding: 30px 0 5px 0;
+    padding: 0 20px 5px 20px;
+    font-size: 30px;
+
+    @media screen and @tablet-above {
+      font-size: 36px;
+    }
+    @media screen and @wide-above {
+      font-size: 48px;
+    }
+
+    > br {
+      @media screen and @mobile {
+        display: none;
+      }
+    }
+  }
+
+  .chatter-text p {
+    font-size: 16px;
+    line-height: 1.7;
 
     @media screen and @mobile-above {
-      font-size: 60px;
+      font-size: 18px;
     }
-  }
-
-  p {
-    @media @mobile {
-      font-size: 14px;
-    }
-  }
-
-  h1,
-  p {
-    // @fade: fade(darken(@sky-blue, 30%), 30%);
-    // background: @fade;
-    // box-shadow: 0 0 32px 32px @fade;
-    // padding: 0 20px;
-    // border-radius: 40px;
   }
 
   hr {
-    max-width: 400px;
-    margin: 40px auto;
-    height: 4px;
-    border: none;
-    // background: url("./assets/synced/illos/scribble.svg");
-    background-color: @accent-light;
+    background-size: 150px;
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .scroll-bug {
+    color: @primaryColor;
+
+    path { 
+      stroke: @primaryColor;
+    }
   }
 }
 

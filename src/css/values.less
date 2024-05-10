@@ -3,9 +3,13 @@
 @mobile-above: ~"(min-width: 501px)";
 @tablet: ~"(max-width: 768px)";
 @tablet-above: ~"(min-width: 769px)";
+@wide: ~"(max-width: 999px)";
+@wide-above: ~"(min-width: 1000px)";
 
 @portrait: ~"(max-aspect-ratio: 1 / 1)";
 @landscape: ~"(min-aspect-ratio: 1 / 1)";
+
+@contentWidth: 650px;
 
 // Colors
 @accent-dark: #4774CC;
@@ -136,3 +140,8 @@
 @tDiff6:  #D5693F;
 @tDiff7:  #CE501F;
 @tDiff8:  #C73800;
+
+// headings
+@primaryColor: @z7a;
+@primaryColorFaded: fade(@primaryColor, 60%);
+@secondaryColor: @z8a;

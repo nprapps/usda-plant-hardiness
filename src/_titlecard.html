@@ -37,35 +37,37 @@
   <% } %>
 
   <div class="darken">
-    <div class="half-container">
-      <div class="half">
-        <img class="title-gif" src="./assets/synced/illo/resized/walker-title.gif" alt="Animation of a cute azalea plant walking in front of the hardiness map">
-      </div>
 
-      <div class="half">
-        <div class="chatter">
-          <img class="logo" src="./assets/logo-outline.svg" alt="NPR" />
-          <h1><%= slide.headline %></h1>
-          <div class="chatter-text">
-            <%= t.renderMarkdown(slide.text) %>
-          </div>
-        
-          <hr>
+    <img class="title-gif" data-src="./assets/synced/illo/resized/walker-title.gif" alt="Animation of a cute azalea plant walking in front of the hardiness map">
 
-          <% if (slide.bylines) { %>
-          <div class="bylines">
-            <%= t.renderMarkdown(slide.bylines) %>
-          </div>
-          <% } %>
+    <div class="logo">
+      <a href="https://www.npr.org">
+        <%= t.include("./assets/logo-outline.svg") %>
+      </a>
+    </div>
+    
+    <h1><%= renderMarkdownText(slide.headline) %></h1>
+
+    <div class="chatter">
+
+      <% if (slide.bylines) { %>
+        <div class="bylines">
+          <%= t.renderMarkdown(slide.bylines) %>
         </div>
+      <% } %>
 
-        <div class="scroll-bug" aria-hidden="true">
-          scroll
-          <svg class="drop" viewBox="0 0 50 50" width="50" height="25">
-            <path d="M 0,0 L 25,25 50,0"></path>
-          </svg>
-        </div>
+      <hr class="shovel" />
+
+      <div class="chatter-text">
+        <%= t.renderMarkdown(slide.text) %>
       </div>
+    </div>
+  
+    <div class="scroll-bug" aria-hidden="true">
+      scroll
+      <svg class="drop" viewBox="0 0 50 50" width="50" height="25">
+        <path d="M 0,0 L 25,25 50,0"></path>
+      </svg>
     </div>
 
     <% if (slide.video) { %>
@@ -76,14 +78,15 @@
     <% } %>
   </div>
 </section>
+
 <% if (slide.video) { %>
 <script type="text/javascript">
-  // Load video based on current screen width
-  // It won't get reloaded if resized, YOLO
-  if (window.innerWidth < 501) {
-      document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/mobile-<%= slide.video %>");
-    } else {
-      document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/<%= slide.video %>");
-    }
+// Load video based on current screen width
+// It won't get reloaded if resized, YOLO
+if (window.innerWidth < 501) {
+  document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/mobile-<%= slide.video %>");
+} else {
+  document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/<%= slide.video %>");
+}
 </script>
-  <% } %>
+<% } %>
