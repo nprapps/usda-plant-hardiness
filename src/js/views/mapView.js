@@ -141,7 +141,6 @@ module.exports = class MapView extends View {
           (a.source == "usda_zones" || a.source == "temp_diff") &&
           a.id != slide.dataset.maplayer
       );
-    // console.log(map.getStyle().layers)
 
     mapElement.classList.add("exiting");
     mapElement.classList.remove("active");
@@ -158,9 +157,6 @@ module.exports = class MapView extends View {
   }
 
   preload = async function (slide, active, i, isBackwards, map) {
-    // var map = this.map;
-    // console.log(map)
-
     var selectedLocation = this.selectedLocation;
 
     if (map) {

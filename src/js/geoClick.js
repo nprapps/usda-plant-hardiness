@@ -118,7 +118,6 @@ async function updateDom(selectedLocation,map,slide) {
     });  
   }
     
-  // console.log(selectedLocation)
   try {
     selectedLocation.zoneInfo = getZone(selectedLocation.zonesData)  
   } catch(err) {
@@ -253,8 +252,6 @@ async function updateDom(selectedLocation,map,slide) {
 
   var modsToUpdate = $(`#${slide.id} .mod span[data-item]`)
   
-  // console.log(slide.id)
-  // console.log(modsToUpdate)
   modsToUpdate.forEach(mod => {   
     var changeSet = changeItems.filter(d=> d.id == mod.dataset.item)[0].formula(selectedLocation);
     mod.innerHTML = changeSet.value;

@@ -44,7 +44,6 @@ module.exports = class ChartView extends View {
       // do some d3 code? transition the thing in?
       var selectedLocation = this.selectedLocation;
       var map = this.map;
-      // console.log(map)
       
       var toContinue = 1;
       if (isBackwards) {
@@ -113,8 +112,6 @@ module.exports = class ChartView extends View {
       if (i==0 || i==1) {
         updateDom(selectedLocation,map,slide)
       }      
-
-    
 
     function waitForMap(callback) {
       // Check if the variable is defined immediately

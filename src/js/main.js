@@ -333,7 +333,7 @@ var renderMap = async function() {
         slideActive.id == "limits-of-hardiness" || 
         slideActive.id == "explore"
         ) {
-        console.log('loading 2012 and 2023')
+
         addLayerFunction(map,"2012_zones",false)
         addLayerFunction(map,"2023_zones",true)
       }
@@ -346,7 +346,7 @@ var renderMap = async function() {
     // used for speed analytics
     map.on('style.load', () => {
       if (selectedLocation.loadIterations == 0) {
-        console.log('all data transfered')
+        // console.log('all data transfered')
 
         now = new Date();
         $.one("#Speedfortransfer").innerHTML = (new Date() - startTime)/1000;
@@ -426,8 +426,6 @@ var renderMap = async function() {
       // listener for "explore map button"
       if ($.one("#back-to-story").classList.contains('active')) {
         track("explore mode button clicked", "sticky-nav");
-
-        console.log('here hello world????????????')
 
         map.setLayoutProperty('2012_zones','visibility','visible')
         map.setLayoutProperty('2012_zones_labels','visibility','visible')
@@ -737,7 +735,7 @@ var onScroll = function() {
         } 
         var slideNumber = slides.length - 1 - i;  
         startingSlide = slide.id;
-        console.log(`slide ${slideNumber}, id: ${slide.id}`); 
+        // console.log(`slide ${slideNumber}, id: ${slide.id}`); 
         slideActive = slide;
         return activateSlide(slide, slideNumber);
     }

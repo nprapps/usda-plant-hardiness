@@ -30,7 +30,7 @@ var track = function(eventAction, eventLabel, eventValue) {
     eventCategory: "apps-" + slug
   }
 
-  console.log(`Tracking: ${eventAction} / ${eventLabel} / ${eventValue}`)
+  // console.log(`Tracking: ${eventAction} / ${eventLabel} / ${eventValue}`)
 
   var search = window.location.search.replace(/^\?/, "");
   var query = {};
