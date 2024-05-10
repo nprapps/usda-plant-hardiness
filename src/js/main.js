@@ -325,17 +325,6 @@ var renderMap = async function() {
     // used for speed analytics
     // url param
 
-
-    $.one("#hidden-button").addEventListener('click',() => {
-      $.one("#debugger").classList.toggle('active')
-      if (map.showTileBoundaries) {
-        map.showTileBoundaries = false;        
-      } else {
-        map.showTileBoundaries = true;  
-      }
-      
-    })
-
     // used for speed analytics
     map.on('style.load', () => {
       if (selectedLocation.loadIterations == 0) {
@@ -414,11 +403,26 @@ var renderMap = async function() {
 
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
       $.one("#base-map").classList.toggle('explore-mode');
-      $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"));
 
+      // listener for "explore map button"
       if ($.one("#back-to-story").classList.contains('active')) {
         track("explore mode button clicked", "sticky-nav");
+
+        console.log('here hello world????????????')
+
+        map.setLayoutProperty('2012_zones','visibility','visible')
+        map.setLayoutProperty('2012_zones_labels','visibility','visible')
+        map.setPaintProperty('2012_zones','fill-opacity',0)
+        map.setPaintProperty('2012_zones_labels','fill-opacity',0)
+
+        // default to 2023 when you enter 
+        map.setPaintProperty('2023_zones','fill-opacity',standardOpacity);
+        map.setPaintProperty('2023_zones_labels','fill-opacity',0.5);
+
+
+        $.one("#layer-2012.inner-nav").classList.remove("active");
+        $.one("#layer-2023.inner-nav").classList.add("active");
 
         $.one("#layer-button-nav").classList.add("active");
 
@@ -450,7 +454,6 @@ var renderMap = async function() {
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
       const geoSlide = $.one("#intro-1");
       $.one('#base-map').classList.remove("explore-mode");
-      $.one("#info").classList.remove('explore-mode');
       $.one("#back-to-story").classList.remove('active');
       $.one("#explore-map").classList.add('active');
 
@@ -472,7 +475,6 @@ var renderMap = async function() {
       $.one("#layer-2023.inner-nav").classList.add("active");
 
       $.one("#base-map").classList.toggle('explore-mode');
-      $.one("#info").classList.toggle('explore-mode');
       $("#sticky-nav .whereTo div").forEach(d => d.classList.toggle("active"));
       $.one("#sticky-nav .inner-nav.dropdown").classList.add("disabled");
 
@@ -494,7 +496,7 @@ var renderMap = async function() {
     });
 
     
-
+    // event listeners for 2012 vs. 2023 map
     $(".inner-nav.layer").forEach(el => el.addEventListener('click',(evt)=>{
       $(".inner-nav.layer").forEach(d => d.classList.remove('active'));
       evt.target.classList.add('active');
@@ -515,8 +517,6 @@ var renderMap = async function() {
         map.setPaintProperty('2012_zones_labels','fill-opacity',0)
       }
     }));
-
-    
 
     $.one(".surpriseMe").addEventListener('click',(evt) => { 
       // Check if locations is defined and not empty

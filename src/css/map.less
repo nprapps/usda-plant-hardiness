@@ -156,26 +156,6 @@
   }
 }
 
-#info {
-  display: none !important;
-  z-index: -2;
-  position: fixed;
-  background-color: white;
-  color: #333;  
-  padding:10px;
-  right: 0;
-  bottom: -300px;
-  width: 100%;
-  transition: all 1s ease;
-  opacity: 0;
-
-  &.explore-mode {
-    z-index: 1010;
-    bottom: 0px;
-    opacity: 1;
-  }
-}
-
 @keyframes glowing-button-85 {
   0% {
     background-position: 0 0;
@@ -409,7 +389,6 @@
 }
 
 #geo-container .button,
-#info .button,
 .end-option-container .button {
   .sans();
   display: inline-block;

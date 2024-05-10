@@ -336,8 +336,6 @@ var renderDotChart = function (config) {
       </div>`;
     });
 
-  console.log(selectedLocation);
-
   chartElement
     .append("line")
     .attr("class", "avg-line")
