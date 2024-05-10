@@ -396,12 +396,20 @@ var renderMap = async function() {
     // disable ability to interact with buttons
     map.on('movestart', () =>{
       $.one(".geo-buttons").classList.add("disabled")
+              
     })
 
     // restore ability to interact with buttons
     map.on('moveend', () => {
       // actually should wait for end 
-      $.one(".geo-buttons").classList.remove("disabled")
+      const waiting = () => {
+        if (!map.isStyleLoaded()) {
+          setTimeout(waiting, 200);
+        } else {
+          $.one(".geo-buttons").classList.remove("disabled")
+        }
+      };
+      waiting();      
     });
 
     $.one("#sticky-nav .whereTo").addEventListener('click',() => {
