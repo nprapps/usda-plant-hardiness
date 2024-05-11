@@ -23,14 +23,11 @@ body {
 .scroll-bug {
   .sans-header();
   text-align: center;
-  color: #ccc;
+  color: @primaryColor;
   font-size: .85rem;
   padding: 1rem 0;
   text-shadow: 0 2px fade(black, 20%);
-
-  // @media @mobile-above {
-  //   display: block;
-  // }
+  margin-top: 5vh;
 
   @keyframes drop {
     from { transform: translateY(0); }
@@ -43,7 +40,7 @@ body {
     animation: drop 2s ease-in-out infinite;
 
     path {
-      stroke: #ccc;
+      stroke: @primaryColor;
       stroke-width: 6;
       fill: none;
     }
