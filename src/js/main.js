@@ -548,6 +548,7 @@ var renderMap = async function() {
 
       // clear out the existing data
       selectedLocation.zonesData = [];
+      selectedLocation.tempDiffData = [];
 
       // interstitial loads
       loadingTextUtil($("span[data-item"));
@@ -587,6 +588,7 @@ var renderMap = async function() {
         var place = locations[idx];        
         
         selectedLocation.zonesData = [];
+        selectedLocation.tempDiffData = [];
         loadingTextUtil($("span[data-item"))
         updateLocation(place,target,selectedLocation,map,slideActive)
 
