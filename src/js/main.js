@@ -431,6 +431,7 @@ var renderMap = async function() {
         map.setLayoutProperty('2012_zones_labels','visibility','visible')
         map.setPaintProperty('2012_zones','fill-opacity',0)
         map.setPaintProperty('2012_zones_labels','fill-opacity',0)
+        $.one("body").classList.add("explore")
 
         // default to 2023 when you enter 
         map.setPaintProperty('2023_zones','fill-opacity',standardOpacity);
@@ -446,6 +447,8 @@ var renderMap = async function() {
 
       } else if ($.one("#explore-map").classList.contains('active')) {
         track("back to story button clicked", "sticky-nav");
+
+        $.one("body").classList.remove("explore")
         
         $('#sticky-legend.zone').forEach(d => {
           d.classList.remove("active");
@@ -483,6 +486,9 @@ var renderMap = async function() {
     });
 
     $.one("#end-explore").addEventListener('click',() => {
+
+      $.one("body").classList.add("explore");
+
       map.setLayoutProperty('2012_zones','visibility','visible')
       map.setLayoutProperty('2012_zones_labels','visibility','visible')
       map.setPaintProperty('2012_zones','fill-opacity',0)
@@ -699,6 +705,25 @@ var activateSlide = function(slide, slideNumber) {
 }
 
 var onScroll = function() {
+  $.one("body").classList.remove("explore")
+  
+  $.one('#base-map').classList.remove("explore-mode");
+  $('#sticky-legend.zone').forEach(d => {
+    d.classList.remove("active");
+  })  
+
+  $('.zone-after').forEach(d => {
+    d.classList.remove("coldest");
+    d.innerHTML = ""
+  });
+
+  $.one("#sticky-nav .inner-nav.dropdown").classList.remove("disabled")
+  $.one("#layer-button-nav").classList.remove("active");
+  $.one("#back-to-story").classList.remove("active");
+  $.one("#explore-map").classList.add("active");
+
+
+
   for (var i = 0; i < slides.length; i++) {
     var slide = slides[i];
     var postTitle = i <= 1 ? null : slides[i + 1];
