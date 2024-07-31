@@ -1,138 +1,119 @@
-
-
-var DataConsent = require('./lib/data-consent');
+var DataConsent = require("./lib/data-consent");
 var googleAnalyticsAlreadyInitialized = false;
 
-var setupGoogleAnalytics = function() {
-  	// Bail early if opted out of Performance and Analytics consent groups
-  	if (!DataConsent.hasConsentedTo(DataConsent.PERFORMANCE_AND_ANALYTICS)) return;
+var setupGoogleAnalytics = function () {
+  if (window.top !== window) {
+    var gtagID = "G-LLLW9F9XPC";
+  } else {
+    var gtagID = "G-XK44GJHVBE";
+  }
+  // Bail early if opted out of Performance and Analytics consent groups
+  // if (!DataConsent.hasConsentedTo(DataConsent.PERFORMANCE_AND_ANALYTICS))
+  //   return;
 
-	  var script = document.createElement("script")
+  var script = document.createElement("script");
 
-  
+  script.src = "https://www.googletagmanager.com/gtag/js?id=" + gtagID;
 
-	  script.src = "https://www.googletagmanager.com/gtag/js?id=G-LLLW9F9XPC"
-	  
-	  script.async = true;
-	  
-	  document.head.appendChild(script);
-	  
-	  var script_embed = document.createElement("script");
-	  
-	  script_embed.text = "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-LLLW9F9XPC');";
-	  
-	  document.head.appendChild(script_embed);
+  script.async = true;
 
-	//   var docHead = document.head;
+  var script_embed = document.createElement("script");
 
-	//   var firstTag = docHead.getElementsByTagName("meta")[0]
-	  
-	//   var script = document.createElement("script");
+  script_embed.innerHTML =
+    "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '" +
+    gtagID +
+    "', { 'send_page_view': false });";
+  document.head.append(script, script_embed);
 
-	//   script.text = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MVD397M');"
+  if (window.top !== window) {
+    // By default Google tracks the query string, but we want to ignore it.
+    var here = new URL(window.location);
 
-	//   docHead.insertBefore(script,firstTag);
+    // Custom dimensions & metrics
+    var parentUrl = here.searchParams.has("parentUrl")
+      ? new URL(here.searchParams.get("parentUrl"))
+      : "";
+    var parentHostname = "";
 
-	//   var script_2 = document.createElement("script");
+    if (parentUrl) {
+      parentHostname = parentUrl.hostname;
+    }
 
-	//   script_2.text = "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}"
+    var initialWidth = here.searchParams.get("initialWidth") || "";
 
-	//   docHead.insertBefore(script_2,firstTag);
+    var customData = {};
+    customData["dimension1"] = parentUrl;
+    customData["dimension2"] = parentHostname;
+    customData["dimension3"] = initialWidth;
+  } else {
+    // Secondary topics
+    var dim6 = "";
+    // Topic IDs
+    var dim2 = "";
 
-	//   var docBody = document.body;
+    // Google analytics doesn't accept arrays anymore, these must be strings.
 
-	//   var firstBodyTag = docBody.getElementsByTagName("main")[0]
+    try {
+      dim6 = window.PROJECT_ANALYTICS.secondaryTopics.join(", ");
+    } catch (error) {
+      console.log(
+        "PROJECT_ANALYTICS.secondaryTopics is not an array, check project.json"
+      );
+    }
 
-	//   var bodyScript = document.createElement("noscript")
+    try {
+      dim2 = window.PROJECT_ANALYTICS.topicIDs.join(", ");
+    } catch (error) {
+      console.log(
+        "PROJECT_ANALYTICS.topicIDs is not an array, check project.json"
+      );
+    }
 
-	//   var bodyScriptContent = document.createElement("iframe")
+    var customData = {};
+    customData["dimension2"] = dim2;
+    customData["dimension3"] = window.PROJECT_ANALYTICS.primaryTopic || "News";
+    customData["dimension6"] = dim6;
+    customData["dimension22"] = document.title;
 
-	//   bodyScriptContent.src = "https://www.googletagmanager.com/ns.html?id=GTM-MVD397M"
+    // // gtag('set', 'send_page_view', false);
+    // gtag("config", gtagID, {
+    //   custom_map: {
+    //     dimension2: "",
+    //     dimension3: "",
+    //     dimension6: "",
+    //     dimension22: "",
+    //   },
+    // });
+  }
 
-	//   bodyScriptContent.height = "0"
-	//   bodyScriptContent.width = "0"
-	//   bodyScriptContent.style = "display:none;visibility:hidden"
-
-	//   bodyScript.appendChild(bodyScriptContent)
-	 
-	//   docBody.insertBefore(bodyScript,firstBodyTag);
-
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-	if (window.top !== window) { 
-
-		ga("create", "UA-5828686-75", "auto");
-		// By default Google tracks the query string, but we want to ignore it.
-		var here = new URL(window.location);
-
-		ga("set", "location", here.protocol + "//" + here.hostname + here.pathname);
-		ga("set", "page", here.pathname);
-
-		// Custom dimensions & metrics
-		var parentUrl = here.searchParams.has("parentUrl") ? new URL(here.searchParams.get("parentUrl")) : "";
-		var parentHostname = "";
-
-		if (parentUrl) {
-		    parentHostname = parentUrl.hostname;
-		}
-
-		var initialWidth = here.searchParams.get("initialWidth") || "";
-
-		ga("set", {
-		  dimension1: parentUrl,
-		  dimension2: parentHostname,
-		  dimension3: initialWidth
-		});
-	} else { 
-
-		// Secondary topics
-		var dim6 = "";
-		// Topic IDs
-		var dim2 = "";
-
-		// Google analytics doesn't accept arrays anymore, these must be strings.
-
-		try {
-		  dim6 = window.PROJECT_ANALYTICS.secondaryTopics.join(", ");
-		} catch (error) {
-		  console.log("PROJECT_ANALYTICS.secondaryTopics is not an array, check project.json");
-		}
-
-		try {
-		  dim2 = window.PROJECT_ANALYTICS.topicIDs.join(", ");
-		} catch (error) {
-		  console.log("PROJECT_ANALYTICS.topicIDs is not an array, check project.json");
-		}
-
-		ga("create", "UA-5828686-4", "auto");
-		ga("set", {
-		  dimension2:  dim2,
-		  dimension3:  window.PROJECT_ANALYTICS.primaryTopic || "News",
-		  dimension6:  dim6,
-		  dimension22: document.title
-		});
-	} 
-	ga("send", "pageview");
-	// gtag('event', 'page_view', {'page_title': "The USDA's gardening zones shifted. This map shows you what's changed in vivid detail"});
-	googleAnalyticsAlreadyInitialized = true;
+  gtag("event", "page_view", customData);
+  googleAnalyticsAlreadyInitialized = true;
 };
 
-
 // Add GA initialization to window.onload
-var oldOnload = window.onload;
-window.onload = (typeof window.onload != 'function') ? setupGoogleAnalytics : function() { oldOnload(); setupGoogleAnalytics(); };
+function addLoadEvent(func) {
+  var oldOnLoad = window.onload;
+  if (typeof window.onload != "function") {
+    window.onload = func;
+  } else {
+    window.onload = function () {
+      if (oldOnLoad) {
+        oldOnLoad();
+      }
+      func();
+    };
+  }
+}
 
-// Listen for DataConsentChanged event 
-document.addEventListener('npr:DataConsentChanged', () => {
+addLoadEvent(setupGoogleAnalytics);
 
-  // Bail early if it's already been set up 
+// Listen for DataConsentChanged event
+document.addEventListener("npr:DataConsentChanged", () => {
+  // Bail early if it's already been set up
   if (googleAnalyticsAlreadyInitialized) return;
 
   // When a user opts into performance and analytics cookies, initialize GA
   if (DataConsent.hasConsentedTo(DataConsent.PERFORMANCE_AND_ANALYTICS)) {
     setupGoogleAnalytics();
-  }  
+  }
 });
