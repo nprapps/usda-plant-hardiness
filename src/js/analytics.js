@@ -8,8 +8,8 @@ var setupGoogleAnalytics = function () {
     var gtagID = "G-XK44GJHVBE";
   }
   // Bail early if opted out of Performance and Analytics consent groups
-  // if (!DataConsent.hasConsentedTo(DataConsent.PERFORMANCE_AND_ANALYTICS))
-  //   return;
+  if (!DataConsent.hasConsentedTo(DataConsent.PERFORMANCE_AND_ANALYTICS))
+    return;
 
   var script = document.createElement("script");
 
@@ -71,19 +71,11 @@ var setupGoogleAnalytics = function () {
 
     var customData = {};
     customData["dimension2"] = dim2;
-    customData["dimension3"] = window.PROJECT_ANALYTICS.primaryTopic || "News";
+    customData["dimension3"] = window.PROJECT_ANALYTICS
+      ? window.PROJECT_ANALYTICS.primaryTopic
+      : "News";
     customData["dimension6"] = dim6;
     customData["dimension22"] = document.title;
-
-    // // gtag('set', 'send_page_view', false);
-    // gtag("config", gtagID, {
-    //   custom_map: {
-    //     dimension2: "",
-    //     dimension3: "",
-    //     dimension6: "",
-    //     dimension22: "",
-    //   },
-    // });
   }
 
   gtag("event", "page_view", customData);
