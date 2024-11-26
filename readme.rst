@@ -1,6 +1,8 @@
 usda-plant-hardiness
 ======================================================
 
+*To understand how we set up the maps for this story, check out [our blog post](https://blog.apps.npr.org/2024/11/26/slippy-maps.html) on the subject*
+
 This news app is built on our `interactive template <https://github.com/nprapps/interactive-template>`_. Check the readme for that template for more details about the structure and mechanics of the app, as well as how to start your own project.
 
 Getting started
