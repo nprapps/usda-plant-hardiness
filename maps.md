@@ -147,3 +147,65 @@ https://discussions.apple.com/docs/DOC-250006086
 https://github.com/maplibre/maputnik/issues/215
 
 https://openmaptiles.org/docs/generate/custom-vector-from-shapefile-geojson/
+
+
+----
+previous flowchart
+
+## Flowchart 
+```mermaid
+graph LR
+subgraph "`**key**`"
+	A[data]:::data
+	B[unsure]:::unsure
+	C([output]):::output
+	D[(database)]
+	E(process):::process
+end
+
+classDef data fill:#00ff00aa
+classDef unsure stroke-dasharray: 5 5
+classDef output fill:#00ffddaa
+classDef process fill: #ff00ffaa, color: #fff
+classDef unsureprocess fill: #ff00ffaa, color: #fff, stroke-dasharray: 5 5
+
+```
+
+```mermaid
+graph TB
+W[custom rasters]:::data --> WW[some raster tiling process]:::unsureprocess -. custom Raster tiles:::data .-> Y[(raster hosting?)]:::unsure 
+
+B[custom vectors]:::data --> ogr2ogr:::process --> postgisDB
+B[custom vectors] --> E
+Z3[other data?]:::data -.-> G
+E["`**maputnik** 
+	vector tile styling`"]:::toLearn -. "??" .-> D
+
+
+A[OSM, NE, etc.]:::data -->C(make process):::process
+A --> E
+
+subgraph "`**OpenMapTiles**`"
+C --> postgisDB[(postgisDB)] -->|.MBtiles | D[?? bake it all ??]:::unsure
+
+end
+
+E -. "style.json"  .-> G
+
+
+D -. MVT tiles? .-> F[("`**PMTiles** 
+		vector tile hosting`")]:::unsure
+F --> G["`**maplibre-gl-js** for client-side`"]
+
+Y .-> G
+
+subgraph "`**browser**`"
+G --> Z([Tooltips]):::output
+G --> Z2([Map]):::output
+end
+classDef data fill:#00ff00aa
+classDef unsure stroke-dasharray: 5 5
+classDef output fill:#00ffddaa
+classDef process fill: #ff00ffaa, color: #fff
+classDef unsureprocess fill: #ff00ffaa, color: #fff, stroke-dasharray: 5 5, stroke: #000
+```
