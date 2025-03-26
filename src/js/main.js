@@ -69,7 +69,8 @@ var completion = 0;
 var map;
 let locations;
 var startingSlide;
-let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
+let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/GAZETTEER-zips.csv";
+
 var slideActive = {'id':'intro-1','dataset':{'maplayer':'2012_zones'}};
 
 var standardOpacity = ['interpolate',['linear'],['zoom'],0, 1, 7, 1, 8, 0.78, 22, 0.78 ]
