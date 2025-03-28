@@ -3,32 +3,6 @@
 %>
 
 <section class="<% if (slide.video) { %>video<% } %> <% if (slide.image) { %>image<% } %> splash titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="<% if (slide.video) { %>video<% } else { %>image<% } %>">
-  <% if (slide.video) { %>
-  <video
-    id="video-<%= slide.id %>"
-    poster="./assets/synced/video/<%=slide.video%>.jpg"
-    class="backdrop"
-    muted
-    loop
-    playsinline
-    autoplay
-    style="<%= t.style({
-      "object-position": slide.anchor,
-      "object-fit": slide.constrain
-    }) %>"></video>
-  <% } %>
-
-  <% if (slide.image) { %>
-    <img
-      class="backdrop"
-      data-src="./assets/synced/images/<%= slide.image %>"
-      alt=""
-      style="<%= t.style({
-        "object-position": slide.anchor,
-        "object-fit": slide.constrain
-      }) %>"
-    >
-  <% } %>
 
   <% if (slide.credit) { %>
   <div class="watermark" alt="">
