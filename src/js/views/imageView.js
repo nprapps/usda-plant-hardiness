@@ -8,10 +8,9 @@ module.exports = class ImageView extends View {
   }
 
   preload(slide, active) {
-    console.log('imageview here')
     var images = $("[data-src]", slide);
     images.forEach(function (img) {
-      if (!img.classList.includes('skip-lazy')) {
+      if (!img.classList.contains('skip-lazy')) {
         img.src = img.dataset.src;
         img.removeAttribute("data-src");
       }

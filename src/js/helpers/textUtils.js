@@ -62,7 +62,13 @@ function ap_state(usps) {
 }
 
 function getName(data) {
-	return `${data.placeName}, ${ap_state(data.placeState)}`
+	// if a number, just return the
+	if (/^\d/.test(data.placeName)) {
+		return data.placeName
+	} else {
+		return `${data.placeName}, ${ap_state(data.placeState)}`	
+	}
+	
 }
 
 function tempRange(min) {

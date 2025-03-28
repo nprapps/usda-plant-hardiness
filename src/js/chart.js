@@ -321,13 +321,18 @@ var renderDotChart = function (config) {
     .html(() => {
       if (
         selectedLocation.placeState == "AK" ||
-        selectedLocation.placeState == "HI"
+        selectedLocation.placeState == "HI"        
       ) {
         var thisPlace = selectedLocation.temperatures.placeName;
       } else {
-        var thisPlace = `${selectedLocation.placeName}, ${ap_state(
-          selectedLocation.placeState
-        )}`;
+        if (/^\d/.test(selectedLocation.placeName)) {
+          var thisPlace = selectedLocation.placeName;
+        } else {
+          var thisPlace = `${selectedLocation.placeName}, ${ap_state(
+            selectedLocation.placeState
+          )}`;  
+        }
+        
       }
 
       return `
