@@ -194,8 +194,10 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
       // image unloading for lazy-load
       var lazy = Array.prototype.slice.call(document.querySelectorAll(".sequence .slide:nth-child(n + 3) [src]"));
       lazy.forEach(function(img) {
-        img.setAttribute("data-src", img.getAttribute("src"));
-        img.removeAttribute("src", "");
+        if (!img.classList.includes('skip-lazy')) {
+          img.setAttribute("data-src", img.getAttribute("src"));
+          img.removeAttribute("src", "");
+        }
       });
 
       // attach analytics to window
