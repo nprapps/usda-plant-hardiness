@@ -260,7 +260,7 @@ var renderMap = async function() {
           center: places[i].center,
           zoom: isMobile.matches ? places[i].zoomMobile : places[i].zoom,
           speed:0.9,
-          essential: true 
+          essential: false
         })
       })
     });
@@ -468,7 +468,7 @@ var renderMap = async function() {
           center: selectedLocation.coords,
           zoom: 8.5,
           speed:0.9,
-          essential: true 
+          essential: false 
         })
       }
     });
@@ -565,7 +565,6 @@ var renderMap = async function() {
       var target = evt.target.closest("section.map");
 
       // get random place
-      console.log()
       var locations_no_zip = locations.filter(d => !/^\d/.test(d.name));
       var place = locations_no_zip[Math.floor(Math.random()*locations_no_zip.length)];
 
