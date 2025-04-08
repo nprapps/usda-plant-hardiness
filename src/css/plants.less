@@ -98,6 +98,9 @@ section.map {
 		@media @mobile-above {
 			animation: walkingScreen 180s linear infinite;
 		}	
+		@media (prefers-reduced-motion) {
+			animation: none;
+		}
 	}
 	
 }

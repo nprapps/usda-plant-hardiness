@@ -565,7 +565,9 @@ var renderMap = async function() {
       var target = evt.target.closest("section.map");
 
       // get random place
-      var place = locations[Math.floor(Math.random()*locations.length)];
+      console.log()
+      var locations_no_zip = locations.filter(d => !/^\d/.test(d.name));
+      var place = locations_no_zip[Math.floor(Math.random()*locations_no_zip.length)];
 
       // activate spinner
       $.one(".surprise-text").classList.remove("active")
