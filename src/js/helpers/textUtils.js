@@ -66,7 +66,7 @@ function getName(data) {
 	if (/^\d/.test(data.placeName)) {
 		return data.placeName
 	} else {
-		return `${data.placeName}, ${ap_state(data.placeState)}`	
+		return `${data.placeName}, ${ap_state(data.placeState)},`	
 	}
 	
 }
