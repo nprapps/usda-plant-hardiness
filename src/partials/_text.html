@@ -86,6 +86,17 @@ if (slide.isMod && !slide.textSections) {
     <div class="content">
       
       <%= t.renderMarkdown(slide.text) %>
+
+        <%if (slide.scrollbug && slide.id == "zoomIn") { %>
+    <div class="scroll-bug" aria-hidden="true">
+      scroll
+      <svg viewBox="0 0 50 50" width="50" height="25">
+        <path
+        d="M 0,0 L 25,25 50,0"
+        ></path>
+      </svg>
+    </div>
+  <%} %>
     </div>
 
     <% if (slide.audio) { %>
@@ -131,3 +142,6 @@ if (slide.isMod && !slide.textSections) {
       </svg>
     </div>
   <%} %>
+
+
+
