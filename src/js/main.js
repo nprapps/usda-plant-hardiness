@@ -480,8 +480,12 @@ var renderMap = async function() {
       $.one('#base-map').classList.remove("explore-mode");
       $.one("#back-to-story").classList.remove('active');
       $.one("#explore-map").classList.add('active');
-
-      geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+      
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      geoSlide.scrollIntoView({
+        behavior: prefersReducedMotion ? "instant" : "smooth",
+        block: "center"
+      });
 
       track("switch location button clicked", "sticky-nav");
     });
@@ -517,7 +521,11 @@ var renderMap = async function() {
       $.one("#layer-button-nav").classList.remove("active");
 
       const geoSlide = $.one("#intro-1");
-      geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      geoSlide.scrollIntoView({
+        behavior: prefersReducedMotion ? "instant" : "smooth",
+        block: "center"
+      });
 
       track("switch location button clicked", "final");
     });
