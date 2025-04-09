@@ -10,8 +10,10 @@ module.exports = class ImageView extends View {
   preload(slide, active) {
     var images = $("[data-src]", slide);
     images.forEach(function (img) {
-      img.src = img.dataset.src;
-      img.removeAttribute("data-src");
+      if (!img.classList.contains('skip-lazy')) {
+        img.src = img.dataset.src;
+        img.removeAttribute("data-src");
+      }
     });
     var posters = $("[data-poster]", slide);
     images.forEach(function (img) {

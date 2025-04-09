@@ -3,32 +3,6 @@
 %>
 
 <section class="<% if (slide.video) { %>video<% } %> <% if (slide.image) { %>image<% } %> splash titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="<% if (slide.video) { %>video<% } else { %>image<% } %>">
-  <% if (slide.video) { %>
-  <video
-    id="video-<%= slide.id %>"
-    poster="./assets/synced/video/<%=slide.video%>.jpg"
-    class="backdrop"
-    muted
-    loop
-    playsinline
-    autoplay
-    style="<%= t.style({
-      "object-position": slide.anchor,
-      "object-fit": slide.constrain
-    }) %>"></video>
-  <% } %>
-
-  <% if (slide.image) { %>
-    <img
-      class="backdrop"
-      data-src="./assets/synced/images/<%= slide.image %>"
-      alt=""
-      style="<%= t.style({
-        "object-position": slide.anchor,
-        "object-fit": slide.constrain
-      }) %>"
-    >
-  <% } %>
 
   <% if (slide.credit) { %>
   <div class="watermark" alt="">
@@ -38,7 +12,7 @@
 
   <div class="darken">
 
-    <img class="title-gif" data-src="./assets/synced/illo/resized/walker-title.gif" alt="Animation of a cute azalea plant walking in front of the hardiness map">
+    <img class="title-gif skip-lazy" src="./assets/synced/illo/resized/walker-title.gif" alt="Animation of a cute azalea plant walking in front of the hardiness map">
 
     <div class="logo">
       <a href="https://www.npr.org">

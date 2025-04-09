@@ -124,7 +124,7 @@ module.exports = class MapView extends View {
           center: newCenter,
           zoom: newZoom,
           speed: 0.9,
-          essential: true,
+          essential: false,
         });
       }
     }

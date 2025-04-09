@@ -69,8 +69,12 @@ var geoClick = function(selectedLocation,target,map,slide) {
         $("div.mod div").forEach(d=>d.classList.remove("active"))  
       }
     }  
-
-    nextSlide.scrollIntoView({ block:"center",behavior: "smooth" })
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    nextSlide.scrollIntoView({
+      behavior: prefersReducedMotion ? "instant" : "smooth",
+      block: "center"
+    });
+    
     var rotatorFlying = true;
 
     map.on('moveend', function(e){

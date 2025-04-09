@@ -69,7 +69,8 @@ var completion = 0;
 var map;
 let locations;
 var startingSlide;
-let locations_url = "https://apps.npr.org/plant-hardiness-garden-map/assets/synced/csv/GAZETTEER.csv";
+let locations_url = "http://stage-apps.npr.org/enlivened-latitude/assets/synced/csv/GAZETTEER-zips.csv";
+
 var slideActive = {'id':'intro-1','dataset':{'maplayer':'2012_zones'}};
 
 var standardOpacity = ['interpolate',['linear'],['zoom'],0, 1, 7, 1, 8, 0.78, 22, 0.78 ]
@@ -259,7 +260,7 @@ var renderMap = async function() {
           center: places[i].center,
           zoom: isMobile.matches ? places[i].zoomMobile : places[i].zoom,
           speed:0.9,
-          essential: true 
+          essential: false
         })
       })
     });
@@ -467,7 +468,7 @@ var renderMap = async function() {
           center: selectedLocation.coords,
           zoom: 8.5,
           speed:0.9,
-          essential: true 
+          essential: false 
         })
       }
     });
@@ -479,8 +480,12 @@ var renderMap = async function() {
       $.one('#base-map').classList.remove("explore-mode");
       $.one("#back-to-story").classList.remove('active');
       $.one("#explore-map").classList.add('active');
-
-      geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+      
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      geoSlide.scrollIntoView({
+        behavior: prefersReducedMotion ? "instant" : "smooth",
+        block: "center"
+      });
 
       track("switch location button clicked", "sticky-nav");
     });
@@ -516,7 +521,11 @@ var renderMap = async function() {
       $.one("#layer-button-nav").classList.remove("active");
 
       const geoSlide = $.one("#intro-1");
-      geoSlide.scrollIntoView({ behavior: "smooth", block: "center" });
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      geoSlide.scrollIntoView({
+        behavior: prefersReducedMotion ? "instant" : "smooth",
+        block: "center"
+      });
 
       track("switch location button clicked", "final");
     });
@@ -564,7 +573,8 @@ var renderMap = async function() {
       var target = evt.target.closest("section.map");
 
       // get random place
-      var place = locations[Math.floor(Math.random()*locations.length)];
+      var locations_no_zip = locations.filter(d => !/^\d/.test(d.name));
+      var place = locations_no_zip[Math.floor(Math.random()*locations_no_zip.length)];
 
       // activate spinner
       $.one(".surprise-text").classList.remove("active")
